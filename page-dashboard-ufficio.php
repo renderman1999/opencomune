@@ -159,15 +159,15 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
     <div class="loader-content">
         <div class="loader-spinner"></div>
         <div class="loader-text">Caricamento Dashboard Ufficio Turistico...</div>
-                                </div>
-                            </div>
+            </div>
+        </div>
                             
 <div class="min-h-screen bg-gray-50 py-8" id="dashboardContent" style="display: none;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header Dashboard -->
         <div class="mb-8">
             <div class="flex items-center justify-between">
-                <div>
+                                <div>
                     <h1 class="text-3xl font-bold text-gray-900">Dashboard Ufficio Turistico</h1>
                     <p class="text-gray-600 mt-2">Gestisci le esperienze turistiche del tuo comune</p>
                                 </div>
@@ -180,20 +180,20 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
                         <i class="bi bi-map mr-2"></i>
                         Visualizza Mappa
                     </a>
-        </div>
-    </div>
-        </div>
+                                </div>
+                            </div>
+                        </div>
 
         <!-- Statistiche -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             <div class="stat-card">
                 <div class="stat-number" id="totalEsperienze">-</div>
                 <div class="stat-label">Totale Esperienze</div>
-                            </div>
+                    </div>
             <div class="stat-card">
                 <div class="stat-number" id="esperienzePubblicate">-</div>
                 <div class="stat-label">Pubblicate</div>
-                        </div>
+                </div>
             <div class="stat-card">
                 <div class="stat-number" id="esperienzeBozza">-</div>
                 <div class="stat-label">In Bozza</div>
@@ -201,8 +201,8 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
             <div class="stat-card">
                 <div class="stat-number" id="prenotazioniOggi">-</div>
                 <div class="stat-label">Prenotazioni Oggi</div>
-            </div>
-                            </div>
+        </div>
+    </div>
 
         <!-- Filtri e Ricerca -->
         <div class="dashboard-card p-6 mb-8">
@@ -212,7 +212,7 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
                         <input type="text" id="searchEsperienze" placeholder="Cerca esperienze..." 
                                class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
                         <i class="bi bi-search absolute left-3 top-3 text-gray-400"></i>
-                    </div>
+        </div>
                     <select id="filterStatus" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="">Tutti gli stati</option>
                         <option value="publish">Pubblicate</option>
@@ -222,15 +222,15 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
                     <select id="filterCategoria" class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
                         <option value="">Tutte le categorie</option>
                     </select>
-                </div>
+                            </div>
                 <div class="flex items-center space-x-2">
                     <button id="refreshData" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
                         <i class="bi bi-arrow-clockwise mr-2"></i>
                         Aggiorna
                     </button>
-                </div>
-            </div>
-            </div>
+                        </div>
+                        </div>
+                    </div>
 
         <!-- Sezione Prenotazioni -->
         <div class="dashboard-card p-6 mb-8">
@@ -248,13 +248,13 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
             <div id="prenotazioniLoading" class="text-center py-8">
                 <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
                 <p class="mt-2 text-gray-500">Caricamento prenotazioni...</p>
-            </div>
+                            </div>
 
             <!-- Lista Prenotazioni -->
             <div id="prenotazioniList" class="space-y-4">
                 <!-- Le prenotazioni verranno caricate qui via AJAX -->
-            </div>
-        </div>
+                        </div>
+                        </div>
 
         <!-- Lista Esperienze -->
         <div class="dashboard-card p-6">
@@ -268,8 +268,8 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
                         <option value="title_asc">Titolo (A-Z)</option>
                         <option value="title_desc">Titolo (Z-A)</option>
                     </select>
+                    </div>
                 </div>
-            </div>
 
             <!-- Loading State -->
             <div id="esperienzeLoading" class="text-center py-8">
@@ -280,15 +280,15 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
             <!-- Lista Esperienze -->
             <div id="esperienzeList" class="space-y-4">
                 <!-- Le esperienze verranno caricate qui via AJAX -->
-            </div>
+                            </div>
 
             <!-- Paginazione -->
             <div id="pagination" class="mt-6 flex justify-center">
                 <!-- La paginazione verrà generata dinamicamente -->
-        </div>
-        </div>
-    </div>
-</div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
 
 <script>
 // Definisci ajax_object direttamente
@@ -431,9 +431,9 @@ function renderPrenotazioni(prenotazioni) {
                 <div class="flex-shrink-0">
                     <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                         <i class="bi bi-calendar-check text-blue-600 text-xl"></i>
-                    </div>
-                </div>
-                
+            </div>
+            </div>
+
                 <!-- Contenuto prenotazione -->
                 <div class="flex-1 min-w-0">
                     <div class="flex items-start justify-between">
@@ -443,21 +443,21 @@ function renderPrenotazioni(prenotazioni) {
                                 <span class="status-badge ${prenotazione.status === 'confirmed' ? 'status-published' : 'status-draft'}">
                                     ${prenotazione.status === 'confirmed' ? 'Confermata' : 'In Attesa'}
                                 </span>
-                            </div>
+                    </div>
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
                                 <div>
                                     <p class="text-sm text-gray-600"><strong>Partecipanti:</strong> ${prenotazione.participants}</p>
                                     <p class="text-sm text-gray-600"><strong>Data:</strong> ${prenotazione.date}</p>
-                                </div>
+                </div>
                                 <div>
                                     <p class="text-sm text-gray-600"><strong>Nome:</strong> ${prenotazione.name}</p>
                                     <p class="text-sm text-gray-600"><strong>Email:</strong> ${prenotazione.email}</p>
-                                </div>
-                            </div>
-                            ${prenotazione.notes ? `<p class="text-sm text-gray-600"><strong>Note:</strong> ${prenotazione.notes}</p>` : ''}
-                        </div>
+            </div>
                     </div>
+                            ${prenotazione.notes ? `<p class="text-sm text-gray-600"><strong>Note:</strong> ${prenotazione.notes}</p>` : ''}
                 </div>
+            </div>
+                    </div>
                 
                 <!-- Azioni prenotazione -->
                 <div class="flex flex-col space-y-2 ml-4">
@@ -467,7 +467,7 @@ function renderPrenotazioni(prenotazioni) {
                             <i class="bi bi-${prenotazione.status === 'confirmed' ? 'x-circle' : 'check-circle'} mr-1"></i>
                             ${prenotazione.status === 'confirmed' ? 'Annulla' : 'Conferma'}
                         </button>
-                    </div>
+                </div>
                     
                     <div class="flex space-x-2">
                         <button onclick="viewPrenotazioneDetails(${prenotazione.id})" 
@@ -478,10 +478,10 @@ function renderPrenotazioni(prenotazioni) {
                                 class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition-colors">
                             <i class="bi bi-trash mr-1"></i>Elimina
                         </button>
+            </div>
                     </div>
                 </div>
             </div>
-        </div>
     `).join('');
 }
 
@@ -506,8 +506,8 @@ function renderEsperienze(esperienze) {
                                 <i class="bi bi-image text-2xl"></i>
                             </div>`
                         }
-                    </div>
-                </div>
+        </div>
+        </div>
                 
                 <!-- Contenuto principale -->
                 <div class="flex-1 min-w-0">
@@ -518,16 +518,25 @@ function renderEsperienze(esperienze) {
                                 <span class="status-badge status-${esperienza.status}">
                                     ${getStatusLabel(esperienza.status)}
                                 </span>
-                            </div>
+    </div>
                             <p class="text-gray-600 text-sm mb-3 line-clamp-2">${esperienza.excerpt || 'Nessuna descrizione disponibile'}</p>
-                            <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <div class="flex items-center space-x-4 text-sm text-gray-500 mb-2">
                                 <span><i class="bi bi-calendar mr-1"></i>${esperienza.date}</span>
                                 <span><i class="bi bi-clock mr-1"></i>${esperienza.duration || 'N/A'}</span>
                                 <span><i class="bi bi-people mr-1"></i>${esperienza.max_participants || 'N/A'} max</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+</div>
+                            ${esperienza.categories && esperienza.categories.length > 0 ? `
+                                <div class="flex flex-wrap gap-1">
+                                    ${esperienza.categories.map(cat => `
+                                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                            <i class="bi bi-tag mr-1"></i>${cat}
+                                        </span>
+                                    `).join('')}
+  </div>
+                            ` : ''}
+</div>
+      </div>
+      </div>
                 
                 <!-- Azioni -->
                 <div class="flex flex-col space-y-2 ml-4">
@@ -538,7 +547,7 @@ function renderEsperienze(esperienze) {
                             <i class="bi bi-${esperienza.status === 'publish' ? 'eye-slash' : 'eye'} mr-1"></i>
                             ${esperienza.status === 'publish' ? 'Nascondi' : 'Pubblica'}
                         </button>
-                    </div>
+      </div>
                     
                     <!-- Azioni principali -->
                     <div class="flex space-x-2">
@@ -548,16 +557,16 @@ function renderEsperienze(esperienze) {
                         <a href="${esperienza.view_url}" class="bg-gray-500 text-white px-3 py-1 rounded text-xs hover:bg-gray-600 transition-colors" target="_blank" style="background-color: #6b7280 !important; color: white !important;">
                             <i class="bi bi-eye mr-1"></i>Visualizza
                         </a>
-                    </div>
+      </div>
                     
                     <!-- Azione eliminazione -->
                     <button onclick="deleteEsperienza(${esperienza.id})" 
                             class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition-colors" style="background-color: #ef4444 !important; color: white !important;">
                         <i class="bi bi-trash mr-1"></i>Elimina
                     </button>
-                </div>
-            </div>
         </div>
+  </div>
+</div>
     `).join('');
 }
 
@@ -604,18 +613,18 @@ function filterEsperienze() {
 function toggleEsperienzaStatus(id, currentStatus) {
     const newStatus = currentStatus === 'publish' ? 'draft' : 'publish';
     const actionText = newStatus === 'publish' ? 'pubblicare' : 'nascondere';
-    
-    Swal.fire({
+        
+        Swal.fire({
         title: 'Conferma Azione',
         text: `Sei sicuro di voler ${actionText} questa esperienza?`,
-        icon: 'question',
-        showCancelButton: true,
+            icon: 'question',
+            showCancelButton: true,
         confirmButtonColor: newStatus === 'publish' ? '#10b981' : '#f59e0b',
         cancelButtonColor: '#6b7280',
         confirmButtonText: `Sì, ${actionText}`,
         cancelButtonText: 'Annulla'
-    }).then((result) => {
-        if (result.isConfirmed) {
+        }).then((result) => {
+            if (result.isConfirmed) {
             fetch(ajax_object.ajax_url + '?action=opencomune_toggle_esperienza_status', {
                 method: 'POST',
                 headers: {
@@ -644,17 +653,17 @@ function togglePrenotazioneStatus(id, currentStatus) {
     const newStatus = currentStatus === 'confirmed' ? 'pending' : 'confirmed';
     const actionText = newStatus === 'confirmed' ? 'confermare' : 'annullare';
     
-    Swal.fire({
+        Swal.fire({
         title: 'Conferma Azione',
         text: `Sei sicuro di voler ${actionText} questa prenotazione?`,
-        icon: 'question',
-        showCancelButton: true,
+            icon: 'question',
+            showCancelButton: true,
         confirmButtonColor: newStatus === 'confirmed' ? '#10b981' : '#f59e0b',
         cancelButtonColor: '#6b7280',
         confirmButtonText: `Sì, ${actionText}`,
         cancelButtonText: 'Annulla'
-    }).then((result) => {
-        if (result.isConfirmed) {
+        }).then((result) => {
+            if (result.isConfirmed) {
             fetch(ajax_object.ajax_url + '?action=opencomune_toggle_prenotazione_status', {
                 method: 'POST',
                 headers: {
@@ -711,7 +720,7 @@ function deletePrenotazione(id) {
                 if (data.success) {
                     Swal.fire('Eliminata!', 'La prenotazione è stata eliminata.', 'success');
                     loadPrenotazioni();
-                } else {
+      } else {
                     Swal.fire('Errore!', data.message || 'Errore durante l\'eliminazione.', 'error');
                 }
             })
@@ -746,7 +755,7 @@ function deleteEsperienza(id) {
                 if (data.success) {
                     Swal.fire('Eliminata!', 'L\'esperienza è stata eliminata.', 'success');
                     loadDashboardData();
-      } else {
+        } else {
                     Swal.fire('Errore!', data.message || 'Errore durante l\'eliminazione.', 'error');
                 }
             })

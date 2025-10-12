@@ -869,6 +869,10 @@ function opencomune_get_esperienze_dashboard_callback() {
             $query->the_post();
             $post_id = get_the_ID();
             
+            // Carica le categorie
+            $categorie_terms = wp_get_post_terms($post_id, 'categorie_esperienze', array('fields' => 'names'));
+            $categorie_names = is_wp_error($categorie_terms) ? [] : $categorie_terms;
+            
             $esperienze[] = [
                 'id' => $post_id,
                 'title' => get_the_title(),
@@ -882,7 +886,8 @@ function opencomune_get_esperienze_dashboard_callback() {
                 'likes' => get_post_meta($post_id, 'likes_count', true) ?: 0,
                 'thumbnail' => get_the_post_thumbnail_url($post_id, 'thumbnail'),
                 'duration' => get_post_meta($post_id, 'tour_duration', true),
-                'max_participants' => get_post_meta($post_id, 'tour_max_participants', true)
+                'max_participants' => get_post_meta($post_id, 'tour_max_participants', true),
+                'categories' => $categorie_names
             ];
         }
     }
