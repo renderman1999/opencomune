@@ -4,19 +4,19 @@ if (have_posts()) : while (have_posts()) : the_post();
     $id = get_the_ID();
     $img = get_the_post_thumbnail_url($id, 'full');
     $titolo = get_the_title();
-    $durata = get_post_meta($id, 'durata', true);
-    $difficolta = get_post_meta($id, 'difficolta', true);
+    $durata = get_post_meta($id, 'tour_duration', true);
+    $difficolta = get_post_meta($id, 'tour_difficulty', true);
     $desc_breve = get_the_excerpt();
     $desc_completa = get_the_content();
     $citta = get_post_meta($id, 'citta', true);
-    $lingue = get_post_meta($id, 'lingue', true);
+    $lingue = get_post_meta($id, 'tour_languages', true);
     // Debug: log del tour ID
     error_log('=== DEBUG CATEGORIE TOUR ===');
     error_log('Tour ID: ' . $id);
     
     // Recupera le categorie dalla tassonomia personalizzata
-    $categorie_arr = wp_get_post_terms($id, 'categorie_tour', ['fields' => 'names']);
-    error_log('Categorie dalla tassonomia categorie_tour: ' . print_r($categorie_arr, true));
+    $categorie_arr = wp_get_post_terms($id, 'categorie_esperienze', ['fields' => 'names']);
+    error_log('Categorie dalla tassonomia categorie_esperienze: ' . print_r($categorie_arr, true));
     
     // Fallback: se non ci sono categorie nella tassonomia, prova con i tag
     if (empty($categorie_arr)) {
@@ -34,18 +34,14 @@ if (have_posts()) : while (have_posts()) : the_post();
     error_log('Categorie finali: ' . print_r($categorie_arr, true));
     error_log('=== FINE DEBUG CATEGORIE TOUR ===');
     
-    $prezzo = get_post_meta($id, 'prezzo', true);
-    $include = get_post_meta($id, 'include', true);
-    $non_include = get_post_meta($id, 'non_include', true);
-    $itinerario = get_post_meta($id, 'itinerario', true);
-    $note = get_post_meta($id, 'note', true);
-    $indirizzo_ritrovo = get_post_meta($id, 'indirizzo_ritrovo', true);
-$gps = get_post_meta($id, 'gps', true);
-$lat = null;
-$lon = null;
-if ($gps && strpos($gps, ',') !== false) {
-    list($lat, $lon) = array_map('trim', explode(',', $gps));
-}
+    $prezzo = get_post_meta($id, 'tour_price', true);
+    $include = get_post_meta($id, 'tour_whats_included', true);
+    $non_include = get_post_meta($id, 'tour_whats_not_included', true);
+    $itinerario = get_post_meta($id, 'tour_itinerary', true);
+    $note = get_post_meta($id, 'tour_requirements', true);
+    $indirizzo_ritrovo = get_post_meta($id, 'tour_meeting_point', true);
+$lat = get_post_meta($id, 'tour_latitude', true);
+$lon = get_post_meta($id, 'tour_longitude', true);
     $difficolta_label = $difficolta ? ucfirst($difficolta) : '';
     $lingue_arr = is_array($lingue) ? $lingue : (is_string($lingue) ? explode(',', $lingue) : []);
     // --- Guida associata ---
@@ -87,9 +83,9 @@ if ($gps && strpos($gps, ',') !== false) {
                 <div class="text-lg text-gray-700 mb-2"><?php echo esc_html($desc_breve); ?></div>
             </div>
             <?php
-            if (is_user_logged_in() && current_user_can('guida') && get_current_user_id() === (int) get_post_field('post_author', $id)) {
-                $edit_url = site_url('/modifica-tour/?id=' . $id);
-                echo '<a href="' . esc_url($edit_url) . '" class="ml-auto bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold px-5 py-2 rounded shadow transition">' . esc_html__('Modifica tour', 'opencomune') . '</a>';
+            if (is_user_logged_in() && current_user_can('editor_turistico') && get_current_user_id() === (int) get_post_field('post_author', $id)) {
+                $edit_url = site_url('/modifica-esperienza/?id=' . $id);
+                echo '<a href="' . esc_url($edit_url) . '" class="ml-auto bg-yellow-400 hover:bg-yellow-500 text-yellow-900 font-bold px-5 py-2 rounded shadow transition">' . esc_html__('Modifica esperienza', 'opencomune') . '</a>';
             }
             ?>
         </div>
@@ -605,7 +601,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 var dataFormattata = new Date(window.selectedBookingData.data).toLocaleDateString('it-IT');
                 var noteText = window.selectedBookingData.note ? ' - ' + window.selectedBookingData.note : '';
                 var partecipanti = parseInt(document.getElementById('adulti-count').textContent) || 1;
-                var prezzoTour = <?php echo intval(get_post_meta(get_the_ID(), 'prezzo', true)); ?>;
+                var prezzoTour = <?php echo intval(get_post_meta(get_the_ID(), 'tour_price', true)); ?>;
                 var prezzoTotale = prezzoTour * partecipanti;
                 
                 document.getElementById('prenota-dettagli-data').innerHTML = '<strong>Data:</strong> ' + dataFormattata + ' alle ' + window.selectedBookingData.orario + noteText + '<br><strong>Partecipanti:</strong> ' + partecipanti + ' adulto' + (partecipanti > 1 ? 'i' : '') + ' - <strong>Totale:</strong> €' + prezzoTotale;
@@ -673,7 +669,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Recupera il prezzo del tour e il numero di partecipanti
-        var prezzoTour = <?php echo intval(get_post_meta(get_the_ID(), 'prezzo', true)); ?>;
+        var prezzoTour = <?php echo intval(get_post_meta(get_the_ID(), 'tour_price', true)); ?>;
         var partecipanti = parseInt(document.getElementById('adulti-count').textContent) || 1;
         var prezzoTotale = prezzoTour * partecipanti;
         
@@ -1009,7 +1005,7 @@ opencomune_show_reviews_swiper(get_the_ID());
                                     <h5 class="font-semibold text-lg"><?php echo esc_html(get_the_title()); ?></h5>
                                     <div id="prenota-dettagli-data" class="text-gray-600 mt-1"></div>
                                     <div class="text-blue-600 font-semibold mt-2">
-                                        €<?php echo esc_html(get_post_meta(get_the_ID(), 'prezzo', true)); ?> 
+                                        €<?php echo esc_html(get_post_meta(get_the_ID(), 'tour_price', true)); ?> 
                                         <span class="text-sm text-gray-500">per persona</span>
                                     </div>
                                 </div>
