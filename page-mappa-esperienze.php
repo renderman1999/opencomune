@@ -28,10 +28,6 @@ get_header();
 </style>
 <div id="mobile-filter-panel" class="md:hidden fixed left-0 right-0 top-[60px] bg-white shadow-lg rounded-b-xl px-4 py-4 z-50 closed" style="top: 90px !important;">
   <div class="mb-4">
-    <label class="block font-semibold mb-1">Città</label>
-    <select id="filter-citta-mobile" class="w-full border rounded p-2" multiple></select>
-  </div>
-  <div class="mb-4">
     <label class="block font-semibold mb-1">Categoria</label>
     <select id="filter-categoria-mobile" class="w-full border rounded p-2">
       <option value="">Tutte</option>
@@ -55,11 +51,7 @@ get_header();
       <button id="btn-vicino-desktop" class="bg-gray-200 text-gray-800 px-3 py-1 rounded" type="button">Vicino a me</button>
       <div id="vicino-loader-desktop" class="ml-2 hidden"><span class="inline-block animate-spin border-2 border-blue-600 border-t-transparent rounded-full w-5 h-5 align-middle"></span></div>
     </div>
-    <h2 class="text-xl font-bold mb-4">Filtra i tour</h2>
-    <div class="mb-4">
-      <label class="block font-semibold mb-1">Città</label>
-      <select id="filter-citta-desktop" class="w-full border rounded p-2" multiple></select>
-    </div>
+    <h2 class="text-xl font-bold mb-4">Filtra le esperienze</h2>
     <div class="mb-4">
       <label class="block font-semibold mb-1">Categoria</label>
       <select id="filter-categoria-desktop" class="w-full border rounded p-2">
@@ -109,19 +101,11 @@ var select2js = document.createElement('script');
 select2js.src = 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js';
 document.head.appendChild(select2js);
 
-// Inizializza Select2 client-side con le città dei tour disponibili
-function initCittaSelect2Client(cittaSet, id) {
-  if (window.jQuery && window.jQuery.fn.select2) {
-    window.jQuery(id).select2({
-      placeholder: 'Cerca città...',
-      allowClear: true,
-      width: '100%',
-      multiple: true,
-      data: Array.from(cittaSet).map(c => ({id: c, text: c}))
-    });
-  } else {
-    setTimeout(function() { initCittaSelect2Client(cittaSet, id); }, 200);
-  }
+// Carica le categorie delle esperienze dalla tassonomia WordPress
+function loadCategorieEsperienze() {
+  return fetch(ajaxurl + '?action=opencomune_get_categorie_esperienze')
+    .then(r => r.json())
+    .then(data => data.success ? data.data : []);
 }
 
 function fetchTours() {
@@ -164,39 +148,34 @@ document.getElementById('close-modal').onclick = () => document.getElementById('
 document.getElementById('tour-modal').onclick = e => { if (e.target === e.currentTarget) document.getElementById('tour-modal').classList.add('hidden'); };
 
 function renderSidebar(tours) {
-  const catSet = new Set(), langSet = new Set(), cittaSet = new Set();
+  const langSet = new Set();
   tours.forEach(t => {
-    if (t.categorie_array && Array.isArray(t.categorie_array)) t.categorie_array.forEach(c => catSet.add(c.trim()));
     if (t.lingue) {
       const lingueStr = Array.isArray(t.lingue) ? t.lingue.join(',') : t.lingue;
       lingueStr.split(',').forEach(l => langSet.add(l.trim()));
     }
-    if (t.citta) t.citta.split(',').forEach(c => cittaSet.add(c.trim()));
   });
-  // Salva selezioni
-  let selectedCittaDesktop = window.jQuery && window.jQuery.fn.select2 ? window.jQuery('#filter-citta-desktop').val() : [];
-  let selectedCittaMobile = window.jQuery && window.jQuery.fn.select2 ? window.jQuery('#filter-citta-mobile').val() : [];
-  // Aggiorna città
-  document.getElementById('filter-citta-desktop').innerHTML = Array.from(cittaSet).map(c => `<option value="${c}">${c}</option>`).join('');
-  document.getElementById('filter-citta-mobile').innerHTML = Array.from(cittaSet).map(c => `<option value="${c}">${c}</option>`).join('');
-  initCittaSelect2Client(cittaSet, '#filter-citta-desktop');
-  initCittaSelect2Client(cittaSet, '#filter-citta-mobile');
-  if (selectedCittaDesktop && selectedCittaDesktop.length) window.jQuery('#filter-citta-desktop').val(selectedCittaDesktop).trigger('change');
-  if (selectedCittaMobile && selectedCittaMobile.length) window.jQuery('#filter-citta-mobile').val(selectedCittaMobile).trigger('change');
-  // Aggiorna categorie e lingue
-  document.getElementById('filter-categoria-desktop').innerHTML = '<option value="">Tutte</option>' + Array.from(catSet).map(c => `<option value="${c}">${c}</option>`).join('');
-  document.getElementById('filter-categoria-mobile').innerHTML = '<option value="">Tutte</option>' + Array.from(catSet).map(c => `<option value="${c}">${c}</option>`).join('');
+  
+  // Carica le categorie delle esperienze dalla tassonomia
+  loadCategorieEsperienze().then(categorie => {
+    // Aggiorna categorie
+    document.getElementById('filter-categoria-desktop').innerHTML = '<option value="">Tutte</option>' + categorie.map(c => `<option value="${c.slug}">${c.name}</option>`).join('');
+    document.getElementById('filter-categoria-mobile').innerHTML = '<option value="">Tutte</option>' + categorie.map(c => `<option value="${c.slug}">${c.name}</option>`).join('');
+  });
+  
+  // Aggiorna lingue
   document.getElementById('filter-lingua-desktop').innerHTML = '<option value="">Tutte</option>' + Array.from(langSet).map(l => `<option value="${l}">${l}</option>`).join('');
   document.getElementById('filter-lingua-mobile').innerHTML = '<option value="">Tutte</option>' + Array.from(langSet).map(l => `<option value="${l}">${l}</option>`).join('');
-  // Lista tour solo su desktop
+  
+  // Lista esperienze solo su desktop
   const list = document.getElementById('tour-list');
   if (list) {
     list.innerHTML = tours.map(t => `
       <div class="mb-4 p-2 border-b flex gap-3 items-center cursor-pointer hover:bg-gray-50" onclick="focusTour(${t.id})">
-        <img src="${t.tour_img || 'https://via.placeholder.com/40x40?text=Tour'}" class="rounded-full object-cover shadow w-12 h-12">
+        <img src="${t.tour_img || 'https://via.placeholder.com/40x40?text=Esperienza'}" class="rounded-full object-cover shadow w-12 h-12">
         <div>
           <div class="font-semibold">${t.titolo}</div>
-          <div class="text-xs text-gray-500">${t.citta || ''}</div>
+          <div class="text-xs text-gray-500">${t.categoria || ''}</div>
         </div>
       </div>
     `).join('');
@@ -212,11 +191,9 @@ window.focusTour = function(id) {
 }
 
 // --- Gestione filtri desktop ---
-document.getElementById('filter-citta-desktop').addEventListener('change', applyFilters);
 document.getElementById('filter-categoria-desktop').addEventListener('change', applyFilters);
 document.getElementById('filter-lingua-desktop').addEventListener('change', applyFilters);
 document.getElementById('reset-filtri-desktop').addEventListener('click', function() {
-  window.jQuery('#filter-citta-desktop').val(null).trigger('change');
   document.getElementById('filter-categoria-desktop').value = '';
   document.getElementById('filter-lingua-desktop').value = '';
   applyFilters();
@@ -257,7 +234,6 @@ document.getElementById('mobile-apply-filters').onclick = function() {
   mobileFilterPanel.classList.add('closed');
 };
 document.getElementById('reset-filtri-mobile').onclick = function() {
-  window.jQuery('#filter-citta-mobile').val(null).trigger('change');
   document.getElementById('filter-categoria-mobile').value = '';
   document.getElementById('filter-lingua-mobile').value = '';
 };
@@ -309,33 +285,31 @@ function distanceKm(lat1, lon1, lat2, lon2) {
 
 function applyFilters() {
   let filtered = allTours;
-  let cittaValues = [];
-  if (isMobile()) {
-    cittaValues = window.jQuery('#filter-citta-mobile').val() || [];
-    cittaValues = cittaValues.map(v => v.toLowerCase());
-  } else {
-    cittaValues = window.jQuery('#filter-citta-desktop').val() || [];
-    cittaValues = cittaValues.map(v => v.toLowerCase());
-  }
   const cat = isMobile() ? document.getElementById('filter-categoria-mobile').value : document.getElementById('filter-categoria-desktop').value;
   const lang = isMobile() ? document.getElementById('filter-lingua-mobile').value : document.getElementById('filter-lingua-desktop').value;
-  if (cittaValues.length > 0) {
+  
+  if (cat) {
     filtered = filtered.filter(t => {
-      const tourCitta = (t.citta||'').split(',').map(x=>x.trim().toLowerCase());
-      return cittaValues.some(val => tourCitta.includes(val));
+      // Controlla se l'esperienza ha la categoria selezionata
+      const categorie = t.categorie_array || [];
+      return categorie.some(c => c.trim() === cat);
     });
   }
-  if (cat) filtered = filtered.filter(t => (t.categorie_array||[]).map(x=>x.trim()).includes(cat));
-  if (lang) filtered = filtered.filter(t => {
-    const lingueStr = Array.isArray(t.lingue) ? t.lingue.join(',') : (t.lingue || '');
-    return lingueStr.split(',').map(x=>x.trim()).includes(lang);
-  });
+  
+  if (lang) {
+    filtered = filtered.filter(t => {
+      const lingueStr = Array.isArray(t.lingue) ? t.lingue.join(',') : (t.lingue || '');
+      return lingueStr.split(',').map(x=>x.trim()).includes(lang);
+    });
+  }
+  
   if (filterVicino && userPosition) {
     filtered = filtered.filter(t => {
       if (!t.lat || !t.lon) return false;
       return distanceKm(userPosition.lat, userPosition.lon, parseFloat(t.lat), parseFloat(t.lon)) <= 20;
     });
   }
+  
   renderSidebar(filtered);
   markers.forEach(m => m.setMap(null));
   markers = [];

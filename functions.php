@@ -740,6 +740,33 @@ function opencomune_mobile_fallback_menu() {
     echo '</ul>';
 }
 
+// === AJAX: Restituisce le categorie delle esperienze ===
+add_action('wp_ajax_opencomune_get_categorie_esperienze', 'opencomune_get_categorie_esperienze_callback');
+add_action('wp_ajax_nopriv_opencomune_get_categorie_esperienze', 'opencomune_get_categorie_esperienze_callback');
+function opencomune_get_categorie_esperienze_callback() {
+    $categorie = get_terms([
+        'taxonomy' => 'categorie_esperienze',
+        'hide_empty' => false,
+        'orderby' => 'name',
+        'order' => 'ASC'
+    ]);
+    
+    if (is_wp_error($categorie)) {
+        wp_send_json_error(['message' => 'Errore nel caricamento delle categorie']);
+    }
+    
+    $data = array_map(function($cat) {
+        return [
+            'id' => $cat->term_id,
+            'name' => $cat->name,
+            'slug' => $cat->slug,
+            'count' => $cat->count
+        ];
+    }, $categorie);
+    
+    wp_send_json_success($data);
+}
+
 // === AJAX: Restituisce tutti i tour pubblicati con lat/lon per la mappa ===
 add_action('wp_ajax_opencomune_get_all_tours', 'opencomune_get_all_tours_callback');
 add_action('wp_ajax_nopriv_opencomune_get_all_tours', 'opencomune_get_all_tours_callback');
