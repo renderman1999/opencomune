@@ -822,6 +822,7 @@ function opencomune_get_esperienze_dashboard_callback() {
         'post_status' => $status ? [$status] : ['publish', 'draft', 'pending'],
         'posts_per_page' => $per_page,
         'paged' => $page,
+        'author' => get_current_user_id(), // Filtra solo per l'utente corrente
         'meta_query' => []
     ];
     
