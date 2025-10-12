@@ -96,6 +96,22 @@ function opencomune_register_cpt_esperienze() {
         'supports' => ['title', 'editor', 'thumbnail', 'excerpt', 'custom-fields', 'author','comments'],
         'show_in_rest' => true,
         'taxonomies' => ['post_tag', 'categorie_esperienze'],
+        'capability_type' => 'esperienza',
+        'capabilities' => [
+            'edit_post' => 'edit_esperienza',
+            'read_post' => 'read_esperienza',
+            'delete_post' => 'delete_esperienza',
+            'edit_posts' => 'edit_esperienze',
+            'edit_others_posts' => 'edit_others_esperienze',
+            'publish_posts' => 'publish_esperienze',
+            'read_private_posts' => 'read_private_esperienze',
+            'delete_posts' => 'delete_esperienze',
+            'delete_private_posts' => 'delete_private_esperienze',
+            'delete_published_posts' => 'delete_published_esperienze',
+            'delete_others_posts' => 'delete_others_esperienze',
+            'edit_private_posts' => 'edit_private_esperienze',
+            'edit_published_posts' => 'edit_published_esperienze',
+        ],
     ]);
 }
 add_action('init', 'opencomune_register_cpt_esperienze');
@@ -202,6 +218,17 @@ function opencomune_add_custom_roles() {
         'publish_tours' => true,
         'edit_esperienze' => true,
         'publish_esperienze' => true,
+        'edit_esperienza' => true,
+        'read_esperienza' => true,
+        'delete_esperienza' => true,
+        'edit_others_esperienze' => true,
+        'read_private_esperienze' => true,
+        'delete_esperienze' => true,
+        'delete_private_esperienze' => true,
+        'delete_published_esperienze' => true,
+        'delete_others_esperienze' => true,
+        'edit_private_esperienze' => true,
+        'edit_published_esperienze' => true,
     ]);
   
 }

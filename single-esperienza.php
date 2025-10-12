@@ -10,29 +10,19 @@ if (have_posts()) : while (have_posts()) : the_post();
     $desc_completa = get_the_content();
     $citta = get_post_meta($id, 'citta', true);
     $lingue = get_post_meta($id, 'tour_languages', true);
-    // Debug: log del tour ID
-    error_log('=== DEBUG CATEGORIE TOUR ===');
-    error_log('Tour ID: ' . $id);
-    
     // Recupera le categorie dalla tassonomia personalizzata
     $categorie_arr = wp_get_post_terms($id, 'categorie_esperienze', ['fields' => 'names']);
-    error_log('Categorie dalla tassonomia categorie_esperienze: ' . print_r($categorie_arr, true));
     
     // Fallback: se non ci sono categorie nella tassonomia, prova con i tag
     if (empty($categorie_arr)) {
         $categorie_arr = wp_get_post_terms($id, 'post_tag', ['fields' => 'names']);
-        error_log('Categorie dai tag post_tag: ' . print_r($categorie_arr, true));
     }
     
     // Fallback: se non ci sono tag, prova dal meta field
     if (empty($categorie_arr)) {
         $categoria = get_post_meta($id, 'categoria', true);
         $categorie_arr = is_array($categoria) ? $categoria : [];
-        error_log('Categorie dal meta field categoria: ' . print_r($categorie_arr, true));
     }
-    
-    error_log('Categorie finali: ' . print_r($categorie_arr, true));
-    error_log('=== FINE DEBUG CATEGORIE TOUR ===');
     
     $prezzo = get_post_meta($id, 'tour_price', true);
     $include = get_post_meta($id, 'tour_whats_included', true);
@@ -44,24 +34,10 @@ $lat = get_post_meta($id, 'tour_latitude', true);
 $lon = get_post_meta($id, 'tour_longitude', true);
     $difficolta_label = $difficolta ? ucfirst($difficolta) : '';
     $lingue_arr = is_array($lingue) ? $lingue : (is_string($lingue) ? explode(',', $lingue) : []);
-    // --- Guida associata ---
-    $author_id = get_post_field('post_author', $id);
-    $guida_post_id = get_user_meta($author_id, 'guida_post_id', true);
-    $guida_nome = $guida_avatar = $guida_special = $guida_citta = $guida_url = '';
-    if ($guida_post_id) {
-        $guida_post = get_post($guida_post_id);
-        if ($guida_post) {
-            $guida_nome = get_the_title($guida_post_id);
-            $guida_url = get_permalink($guida_post_id);
-            $guida_special = get_post_meta($guida_post_id, '_specializzazioni', true);
-            $guida_citta = get_post_meta($guida_post_id, '_citta', true);
-            if (has_post_thumbnail($guida_post_id)) {
-                $guida_avatar = get_the_post_thumbnail_url($guida_post_id, 'medium');
-            } else {
-                $guida_avatar = get_avatar_url($author_id, ['size' => 96]);
-            }
-        }
-    }
+    // --- Organizzato da Ufficio Turistico ---
+    $ufficio_nome = get_option('opencomune_nome_comune', 'Ufficio Turistico');
+    $ufficio_email = get_option('opencomune_email_ufficio', '');
+    $ufficio_telefono = get_option('opencomune_telefono_ufficio', '');
 ?>
 
 <main class="max-w-7xl mx-auto p-4">
@@ -167,7 +143,7 @@ $lon = get_post_meta($id, 'tour_longitude', true);
                     <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-4">
                         <p class="text-yellow-800 text-sm">
                             <i class="fas fa-info-circle mr-2"></i>
-                            <?php _e('Le coordinate del punto di ritrovo non sono state configurate. Contatta la guida per maggiori informazioni.', 'opencomune'); ?>
+                            <?php _e('Le coordinate del punto di ritrovo non sono state configurate. Contatta l\'ufficio turistico per maggiori informazioni.', 'opencomune'); ?>
                         </p>
                     </div>
                     <?php endif; ?>
@@ -177,8 +153,8 @@ $lon = get_post_meta($id, 'tour_longitude', true);
                         <h4 class="font-semibold text-blue-800 mb-2"><?php _e('Come raggiungere il punto di ritrovo', 'opencomune'); ?></h4>
                         <ul class="text-blue-700 text-sm space-y-1">
                             <li>• <?php _e('Presentati 10 minuti prima dell\'orario di inizio', 'opencomune'); ?></li>
-                            <li>• <?php _e('Cerca la guida', 'opencomune'); ?></li>
-                            <li>• <?php _e('In caso di difficoltà, contatta la guida al telefono fornito', 'opencomune'); ?></li>
+                            <li>• <?php _e('Cerca il referente dell\'ufficio turistico', 'opencomune'); ?></li>
+                            <li>• <?php _e('In caso di difficoltà, contatta l\'ufficio turistico', 'opencomune'); ?></li>
                         </ul>
                     </div>
                 </div>
@@ -214,7 +190,7 @@ $lon = get_post_meta($id, 'tour_longitude', true);
                         }
                         ?>
                     </div>
-                    <div><b><?php _e('Guida per live tour', 'opencomune'); ?>:</b> <?php foreach($lingue_arr as $l) echo '<span class="inline-block bg-blue-100 text-blue-800 rounded px-2 py-1 mr-1 text-xs">'.esc_html(trim($l)).'</span>'; ?></div>
+                    <div><b><?php _e('Lingue disponibili', 'opencomune'); ?>:</b> <?php foreach($lingue_arr as $l) echo '<span class="inline-block bg-blue-100 text-blue-800 rounded px-2 py-1 mr-1 text-xs">'.esc_html(trim($l)).'</span>'; ?></div>
                 </div>
             </div>
         </div>
@@ -601,8 +577,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 var dataFormattata = new Date(window.selectedBookingData.data).toLocaleDateString('it-IT');
                 var noteText = window.selectedBookingData.note ? ' - ' + window.selectedBookingData.note : '';
                 var partecipanti = parseInt(document.getElementById('adulti-count').textContent) || 1;
-                var prezzoTour = <?php echo intval(get_post_meta(get_the_ID(), 'tour_price', true)); ?>;
-                var prezzoTotale = prezzoTour * partecipanti;
+                var prezzoEsperienza = <?php echo intval(get_post_meta(get_the_ID(), 'tour_price', true)); ?>;
+                var prezzoTotale = prezzoEsperienza * partecipanti;
                 
                 document.getElementById('prenota-dettagli-data').innerHTML = '<strong>Data:</strong> ' + dataFormattata + ' alle ' + window.selectedBookingData.orario + noteText + '<br><strong>Partecipanti:</strong> ' + partecipanti + ' adulto' + (partecipanti > 1 ? 'i' : '') + ' - <strong>Totale:</strong> €' + prezzoTotale;
                 
@@ -668,16 +644,16 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Recupera il prezzo del tour e il numero di partecipanti
-        var prezzoTour = <?php echo intval(get_post_meta(get_the_ID(), 'tour_price', true)); ?>;
+        // Recupera il prezzo dell'esperienza e il numero di partecipanti
+        var prezzoEsperienza = <?php echo intval(get_post_meta(get_the_ID(), 'tour_price', true)); ?>;
         var partecipanti = parseInt(document.getElementById('adulti-count').textContent) || 1;
-        var prezzoTotale = prezzoTour * partecipanti;
+        var prezzoTotale = prezzoEsperienza * partecipanti;
         
         // Popola riepilogo finale
         var dataFormattata = new Date(window.selectedBookingData.data).toLocaleDateString('it-IT');
         var noteText = window.selectedBookingData.note ? ' - ' + window.selectedBookingData.note : '';
         var riepilogoHTML = '<div class="space-y-2">';
-        riepilogoHTML += '<div><strong>Tour:</strong> <?php echo esc_html(get_the_title()); ?></div>';
+        riepilogoHTML += '<div><strong>Esperienza:</strong> <?php echo esc_html(get_the_title()); ?></div>';
         riepilogoHTML += '<div><strong>Data:</strong> ' + dataFormattata + ' alle ' + window.selectedBookingData.orario + noteText + '</div>';
         riepilogoHTML += '<div><strong>Nome:</strong> ' + nome + ' ' + cognome + '</div>';
         riepilogoHTML += '<div><strong>Telefono:</strong> ' + telefono + '</div>';
@@ -715,7 +691,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Aggiungi nota di pagamento
         var notaPagamento = '';
         if (metodoSelezionato === 'guida') {
-            notaPagamento = '<div class="mt-3 pt-3 border-t bg-blue-50 border border-blue-200 text-blue-700 rounded p-3"><strong>Pagamento:</strong> Alla guida il giorno del tour</div>';
+            notaPagamento = '<div class="mt-3 pt-3 border-t bg-blue-50 border border-blue-200 text-blue-700 rounded p-3"><strong>Pagamento:</strong> All\'ufficio turistico il giorno dell\'esperienza</div>';
         } else if (metodoSelezionato === 'online') {
             notaPagamento = '<div class="mt-3 pt-3 border-t bg-green-50 border border-green-200 text-green-700 rounded p-3"><strong>Pagamento:</strong> Online (verrai reindirizzato al gateway di pagamento)</div>';
         }
@@ -955,7 +931,7 @@ opencomune_show_reviews_swiper(get_the_ID());
         <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
         <div class="p-6">
             <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold">Prenota Tour</h3>
+                <h3 class="text-xl font-bold">Prenota Esperienza</h3>
                 <button id="close-prenota-modal" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
             
@@ -964,7 +940,7 @@ opencomune_show_reviews_swiper(get_the_ID());
                 <div class="flex items-center justify-between">
                     <div class="flex items-center">
                         <div class="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center text-sm font-bold step-indicator active" data-step="1">1</div>
-                        <div class="ml-2 text-sm font-medium">Dettagli Tour</div>
+                        <div class="ml-2 text-sm font-medium">Dettagli Esperienza</div>
                     </div>
                     <div class="flex-1 h-1 bg-gray-200 mx-4"></div>
                     <div class="flex items-center">
@@ -990,10 +966,10 @@ opencomune_show_reviews_swiper(get_the_ID());
                 <input type="hidden" id="prenota-orario" name="orario">
                 <input type="hidden" id="prenota-event-id" name="event_id">
                 
-                <!-- STEP 1: Dettagli Tour -->
+                <!-- STEP 1: Dettagli Esperienza -->
                 <div id="step-1" class="step-content">
                     <div class="mb-6">
-                        <h4 class="text-lg font-semibold mb-4">Dettagli della prenotazione</h4>
+                        <h4 class="text-lg font-semibold mb-4">Dettagli dell'esperienza</h4>
                         <div class="bg-gray-50 rounded-lg p-4 mb-4">
                             <div class="flex items-start gap-4">
                                 <?php if (has_post_thumbnail()): ?>
@@ -1129,8 +1105,8 @@ opencomune_show_reviews_swiper(get_the_ID());
                                 <label class="flex items-center p-3 mb-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition">
                                     <input type="radio" name="metodo_pagamento" value="guida" class="mr-3 text-blue-600" checked>
                                     <div class="mb-3">
-                                        <div class="font-medium">Pagamento alla guida</div>
-                                        <div class="text-sm text-gray-600">Paga direttamente alla guida il giorno del tour</div>
+                                        <div class="font-medium">Pagamento all'ufficio turistico</div>
+                                        <div class="text-sm text-gray-600">Paga direttamente all'ufficio turistico il giorno dell'esperienza</div>
                                     </div>
                                 </label>
                                 
