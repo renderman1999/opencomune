@@ -143,12 +143,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     <!-- SWIPER ESPERIENZE CARDS DINAMICO -->
     <div class="container mx-auto px-4 py-8">
-      <h2 class="text-2xl font-bold mb-4">Esperienze consigliate</h2>
+      <h2 class="text-2xl font-bold mb-4">La nostra proposta culturale</h2>
       <div class="swiper tour-swiper">
         <div class="swiper-wrapper">
           <?php
           $tour_query = new WP_Query([
-            'post_type' => 'tour',
+            'post_type' => 'esperienze',
             'posts_per_page' => 8,
             'post_status' => 'publish',
           ]);
@@ -401,7 +401,7 @@ opencomune_show_home_reviews_swiper(8);
 const toursMarkers = [
 <?php
 $tour_query = new WP_Query([
-  'post_type' => 'tour',
+  'post_type' => 'experienze',
   'post_status' => 'publish',
   'posts_per_page' => -1,
 ]);

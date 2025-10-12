@@ -38,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
     
     // Sanitizzazione dei dati
     $tour_title = sanitize_text_field($_POST['tour_title'] ?? '');
+    $tour_excerpt = sanitize_textarea_field($_POST['tour_excerpt'] ?? '');
     $tour_description = wp_kses_post($_POST['tour_description'] ?? '');
     $tour_duration = sanitize_text_field($_POST['tour_duration'] ?? '');
     // $tour_price = floatval($_POST['tour_price'] ?? 0); // Rimosso per ente pubblico
@@ -74,6 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
         // Creazione del post
         $post_data = array(
             'post_title' => $tour_title,
+            'post_excerpt' => $tour_excerpt,
             'post_content' => $tour_description,
             'post_status' => 'draft',
             'post_type' => 'esperienze',
@@ -169,7 +171,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
                     }).then((result) => {
                         if (result.isConfirmed) {
                             window.location.href = "' . $dashboard_url . '";
-                        } else {
+                } else {
                             window.location.reload();
                         }
                     });
@@ -388,8 +390,18 @@ $categorie = get_terms(array(
                     </div>
                     
                     <div class="md:col-span-2">
+                        <label for="tour_excerpt" class="form-label">
+                            Descrizione Breve
+                        </label>
+                        <textarea id="tour_excerpt" name="tour_excerpt" class="form-textarea" 
+                                  placeholder="Breve descrizione dell'esperienza (max 160 caratteri)" 
+                                  maxlength="160" rows="3"><?php echo esc_textarea($_POST['tour_excerpt'] ?? ''); ?></textarea>
+                        <p class="text-sm text-gray-500 mt-1">Questa descrizione apparirà nelle anteprime e nei risultati di ricerca</p>
+                    </div>
+                    
+                    <div class="md:col-span-2">
                         <label for="tour_description" class="form-label">
-                            Descrizione <span class="form-required">*</span>
+                            Descrizione Completa <span class="form-required">*</span>
                         </label>
                         <textarea id="tour_description" name="tour_description" class="form-textarea" required><?php echo esc_textarea($_POST['tour_description'] ?? ''); ?></textarea>
                     </div>
@@ -410,8 +422,8 @@ $categorie = get_terms(array(
                         </label>
                         <input type="number" id="tour_max_participants" name="tour_max_participants" class="form-input" 
                                min="1" value="<?php echo esc_attr($_POST['tour_max_participants'] ?? ''); ?>">
-                    </div>
-                    
+                        </div>
+                        
                     <div>
                         <label for="tour_difficulty" class="form-label">
                             Difficoltà
@@ -421,10 +433,10 @@ $categorie = get_terms(array(
                             <option value="facile" <?php selected($_POST['tour_difficulty'] ?? '', 'facile'); ?>>Facile</option>
                             <option value="medio" <?php selected($_POST['tour_difficulty'] ?? '', 'medio'); ?>>Medio</option>
                             <option value="difficile" <?php selected($_POST['tour_difficulty'] ?? '', 'difficile'); ?>>Difficile</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
+                            </select>
+                        </div>
+                        </div>
+                        </div>
 
             <!-- Sezione Categorie e Immagine -->
             <div class="form-section p-6 mt-8">
@@ -451,17 +463,17 @@ $categorie = get_terms(array(
                             <?php endforeach; ?>
                         </div>
                         <p class="text-sm text-gray-500 mt-2">Seleziona una o più categorie per l'esperienza</p>
-                    </div>
-                    
+            </div>
+
                     <div>
                         <label for="tour_image" class="form-label">
                             Immagine Principale
                         </label>
                         <input type="file" id="tour_image" name="tour_image" class="form-input" accept="image/*">
                         <p class="text-sm text-gray-500 mt-1">Formati supportati: JPG, PNG, GIF. Max 5MB</p>
-                    </div>
                 </div>
-            </div>
+                    </div>
+                    </div>
 
             <!-- Sezione Dettagli -->
             <div class="form-section p-6 mt-8">
@@ -478,7 +490,7 @@ $categorie = get_terms(array(
                         <textarea id="tour_highlights" name="tour_highlights" class="form-textarea" 
                                   placeholder="Elenca i punti salienti dell'esperienza..."><?php echo esc_textarea($_POST['tour_highlights'] ?? ''); ?></textarea>
                     </div>
-                    
+
                     <div>
                         <label for="tour_itinerary" class="form-label">
                             Itinerario
@@ -486,7 +498,7 @@ $categorie = get_terms(array(
                         <textarea id="tour_itinerary" name="tour_itinerary" class="form-textarea" 
                                   placeholder="Descrivi l'itinerario dettagliato..."><?php echo esc_textarea($_POST['tour_itinerary'] ?? ''); ?></textarea>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="tour_whats_included" class="form-label">
@@ -494,26 +506,26 @@ $categorie = get_terms(array(
                             </label>
                             <textarea id="tour_whats_included" name="tour_whats_included" class="form-textarea" 
                                       placeholder="Cosa è incluso nel prezzo..."><?php echo esc_textarea($_POST['tour_whats_included'] ?? ''); ?></textarea>
-                        </div>
-                        
+            </div>
+
                         <div>
                             <label for="tour_whats_not_included" class="form-label">
                                 Cosa Non Include
                             </label>
                             <textarea id="tour_whats_not_included" name="tour_whats_not_included" class="form-textarea" 
                                       placeholder="Cosa non è incluso..."><?php echo esc_textarea($_POST['tour_whats_not_included'] ?? ''); ?></textarea>
-                        </div>
+                </div>
                     </div>
-                    
+
                     <div>
                         <label for="tour_requirements" class="form-label">
                             Requisiti
                         </label>
                         <textarea id="tour_requirements" name="tour_requirements" class="form-textarea" 
                                   placeholder="Requisiti per partecipare..."><?php echo esc_textarea($_POST['tour_requirements'] ?? ''); ?></textarea>
-                    </div>
-                </div>
-            </div>
+                            </div>
+                            </div>
+                            </div>
 
             <!-- Sezione Incontro -->
             <div class="form-section p-6 mt-8">
@@ -529,15 +541,15 @@ $categorie = get_terms(array(
                         </label>
                         <input type="text" id="tour_meeting_point" name="tour_meeting_point" class="form-input" 
                                placeholder="es. Piazza del Duomo" value="<?php echo esc_attr($_POST['tour_meeting_point'] ?? ''); ?>">
-                    </div>
-                    
+                        </div>
+
                     <div>
                         <label for="tour_meeting_time" class="form-label">
                             Orario di Incontro
                         </label>
                         <input type="time" id="tour_meeting_time" name="tour_meeting_time" class="form-input" 
                                value="<?php echo esc_attr($_POST['tour_meeting_time'] ?? ''); ?>">
-                    </div>
+                            </div>
                     
                     <div>
                         <label for="tour_meeting_date" class="form-label">
@@ -545,7 +557,7 @@ $categorie = get_terms(array(
                         </label>
                         <input type="date" id="tour_meeting_date" name="tour_meeting_date" class="form-input" 
                                value="<?php echo esc_attr($_POST['tour_meeting_date'] ?? ''); ?>">
-                    </div>
+                            </div>
                     
                     <div>
                         <label for="tour_languages" class="form-label">
@@ -553,17 +565,17 @@ $categorie = get_terms(array(
                         </label>
                         <input type="text" id="tour_languages" name="tour_languages" class="form-input" 
                                placeholder="es. Italiano, Inglese" value="<?php echo esc_attr($_POST['tour_languages'] ?? ''); ?>">
+                        </div>
                     </div>
-                </div>
-                
+
                 <div class="mt-6">
                     <label for="tour_address" class="form-label">
                         Indirizzo Completo
                     </label>
                     <input type="text" id="tour_address" name="tour_address" class="form-input" 
                            placeholder="Indirizzo completo del punto di incontro" value="<?php echo esc_attr($_POST['tour_address'] ?? ''); ?>">
-                </div>
-                
+                        </div>
+
                 <div class="mt-6">
                     <label class="form-label">Posizione sulla Mappa</label>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -589,7 +601,7 @@ $categorie = get_terms(array(
                     Politiche e Termini
                 </h2>
                 
-                <div>
+                    <div>
                     <label for="tour_cancellation_policy" class="form-label">
                         Politica di Cancellazione
                     </label>
@@ -668,15 +680,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (file) {
             // Validazione dimensione (5MB)
             if (file.size > 5 * 1024 * 1024) {
-                Swal.fire({
+        Swal.fire({
                     title: 'File Troppo Grande',
                     text: 'L\'immagine deve essere inferiore a 5MB',
                     icon: 'error'
                 });
                 fileInput.value = '';
-                return;
-            }
-            
+            return;
+        }
+        
             // Validazione tipo
             const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!allowedTypes.includes(file.type)) {
@@ -686,8 +698,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     icon: 'error'
                 });
                 fileInput.value = '';
-                return;
-            }
+            return;
+        }
         }
     });
     

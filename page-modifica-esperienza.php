@@ -54,6 +54,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
     
     // Sanitizzazione dei dati
     $tour_title = sanitize_text_field($_POST['tour_title'] ?? '');
+    $tour_excerpt = sanitize_textarea_field($_POST['tour_excerpt'] ?? '');
     $tour_description = wp_kses_post($_POST['tour_description'] ?? '');
     $tour_duration = sanitize_text_field($_POST['tour_duration'] ?? '');
     $tour_max_participants = intval($_POST['tour_max_participants'] ?? 0);
@@ -88,6 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
         $post_data = array(
             'ID' => $edit_id,
             'post_title' => $tour_title,
+            'post_excerpt' => $tour_excerpt,
             'post_content' => $tour_description,
             'post_status' => $post->post_status, // Mantieni lo stato attuale
             'post_type' => 'esperienze'
@@ -405,8 +407,18 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                     </div>
                     
                     <div class="md:col-span-2">
+                        <label for="tour_excerpt" class="form-label">
+                            Descrizione Breve
+                        </label>
+                        <textarea id="tour_excerpt" name="tour_excerpt" class="form-textarea" 
+                                  placeholder="Breve descrizione dell'esperienza (max 160 caratteri)" 
+                                  maxlength="160" rows="3"><?php echo esc_textarea($post->post_excerpt); ?></textarea>
+                        <p class="text-sm text-gray-500 mt-1">Questa descrizione apparirà nelle anteprime e nei risultati di ricerca</p>
+                    </div>
+                    
+                    <div class="md:col-span-2">
                         <label for="tour_description" class="form-label">
-                            Descrizione <span class="form-required">*</span>
+                            Descrizione Completa <span class="form-required">*</span>
                         </label>
                         <textarea id="tour_description" name="tour_description" class="form-textarea" required><?php echo esc_textarea($post->post_content); ?></textarea>
                     </div>
