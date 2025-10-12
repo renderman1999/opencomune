@@ -86,13 +86,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
         $error_message = 'La durata è obbligatoria.';
     } else {
         // Aggiornamento del post
-        $post_data = array(
+    $post_data = array(
             'ID' => $edit_id,
             'post_title' => $tour_title,
             'post_excerpt' => $tour_excerpt,
             'post_content' => $tour_description,
             'post_status' => $post->post_status, // Mantieni lo stato attuale
-            'post_type' => 'esperienze'
+            'post_type' => 'esperienze',
+            'post_name' => sanitize_title($tour_title) // Aggiorna lo slug automaticamente
         );
         
         $result = wp_update_post($post_data);
@@ -178,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
             
             // Imposta una variabile per indicare il successo
             $show_success_modal = true;
-        } else {
+                } else {
             $error_message = 'Errore durante l\'aggiornamento dell\'esperienza.';
         }
     }
@@ -370,23 +371,23 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
 
         <?php if (isset($show_success_modal) && $show_success_modal): ?>
             <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    Swal.fire({
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
                         title: "Esperienza Aggiornata!",
                         text: "L'esperienza è stata aggiornata con successo.",
-                        icon: "success",
+                icon: "success",
                         confirmButtonText: "Vai alla Dashboard",
-                        showCancelButton: true,
+                showCancelButton: true,
                         cancelButtonText: "Continua Modifica"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
+            }).then((result) => {
+                if (result.isConfirmed) {
                             window.location.href = "<?php echo esc_js(home_url('/dashboard-ufficio/')); ?>";
-                        }
+                }
                         // Se sceglie "Continua Modifica", il modal non si ripresenterà
-                    });
-                });
+            });
+        });
             </script>
-        <?php endif; ?>
+<?php endif; ?>
 
         <!-- Form -->
         <form method="POST" enctype="multipart/form-data" id="modifica-esperienza-form" class="space-y-8">
@@ -404,8 +405,8 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                         </label>
                         <input type="text" id="tour_title" name="tour_title" class="form-input" 
                                value="<?php echo esc_attr($post->post_title); ?>" required>
-                    </div>
-                    
+        </div>
+
                     <div class="md:col-span-2">
                         <label for="tour_excerpt" class="form-label">
                             Descrizione Breve
@@ -414,31 +415,31 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                                   placeholder="Breve descrizione dell'esperienza (max 160 caratteri)" 
                                   maxlength="160" rows="3"><?php echo esc_textarea($post->post_excerpt); ?></textarea>
                         <p class="text-sm text-gray-500 mt-1">Questa descrizione apparirà nelle anteprime e nei risultati di ricerca</p>
-                    </div>
-                    
+                        </div>
+                        
                     <div class="md:col-span-2">
                         <label for="tour_description" class="form-label">
                             Descrizione Completa <span class="form-required">*</span>
                         </label>
                         <textarea id="tour_description" name="tour_description" class="form-textarea" required><?php echo esc_textarea($post->post_content); ?></textarea>
-                    </div>
-                    
+                        </div>
+
                     <div>
                         <label for="tour_duration" class="form-label">
                             Durata <span class="form-required">*</span>
                         </label>
                         <input type="text" id="tour_duration" name="tour_duration" class="form-input" 
                                placeholder="es. 2 ore, 1 giorno" value="<?php echo esc_attr(get_post_meta($edit_id, 'tour_duration', true)); ?>" required>
-                    </div>
-                    
+                        </div>
+
                     <div>
                         <label for="tour_max_participants" class="form-label">
                             Max Partecipanti
                         </label>
                         <input type="number" id="tour_max_participants" name="tour_max_participants" class="form-input" 
                                min="1" value="<?php echo esc_attr(get_post_meta($edit_id, 'tour_max_participants', true)); ?>">
-                    </div>
-                    
+                        </div>
+
                     <div>
                         <label for="tour_difficulty" class="form-label">
                             Difficoltà
@@ -448,10 +449,10 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                             <option value="facile" <?php selected(get_post_meta($edit_id, 'tour_difficulty', true), 'facile'); ?>>Facile</option>
                             <option value="medio" <?php selected(get_post_meta($edit_id, 'tour_difficulty', true), 'medio'); ?>>Medio</option>
                             <option value="difficile" <?php selected(get_post_meta($edit_id, 'tour_difficulty', true), 'difficile'); ?>>Difficile</option>
-                        </select>
+                            </select>
+                        </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
             <!-- Sezione Categorie e Immagine -->
             <div class="form-section p-6 mt-8">
@@ -476,10 +477,10 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                                     <span class="text-sm text-gray-700"><?php echo esc_html($categoria->name); ?></span>
                                 </label>
                             <?php endforeach; ?>
-                        </div>
+                </div>
                         <p class="text-sm text-gray-500 mt-2">Seleziona una o più categorie per l'esperienza</p>
-                    </div>
-                    
+            </div>
+
                     <div>
                         <label for="tour_image" class="form-label">
                             Immagine Principale
@@ -490,11 +491,11 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                             <div class="mt-2">
                                 <p class="text-sm text-gray-600 mb-2">Immagine attuale:</p>
                                 <?php echo get_the_post_thumbnail($edit_id, 'thumbnail', array('class' => 'w-24 h-24 object-cover rounded')); ?>
-                            </div>
+                </div>
                         <?php endif; ?>
                     </div>
-                </div>
-            </div>
+                    </div>
+                        </div>
 
             <!-- Sezione Dettagli -->
             <div class="form-section p-6 mt-8">
@@ -511,7 +512,7 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                         <textarea id="tour_highlights" name="tour_highlights" class="form-textarea" 
                                   placeholder="Elenca i punti salienti dell'esperienza..."><?php echo esc_textarea(get_post_meta($edit_id, 'tour_highlights', true)); ?></textarea>
                     </div>
-                    
+
                     <div>
                         <label for="tour_itinerary" class="form-label">
                             Itinerario
@@ -519,7 +520,7 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                         <textarea id="tour_itinerary" name="tour_itinerary" class="form-textarea" 
                                   placeholder="Descrivi l'itinerario dettagliato..."><?php echo esc_textarea(get_post_meta($edit_id, 'tour_itinerary', true)); ?></textarea>
                     </div>
-                    
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="tour_whats_included" class="form-label">
@@ -527,26 +528,26 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                             </label>
                             <textarea id="tour_whats_included" name="tour_whats_included" class="form-textarea" 
                                       placeholder="Cosa è incluso nel prezzo..."><?php echo esc_textarea(get_post_meta($edit_id, 'tour_whats_included', true)); ?></textarea>
-                        </div>
-                        
+            </div>
+
                         <div>
                             <label for="tour_whats_not_included" class="form-label">
                                 Cosa Non Include
                             </label>
                             <textarea id="tour_whats_not_included" name="tour_whats_not_included" class="form-textarea" 
                                       placeholder="Cosa non è incluso..."><?php echo esc_textarea(get_post_meta($edit_id, 'tour_whats_not_included', true)); ?></textarea>
-                        </div>
+                </div>
                     </div>
-                    
+
                     <div>
                         <label for="tour_requirements" class="form-label">
                             Requisiti
                         </label>
                         <textarea id="tour_requirements" name="tour_requirements" class="form-textarea" 
                                   placeholder="Requisiti per partecipare..."><?php echo esc_textarea(get_post_meta($edit_id, 'tour_requirements', true)); ?></textarea>
-                    </div>
-                </div>
-            </div>
+                            </div>
+                            </div>
+                            </div>
 
             <!-- Sezione Incontro -->
             <div class="form-section p-6 mt-8">
@@ -562,15 +563,15 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                         </label>
                         <input type="text" id="tour_meeting_point" name="tour_meeting_point" class="form-input" 
                                placeholder="es. Piazza del Duomo" value="<?php echo esc_attr(get_post_meta($edit_id, 'tour_meeting_point', true)); ?>">
-                    </div>
-                    
+                        </div>
+
                     <div>
                         <label for="tour_meeting_time" class="form-label">
                             Orario di Incontro
                         </label>
                         <input type="time" id="tour_meeting_time" name="tour_meeting_time" class="form-input" 
                                value="<?php echo esc_attr(get_post_meta($edit_id, 'tour_meeting_time', true)); ?>">
-                    </div>
+                            </div>
                     
                     <div>
                         <label for="tour_meeting_date" class="form-label">
@@ -578,7 +579,7 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                         </label>
                         <input type="date" id="tour_meeting_date" name="tour_meeting_date" class="form-input" 
                                value="<?php echo esc_attr(get_post_meta($edit_id, 'tour_meeting_date', true)); ?>">
-                    </div>
+                            </div>
                     
                     <div>
                         <label for="tour_languages" class="form-label">
@@ -586,17 +587,17 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                         </label>
                         <input type="text" id="tour_languages" name="tour_languages" class="form-input" 
                                placeholder="es. Italiano, Inglese" value="<?php echo esc_attr(get_post_meta($edit_id, 'tour_languages', true)); ?>">
+                        </div>
                     </div>
-                </div>
-                
+
                 <div class="mt-6">
                     <label for="tour_address" class="form-label">
                         Indirizzo Completo
                     </label>
                     <input type="text" id="tour_address" name="tour_address" class="form-input" 
                            placeholder="Indirizzo completo del punto di incontro" value="<?php echo esc_attr(get_post_meta($edit_id, 'tour_address', true)); ?>">
-                </div>
-                
+                        </div>
+
                 <div class="mt-6">
                     <label class="form-label">Posizione sulla Mappa</label>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -629,7 +630,7 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                     <textarea id="tour_cancellation_policy" name="tour_cancellation_policy" class="form-textarea" 
                               placeholder="Descrivi la politica di cancellazione..."><?php echo esc_textarea(get_post_meta($edit_id, 'tour_cancellation_policy', true)); ?></textarea>
                 </div>
-            </div>
+                    </div>
 
             <!-- Pulsanti di Azione -->
             <div class="flex justify-end space-x-4 pb-8">
@@ -640,11 +641,11 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                 <button type="submit" name="save_tour" class="btn-primary">
                     <i class="bi bi-check-circle mr-2"></i>
                     Salva Modifiche
-                </button>
-            </div>
+                                            </button>
+                                        </div>
         </form>
-    </div>
-</div>
+                </div>
+            </div>
 
 <!-- Loading Overlay -->
 <div id="loading-overlay" class="loading-overlay" style="display: none;">
@@ -701,15 +702,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (file) {
             // Validazione dimensione (5MB)
             if (file.size > 5 * 1024 * 1024) {
-                Swal.fire({
+        Swal.fire({
                     title: 'File Troppo Grande',
                     text: 'L\'immagine deve essere inferiore a 5MB',
                     icon: 'error'
                 });
                 fileInput.value = '';
-                return;
-            }
-            
+            return;
+        }
+        
             // Validazione tipo
             const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
             if (!allowedTypes.includes(file.type)) {
@@ -719,8 +720,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     icon: 'error'
                 });
                 fileInput.value = '';
-                return;
-            }
+            return;
+        }
         }
     });
 });

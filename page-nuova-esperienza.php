@@ -73,13 +73,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
     //     $error_message = 'Il prezzo deve essere maggiore di 0.';
     } else {
         // Creazione del post
-        $post_data = array(
+    $post_data = array(
             'post_title' => $tour_title,
             'post_excerpt' => $tour_excerpt,
             'post_content' => $tour_description,
             'post_status' => 'draft',
             'post_type' => 'esperienze',
-            'post_author' => get_current_user_id()
+            'post_author' => get_current_user_id(),
+            'post_name' => sanitize_title($tour_title) // Genera lo slug dal titolo
         );
         
         $post_id = wp_insert_post($post_data);
