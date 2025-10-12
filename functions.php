@@ -858,18 +858,18 @@ function opencomune_theme_settings_page_content() {
             update_option('opencomune_swiper_slide_3_icon', sanitize_text_field($_POST['swiper_slide_3_icon']));
             
             // Campi swiper hero homepage
-            update_option('opencomune_hero_slide_1_title', sanitize_text_field($_POST['hero_slide_1_title']));
-            update_option('opencomune_hero_slide_1_text', sanitize_textarea_field($_POST['hero_slide_1_text']));
-            update_option('opencomune_hero_slide_1_image', esc_url_raw($_POST['hero_slide_1_image']));
-            update_option('opencomune_hero_slide_1_link', esc_url_raw($_POST['hero_slide_1_link']));
-            update_option('opencomune_hero_slide_2_title', sanitize_text_field($_POST['hero_slide_2_title']));
-            update_option('opencomune_hero_slide_2_text', sanitize_textarea_field($_POST['hero_slide_2_text']));
-            update_option('opencomune_hero_slide_2_image', esc_url_raw($_POST['hero_slide_2_image']));
-            update_option('opencomune_hero_slide_2_link', esc_url_raw($_POST['hero_slide_2_link']));
-            update_option('opencomune_hero_slide_3_title', sanitize_text_field($_POST['hero_slide_3_title']));
-            update_option('opencomune_hero_slide_3_text', sanitize_textarea_field($_POST['hero_slide_3_text']));
-            update_option('opencomune_hero_slide_3_image', esc_url_raw($_POST['hero_slide_3_image']));
-            update_option('opencomune_hero_slide_3_link', esc_url_raw($_POST['hero_slide_3_link']));
+            update_option('opencomune_hero_slide_1_title', sanitize_text_field($_POST['hero_slide_1_title'] ?? ''));
+            update_option('opencomune_hero_slide_1_text', sanitize_textarea_field($_POST['hero_slide_1_text'] ?? ''));
+            update_option('opencomune_hero_slide_1_image', esc_url_raw($_POST['hero_slide_1_image'] ?? ''));
+            update_option('opencomune_hero_slide_1_link', esc_url_raw($_POST['hero_slide_1_link'] ?? ''));
+            update_option('opencomune_hero_slide_2_title', sanitize_text_field($_POST['hero_slide_2_title'] ?? ''));
+            update_option('opencomune_hero_slide_2_text', sanitize_textarea_field($_POST['hero_slide_2_text'] ?? ''));
+            update_option('opencomune_hero_slide_2_image', esc_url_raw($_POST['hero_slide_2_image'] ?? ''));
+            update_option('opencomune_hero_slide_2_link', esc_url_raw($_POST['hero_slide_2_link'] ?? ''));
+            update_option('opencomune_hero_slide_3_title', sanitize_text_field($_POST['hero_slide_3_title'] ?? ''));
+            update_option('opencomune_hero_slide_3_text', sanitize_textarea_field($_POST['hero_slide_3_text'] ?? ''));
+            update_option('opencomune_hero_slide_3_image', esc_url_raw($_POST['hero_slide_3_image'] ?? ''));
+            update_option('opencomune_hero_slide_3_link', esc_url_raw($_POST['hero_slide_3_link'] ?? ''));
             
             echo '<div class="notice notice-success"><p>Impostazioni salvate con successo!</p></div>';
         }
