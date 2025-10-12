@@ -6,11 +6,15 @@ require_once(ABSPATH . 'wp-admin/includes/image.php');
 require_once(ABSPATH . 'wp-admin/includes/file.php');
 require_once(ABSPATH . 'wp-admin/includes/media.php');
 
-// Carica jQuery (non più necessario per Select2)
+// Carica jQuery
 wp_enqueue_script('jquery');
 
 // Carica SweetAlert2
 wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array(), null, true);
+
+// Carica WordPress Media Uploader per il frontend
+wp_enqueue_media();
+wp_enqueue_script('wp-media-uploader');
 
 // Carica Google Maps API
 $api_key = opencomune_get_google_maps_api_key();
@@ -719,7 +723,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // WordPress Media Uploader per immagine principale
     let featuredImageFrame;
     const uploadFeaturedBtn = document.getElementById('upload-featured-image');
-    if (uploadFeaturedBtn) {
+    if (uploadFeaturedBtn && typeof wp !== 'undefined' && wp.media) {
         uploadFeaturedBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
@@ -760,7 +764,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // WordPress Media Uploader per galleria
     let galleryFrame;
     const uploadGalleryBtn = document.getElementById('upload-gallery-images');
-    if (uploadGalleryBtn) {
+    if (uploadGalleryBtn && typeof wp !== 'undefined' && wp.media) {
         uploadGalleryBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
