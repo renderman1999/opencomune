@@ -58,6 +58,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
     $tour_address = sanitize_text_field($_POST['tour_address'] ?? '');
     $tour_categories = array_map('sanitize_text_field', $_POST['tour_categories'] ?? []);
     
+    // Debug: log delle categorie ricevute
+    error_log('Categorie ricevute (nuova esperienza): ' . print_r($tour_categories, true));
+    
     // Validazione
     if (empty($tour_title)) {
         $error_message = 'Il titolo è obbligatorio.';
@@ -100,13 +103,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
             update_post_meta($post_id, 'tour_address', $tour_address);
             
             // Gestione delle categorie
+            error_log('Inizio gestione categorie per nuovo post ID: ' . $post_id);
+            
             if (!empty($tour_categories)) {
+                error_log('Tentativo di salvare categorie (nuova esperienza): ' . implode(', ', $tour_categories));
                 $result = wp_set_post_terms($post_id, $tour_categories, 'categorie_esperienze');
                 if (is_wp_error($result)) {
                     error_log('Errore nel salvataggio delle categorie: ' . $result->get_error_message());
                 } else {
                     error_log('Categorie salvate con successo: ' . implode(', ', $tour_categories));
+                    error_log('Risultato wp_set_post_terms: ' . print_r($result, true));
                 }
+            } else {
+                error_log('Nessuna categoria da salvare (nuova esperienza)');
             }
             
             // Gestione dell'immagine
