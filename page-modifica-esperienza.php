@@ -149,10 +149,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
             $success_message = 'L\'esperienza "' . esc_js($tour_title) . '" è stata aggiornata con successo.';
             $dashboard_url = esc_url(site_url('/dashboard-ufficio/'));
             
-            // Usa un parametro URL per indicare che il salvataggio è avvenuto
-            $redirect_url = add_query_arg('saved', '1', $_SERVER['REQUEST_URI']);
-            wp_redirect($redirect_url);
-            exit;
+            // Imposta una variabile per indicare il successo
+            $show_success_modal = true;
         } else {
             $error_message = 'Errore durante l\'aggiornamento dell\'esperienza.';
         }
@@ -343,7 +341,7 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
             </div>
         <?php endif; ?>
 
-        <?php if (isset($_GET['saved']) && $_GET['saved'] == '1'): ?>
+        <?php if (isset($show_success_modal) && $show_success_modal): ?>
             <script>
                 document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
@@ -356,12 +354,8 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
                     }).then((result) => {
                         if (result.isConfirmed) {
                             window.location.href = "<?php echo esc_js(home_url('/dashboard-ufficio/')); ?>";
-                        } else {
-                            // Rimuovi il parametro saved dall'URL per evitare di mostrare di nuovo il modal
-                            const url = new URL(window.location);
-                            url.searchParams.delete('saved');
-                            window.history.replaceState({}, document.title, url);
                         }
+                        // Se sceglie "Continua Modifica", il modal non si ripresenterà
                     });
                 });
             </script>
