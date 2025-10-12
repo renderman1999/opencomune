@@ -78,8 +78,8 @@ wp_localize_script('select2', 'select2_params', array(
 ));
 
 get_header();
-if (!is_user_logged_in() || !current_user_can('guida')) {
-    echo '<div class="container mx-auto p-8 text-center text-red-600 font-bold">' . esc_html__('Accesso riservato alle guide. Effettua il login con un account guida.', 'opencomune') . '</div>';
+if (!is_user_logged_in() || !current_user_can('editor_turistico')) {
+    echo '<div class="container mx-auto p-8 text-center text-red-600 font-bold">' . esc_html__('Accesso riservato all\'Ufficio Turistico. Effettua il login con un account autorizzato.', 'opencomune') . '</div>';
     get_footer();
     exit;
 }
@@ -490,7 +490,7 @@ require_once get_template_directory() . '/functions.php';
 if (isset($success) && $success) {
     error_log('Tour salvato con successo, mostrando SweetAlert');
     $success_message = 'Il tour "' . esc_js($tour_title) . '" è stato aggiornato con successo.';
-    $dashboard_url = esc_url(site_url('/dashboard-guida/'));
+    $dashboard_url = esc_url(site_url('/dashboard-ufficio/'));
     echo '<script>
         document.addEventListener("DOMContentLoaded", function() {
             // Chiudi il loader se è aperto
@@ -518,18 +518,18 @@ if (isset($success) && $success) {
 // Verifica che sia specificato un tour da modificare
 $edit_id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 if (!$edit_id) {
-    echo '<div class="container mx-auto p-8 text-center text-red-600 font-bold">Nessun tour specificato per la modifica. <a href="' . esc_url(site_url('/dashboard-guida/')) . '" class="underline text-blue-700">Torna alla dashboard</a>.</div>';
+    echo '<div class="container mx-auto p-8 text-center text-red-600 font-bold">Nessuna esperienza specificata per la modifica. <a href="' . esc_url(site_url('/dashboard-ufficio/')) . '" class="underline text-blue-700">Torna alla dashboard</a>.</div>';
     get_footer();
     exit;
 }
 global $wpdb;
 $comuni = $wpdb->get_results("SELECT Descrizione FROM wpmyguide_comuni WHERE DataFineVal IS NULL OR DataFineVal = '' ORDER BY Descrizione ASC");
 $tour_edit_data = null;
-if ($edit_id && is_user_logged_in() && current_user_can('guida')) {
+if ($edit_id && is_user_logged_in() && current_user_can('editor_turistico')) {
     $post = get_post($edit_id);
-    if ($post && $post->post_type === 'tour' && (int)$post->post_author === get_current_user_id()) {
+    if ($post && $post->post_type === 'esperienze' && (int)$post->post_author === get_current_user_id()) {
         // Recupera le categorie dalla tassonomia personalizzata
-        $categorie_tags = wp_get_post_terms($edit_id, 'categorie_tour', ['fields' => 'names']);
+        $categorie_tags = wp_get_post_terms($edit_id, 'categorie_esperienze', ['fields' => 'names']);
         
         // Debug: log delle categorie recuperate
         error_log('Categorie recuperate per tour ' . $edit_id . ': ' . print_r($categorie_tags, true));

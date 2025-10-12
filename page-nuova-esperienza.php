@@ -26,8 +26,8 @@ wp_localize_script('select2', 'select2_params', array(
 ));
 
 get_header();
-if (!is_user_logged_in() || !current_user_can('guida')) {
-    echo '<div class="container mx-auto p-8 text-center text-red-600 font-bold">' . esc_html__('Accesso riservato alle guide. Effettua il login con un account guida.', 'opencomune') . '</div>';
+if (!is_user_logged_in() || !current_user_can('editor_turistico')) {
+    echo '<div class="container mx-auto p-8 text-center text-red-600 font-bold">' . esc_html__('Accesso riservato all\'Ufficio Turistico. Effettua il login con un account autorizzato.', 'opencomune') . '</div>';
     get_footer();
     exit;
 }
@@ -438,7 +438,7 @@ require_once get_template_directory() . '/functions.php';
 if (isset($success) && $success) {
     error_log('Tour salvato con successo, mostrando SweetAlert');
     $success_message = 'Il tour "' . esc_js($tour_title) . '" è stato creato con successo.';
-    $dashboard_url = esc_url(site_url('/dashboard-guida/'));
+    $dashboard_url = esc_url(site_url('/dashboard-ufficio/'));
     echo '<script>
         document.addEventListener("DOMContentLoaded", function() {
             // Chiudi il loader se è aperto
