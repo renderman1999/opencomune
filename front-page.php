@@ -168,14 +168,17 @@ document.addEventListener('DOMContentLoaded', function() {
               <div class="relative">
                 <img src="<?php echo esc_url($img); ?>" class="rounded-xl w-full h-40 object-cover" alt="<?php the_title_attribute(); ?>">
                 <?php
-                  $author_id = get_post_field('post_author', $post_id);
-                  $guida_post_id = get_user_meta($author_id, 'guida_post_id', true);
-                  $guida_thumb = $guida_post_id ? get_the_post_thumbnail_url($guida_post_id, 'thumbnail') : '';
-                  if (!$guida_thumb) {
-                    $guida_thumb = 'https://www.gravatar.com/avatar/?d=mp&f=y';
+                  // Ottieni l'immagine profilo dell'ufficio turistico
+                  $ufficio_image_id = get_user_meta($author_id, 'profile_image_id', true);
+                  $ufficio_thumb = '';
+                  if ($ufficio_image_id) {
+                    $ufficio_thumb = wp_get_attachment_image_url($ufficio_image_id, 'thumbnail');
+                  }
+                  if (!$ufficio_thumb) {
+                    $ufficio_thumb = 'https://www.gravatar.com/avatar/?d=mp&f=y';
                   }
                 ?>
-                <img src="<?php echo esc_url($guida_thumb); ?>" alt="Guida" class="absolute top-2 right-2 w-10 h-10 rounded-full border-2 border-white shadow object-cover bg-white" />
+                <img src="<?php echo esc_url($ufficio_thumb); ?>" alt="Ufficio Turistico" class="absolute top-2 right-2 w-10 h-10 rounded-full border-2 border-white shadow object-cover bg-white" />
               </div>
               <div class="mt-3 flex-1 flex flex-col">
                 <div class="font-semibold text-base leading-tight mb-1"><?php the_title(); ?></div>

@@ -64,6 +64,7 @@
                     </button>
                     <div id="user-menu-dropdown" class="hidden absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded shadow-lg z-50">
                         <a href="<?php echo home_url('/dashboard-ufficio/'); ?>" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</a>
+                        <a href="<?php echo home_url('/profilo-ufficio/'); ?>" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profilo</a>
                         <a href="<?php echo wp_logout_url(home_url('/')); ?>" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Esci</a>
                     </div>
                 </div>
@@ -104,6 +105,7 @@
             <div class="mt-8">
                 <?php if (is_user_logged_in() && current_user_can('editor_turistico')): ?>
                     <a href="<?php echo home_url('/dashboard-ufficio/'); ?>" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Dashboard</a>
+                    <a href="<?php echo home_url('/profilo-ufficio/'); ?>" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Profilo</a>
                     <a href="<?php echo wp_logout_url(home_url('/')); ?>" class="block px-4 py-2 text-gray-700 hover:bg-gray-100">Esci</a>
                 <?php endif; ?>
             </div>
