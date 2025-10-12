@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
             error_log('Inizio gestione categorie per post ID: ' . $edit_id);
             
             // Prima rimuovi tutte le categorie esistenti
-            $remove_result = wp_set_post_terms($edit_id, array(), 'categorie_esperienze');
+            $remove_result = wp_set_object_terms($edit_id, array(), 'categorie_esperienze');
             error_log('Rimozione categorie esistenti: ' . (is_wp_error($remove_result) ? $remove_result->get_error_message() : 'OK'));
             
             // Poi aggiungi le nuove categorie se ce ne sono
@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
                     }
                 }
                 
-                $result = wp_set_post_terms($edit_id, $tour_categories, 'categorie_esperienze');
+                $result = wp_set_object_terms($edit_id, $tour_categories, 'categorie_esperienze');
                 if (is_wp_error($result)) {
                     error_log('Errore nel salvataggio delle categorie: ' . $result->get_error_message());
                 } else {
