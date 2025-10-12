@@ -8,9 +8,10 @@ get_header();
 
 // Aggiungi SweetAlert
 wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array(), '11.0.0', true);
+?>
 
-// Aggiungi CSS per il loader
-echo '<style>
+<!-- Aggiungi CSS per il loader -->
+<style>
 .page-loader {
     position: fixed;
     top: 0;
