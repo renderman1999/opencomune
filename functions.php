@@ -857,6 +857,20 @@ function opencomune_theme_settings_page_content() {
             update_option('opencomune_swiper_slide_3_text', sanitize_textarea_field($_POST['swiper_slide_3_text']));
             update_option('opencomune_swiper_slide_3_icon', sanitize_text_field($_POST['swiper_slide_3_icon']));
             
+            // Campi swiper hero homepage
+            update_option('opencomune_hero_slide_1_title', sanitize_text_field($_POST['hero_slide_1_title']));
+            update_option('opencomune_hero_slide_1_text', sanitize_textarea_field($_POST['hero_slide_1_text']));
+            update_option('opencomune_hero_slide_1_image', esc_url_raw($_POST['hero_slide_1_image']));
+            update_option('opencomune_hero_slide_1_link', esc_url_raw($_POST['hero_slide_1_link']));
+            update_option('opencomune_hero_slide_2_title', sanitize_text_field($_POST['hero_slide_2_title']));
+            update_option('opencomune_hero_slide_2_text', sanitize_textarea_field($_POST['hero_slide_2_text']));
+            update_option('opencomune_hero_slide_2_image', esc_url_raw($_POST['hero_slide_2_image']));
+            update_option('opencomune_hero_slide_2_link', esc_url_raw($_POST['hero_slide_2_link']));
+            update_option('opencomune_hero_slide_3_title', sanitize_text_field($_POST['hero_slide_3_title']));
+            update_option('opencomune_hero_slide_3_text', sanitize_textarea_field($_POST['hero_slide_3_text']));
+            update_option('opencomune_hero_slide_3_image', esc_url_raw($_POST['hero_slide_3_image']));
+            update_option('opencomune_hero_slide_3_link', esc_url_raw($_POST['hero_slide_3_link']));
+            
             echo '<div class="notice notice-success"><p>Impostazioni salvate con successo!</p></div>';
         }
     }
@@ -889,6 +903,20 @@ function opencomune_theme_settings_page_content() {
     $swiper_slide_3_title = get_option('opencomune_swiper_slide_3_title', 'Diventa protagonista');
     $swiper_slide_3_text = get_option('opencomune_swiper_slide_3_text', 'Crea e condividi le tue esperienze, entra nella community di Explorando.');
     $swiper_slide_3_icon = get_option('opencomune_swiper_slide_3_icon', 'bi-people');
+    
+    // Swiper hero homepage
+    $hero_slide_1_title = get_option('opencomune_hero_slide_1_title', 'Scopri luoghi veri, vivi emozioni autentiche');
+    $hero_slide_1_text = get_option('opencomune_hero_slide_1_text', 'Dimentica i soliti itinerari. Con Explorando entri nel cuore del territorio: esperienze locali, sapori genuini, storie da ricordare.');
+    $hero_slide_1_image = get_option('opencomune_hero_slide_1_image', 'https://betadev.it/explora/wp-content/uploads/2025/06/lecce_home.jpg');
+    $hero_slide_1_link = get_option('opencomune_hero_slide_1_link', '#');
+    $hero_slide_2_title = get_option('opencomune_hero_slide_2_title', 'Eventi, tour e attività… a due passi da te');
+    $hero_slide_2_text = get_option('opencomune_hero_slide_2_text', 'Che sia una gita in natura, un workshop artigianale o una serata sotto le stelle, Explorando ti porta dove succede la magia.');
+    $hero_slide_2_image = get_option('opencomune_hero_slide_2_image', 'https://betadev.it/explora/wp-content/uploads/2025/06/polignano.jpg');
+    $hero_slide_2_link = get_option('opencomune_hero_slide_2_link', '#');
+    $hero_slide_3_title = get_option('opencomune_hero_slide_3_title', 'Esperienze da condividere, ricordi da custodire');
+    $hero_slide_3_text = get_option('opencomune_hero_slide_3_text', 'Scopri proposte per coppie, famiglie e gruppi. Condividi momenti unici e crea connessioni autentiche, una tappa alla volta.');
+    $hero_slide_3_image = get_option('opencomune_hero_slide_3_image', 'https://betadev.it/explora/wp-content/uploads/2025/06/vendemmia_puglia.jpeg');
+    $hero_slide_3_link = get_option('opencomune_hero_slide_3_link', '#');
     ?>
     <div class="wrap">
         <h1>OpenComune - Impostazioni Tema</h1>
@@ -1238,6 +1266,169 @@ function opencomune_theme_settings_page_content() {
                                class="regular-text"
                                placeholder="bi-people">
                         <p class="description">Nome dell'icona Bootstrap Icons (es: bi-stars, bi-search, bi-people)</p>
+                    </td>
+                </tr>
+                
+                <!-- Sezione Swiper Hero Homepage -->
+                <tr>
+                    <th scope="row" colspan="2">
+                        <h3 style="margin: 20px 0 10px 0; padding: 10px 0; border-top: 1px solid #ddd;">Swiper Hero Homepage - Configurazione Slide</h3>
+                    </th>
+                </tr>
+                
+                <!-- Hero Slide 1 -->
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_1_title">Hero Slide 1 - Titolo</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="hero_slide_1_title" 
+                               name="hero_slide_1_title" 
+                               value="<?php echo esc_attr($hero_slide_1_title); ?>" 
+                               class="regular-text">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_1_text">Hero Slide 1 - Testo</label>
+                    </th>
+                    <td>
+                        <textarea id="hero_slide_1_text" 
+                                  name="hero_slide_1_text" 
+                                  rows="3" 
+                                  class="large-text"><?php echo esc_textarea($hero_slide_1_text); ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_1_image">Hero Slide 1 - Immagine URL</label>
+                    </th>
+                    <td>
+                        <input type="url" 
+                               id="hero_slide_1_image" 
+                               name="hero_slide_1_image" 
+                               value="<?php echo esc_attr($hero_slide_1_image); ?>" 
+                               class="regular-text">
+                        <p class="description">URL dell'immagine di sfondo per la slide</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_1_link">Hero Slide 1 - Link Bottone</label>
+                    </th>
+                    <td>
+                        <input type="url" 
+                               id="hero_slide_1_link" 
+                               name="hero_slide_1_link" 
+                               value="<?php echo esc_attr($hero_slide_1_link); ?>" 
+                               class="regular-text"
+                               placeholder="#">
+                        <p class="description">URL del link per il bottone "Scopri di più"</p>
+                    </td>
+                </tr>
+                
+                <!-- Hero Slide 2 -->
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_2_title">Hero Slide 2 - Titolo</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="hero_slide_2_title" 
+                               name="hero_slide_2_title" 
+                               value="<?php echo esc_attr($hero_slide_2_title); ?>" 
+                               class="regular-text">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_2_text">Hero Slide 2 - Testo</label>
+                    </th>
+                    <td>
+                        <textarea id="hero_slide_2_text" 
+                                  name="hero_slide_2_text" 
+                                  rows="3" 
+                                  class="large-text"><?php echo esc_textarea($hero_slide_2_text); ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_2_image">Hero Slide 2 - Immagine URL</label>
+                    </th>
+                    <td>
+                        <input type="url" 
+                               id="hero_slide_2_image" 
+                               name="hero_slide_2_image" 
+                               value="<?php echo esc_attr($hero_slide_2_image); ?>" 
+                               class="regular-text">
+                        <p class="description">URL dell'immagine di sfondo per la slide</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_2_link">Hero Slide 2 - Link Bottone</label>
+                    </th>
+                    <td>
+                        <input type="url" 
+                               id="hero_slide_2_link" 
+                               name="hero_slide_2_link" 
+                               value="<?php echo esc_attr($hero_slide_2_link); ?>" 
+                               class="regular-text"
+                               placeholder="#">
+                        <p class="description">URL del link per il bottone "Scopri di più"</p>
+                    </td>
+                </tr>
+                
+                <!-- Hero Slide 3 -->
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_3_title">Hero Slide 3 - Titolo</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="hero_slide_3_title" 
+                               name="hero_slide_3_title" 
+                               value="<?php echo esc_attr($hero_slide_3_title); ?>" 
+                               class="regular-text">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_3_text">Hero Slide 3 - Testo</label>
+                    </th>
+                    <td>
+                        <textarea id="hero_slide_3_text" 
+                                  name="hero_slide_3_text" 
+                                  rows="3" 
+                                  class="large-text"><?php echo esc_textarea($hero_slide_3_text); ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_3_image">Hero Slide 3 - Immagine URL</label>
+                    </th>
+                    <td>
+                        <input type="url" 
+                               id="hero_slide_3_image" 
+                               name="hero_slide_3_image" 
+                               value="<?php echo esc_attr($hero_slide_3_image); ?>" 
+                               class="regular-text">
+                        <p class="description">URL dell'immagine di sfondo per la slide</p>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="hero_slide_3_link">Hero Slide 3 - Link Bottone</label>
+                    </th>
+                    <td>
+                        <input type="url" 
+                               id="hero_slide_3_link" 
+                               name="hero_slide_3_link" 
+                               value="<?php echo esc_attr($hero_slide_3_link); ?>" 
+                               class="regular-text"
+                               placeholder="#">
+                        <p class="description">URL del link per il bottone "Scopri di più"</p>
                     </td>
                 </tr>
             </table>
