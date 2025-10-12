@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="flex flex-col items-center mb-8">
  
         <div class="text-center  text-gray-700 mb-6">
-            <h1 class="text-4xl font-bold"><?php echo bloginfo('name'); ?>, la piattaforma per scoprire, creare<br>
+            <h1 class="text-4xl font-bold"><?php echo bloginfo('name'); ?>, la piattaforma per scoprire<br>
             e condividere esperienze culturali</h1>
         </div>
     </div>
@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <!-- Ricerca -->
     <form id="tour-search-form" class="w-full max-w-2xl mx-auto mb-8 relative" autocomplete="off">
         <div class="flex flex-col md:flex-row bg-white rounded-xl shadow px-4 py-3 items-center space-y-2 md:space-y-0 md:space-x-2">
-            <input type="text" id="tour-search-input" placeholder="Cerca esperienze, città..." class="flex-1 border-none focus:ring-0 text-1xl bg-transparent py-4 px-4" autocomplete="off" />
+            <input type="text" id="tour-search-input" placeholder="Cerca esperienze..." class="flex-1 border-none focus:ring-0 text-1xl bg-transparent py-4 px-4" autocomplete="off" />
             <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded font-light text-lg hover:bg-blue-700" style="    width: 100px;">Cerca</button>
         </div>
         <div id="tour-search-suggestions" class="absolute left-0 right-0 bg-white border rounded shadow z-50 mt-1 hidden"></div>
