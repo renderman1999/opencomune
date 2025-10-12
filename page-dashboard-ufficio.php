@@ -232,6 +232,30 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
             </div>
             </div>
 
+        <!-- Sezione Prenotazioni -->
+        <div class="dashboard-card p-6 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-semibold text-gray-900">Prenotazioni Recenti</h2>
+                <div class="flex items-center space-x-2">
+                    <button id="refreshPrenotazioni" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 text-sm">
+                        <i class="bi bi-arrow-clockwise mr-2"></i>
+                        Aggiorna
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State Prenotazioni -->
+            <div id="prenotazioniLoading" class="text-center py-8">
+                <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+                <p class="mt-2 text-gray-500">Caricamento prenotazioni...</p>
+            </div>
+
+            <!-- Lista Prenotazioni -->
+            <div id="prenotazioniList" class="space-y-4">
+                <!-- Le prenotazioni verranno caricate qui via AJAX -->
+            </div>
+        </div>
+
         <!-- Lista Esperienze -->
         <div class="dashboard-card p-6">
             <div class="flex items-center justify-between mb-6">
@@ -286,6 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Carica dati iniziali
     loadDashboardData();
     loadCategorie();
+    loadPrenotazioni();
     
     // Event listeners
     document.getElementById('searchEsperienze').addEventListener('input', debounce(filterEsperienze, 300));
@@ -293,6 +318,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('filterCategoria').addEventListener('change', filterEsperienze);
     document.getElementById('sortBy').addEventListener('change', filterEsperienze);
     document.getElementById('refreshData').addEventListener('click', loadDashboardData);
+    document.getElementById('refreshPrenotazioni').addEventListener('click', loadPrenotazioni);
 });
 
 // Carica dati dashboard
@@ -326,6 +352,29 @@ function loadCategorie() {
             }
         })
         .catch(error => console.error('Errore nel caricamento delle categorie:', error));
+}
+
+// Carica prenotazioni
+function loadPrenotazioni() {
+    document.getElementById('prenotazioniLoading').style.display = 'block';
+    document.getElementById('prenotazioniList').innerHTML = '';
+    
+    fetch(ajax_object.ajax_url + '?action=opencomune_get_prenotazioni')
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('prenotazioniLoading').style.display = 'none';
+            
+            if (data.success) {
+                renderPrenotazioni(data.data);
+            } else {
+                document.getElementById('prenotazioniList').innerHTML = 
+                    '<div class="text-center py-8 text-gray-500">Nessuna prenotazione trovata</div>';
+            }
+        })
+        .catch(error => {
+            document.getElementById('prenotazioniLoading').style.display = 'none';
+            console.error('Errore nel caricamento delle prenotazioni:', error);
+        });
 }
 
 // Carica esperienze
@@ -364,6 +413,76 @@ function loadEsperienze(page = 1) {
             document.getElementById('esperienzeLoading').style.display = 'none';
             console.error('Errore nel caricamento delle esperienze:', error);
         });
+}
+
+// Renderizza prenotazioni
+function renderPrenotazioni(prenotazioni) {
+    const container = document.getElementById('prenotazioniList');
+    
+    if (prenotazioni.length === 0) {
+        container.innerHTML = '<div class="text-center py-8 text-gray-500">Nessuna prenotazione trovata</div>';
+        return;
+    }
+    
+    container.innerHTML = prenotazioni.map(prenotazione => `
+        <div class="experience-card">
+            <div class="flex items-start space-x-4">
+                <!-- Icona prenotazione -->
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                        <i class="bi bi-calendar-check text-blue-600 text-xl"></i>
+                    </div>
+                </div>
+                
+                <!-- Contenuto prenotazione -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <h3 class="text-lg font-semibold text-gray-900">${prenotazione.esperienza_title}</h3>
+                                <span class="status-badge ${prenotazione.status === 'confirmed' ? 'status-published' : 'status-draft'}">
+                                    ${prenotazione.status === 'confirmed' ? 'Confermata' : 'In Attesa'}
+                                </span>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
+                                <div>
+                                    <p class="text-sm text-gray-600"><strong>Partecipanti:</strong> ${prenotazione.participants}</p>
+                                    <p class="text-sm text-gray-600"><strong>Data:</strong> ${prenotazione.date}</p>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-600"><strong>Nome:</strong> ${prenotazione.name}</p>
+                                    <p class="text-sm text-gray-600"><strong>Email:</strong> ${prenotazione.email}</p>
+                                </div>
+                            </div>
+                            ${prenotazione.notes ? `<p class="text-sm text-gray-600"><strong>Note:</strong> ${prenotazione.notes}</p>` : ''}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Azioni prenotazione -->
+                <div class="flex flex-col space-y-2 ml-4">
+                    <div class="flex space-x-2">
+                        <button onclick="togglePrenotazioneStatus(${prenotazione.id}, '${prenotazione.status}')" 
+                                class="px-3 py-1 rounded text-xs font-medium transition-colors ${prenotazione.status === 'confirmed' ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' : 'bg-green-100 text-green-800 hover:bg-green-200'}">
+                            <i class="bi bi-${prenotazione.status === 'confirmed' ? 'x-circle' : 'check-circle'} mr-1"></i>
+                            ${prenotazione.status === 'confirmed' ? 'Annulla' : 'Conferma'}
+                        </button>
+                    </div>
+                    
+                    <div class="flex space-x-2">
+                        <button onclick="viewPrenotazioneDetails(${prenotazione.id})" 
+                                class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors">
+                            <i class="bi bi-eye mr-1"></i>Dettagli
+                        </button>
+                        <button onclick="deletePrenotazione(${prenotazione.id})" 
+                                class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition-colors">
+                            <i class="bi bi-trash mr-1"></i>Elimina
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
 }
 
 // Renderizza esperienze
@@ -511,6 +630,89 @@ function toggleEsperienzaStatus(id, currentStatus) {
                     loadDashboardData(); // Ricarica i dati
                 } else {
                     Swal.fire('Errore!', data.message || 'Errore durante l\'aggiornamento.', 'error');
+                }
+            })
+            .catch(error => {
+                Swal.fire('Errore!', 'Errore di connessione.', 'error');
+            });
+        }
+    });
+}
+
+// Gestione prenotazioni
+function togglePrenotazioneStatus(id, currentStatus) {
+    const newStatus = currentStatus === 'confirmed' ? 'pending' : 'confirmed';
+    const actionText = newStatus === 'confirmed' ? 'confermare' : 'annullare';
+    
+    Swal.fire({
+        title: 'Conferma Azione',
+        text: `Sei sicuro di voler ${actionText} questa prenotazione?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: newStatus === 'confirmed' ? '#10b981' : '#f59e0b',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: `Sì, ${actionText}`,
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(ajax_object.ajax_url + '?action=opencomune_toggle_prenotazione_status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id=${id}&status=${newStatus}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Aggiornato!', data.message, 'success');
+                    loadPrenotazioni(); // Ricarica le prenotazioni
+                } else {
+                    Swal.fire('Errore!', data.message || 'Errore durante l\'aggiornamento.', 'error');
+                }
+            })
+            .catch(error => {
+                Swal.fire('Errore!', 'Errore di connessione.', 'error');
+            });
+        }
+    });
+}
+
+function viewPrenotazioneDetails(id) {
+    // Implementa la visualizzazione dei dettagli della prenotazione
+    Swal.fire({
+        title: 'Dettagli Prenotazione',
+        text: 'Funzionalità in sviluppo...',
+        icon: 'info'
+    });
+}
+
+function deletePrenotazione(id) {
+    Swal.fire({
+        title: 'Sei sicuro?',
+        text: "Questa prenotazione verrà eliminata definitivamente!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Sì, elimina!',
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(ajax_object.ajax_url + '?action=opencomune_delete_prenotazione', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id=${id}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Eliminata!', 'La prenotazione è stata eliminata.', 'success');
+                    loadPrenotazioni();
+                } else {
+                    Swal.fire('Errore!', data.message || 'Errore durante l\'eliminazione.', 'error');
                 }
             })
             .catch(error => {

@@ -936,6 +936,80 @@ function opencomune_toggle_esperienza_status_callback() {
     }
 }
 
+// === AJAX: Get Prenotazioni ===
+add_action('wp_ajax_opencomune_get_prenotazioni', 'opencomune_get_prenotazioni_callback');
+function opencomune_get_prenotazioni_callback() {
+    if (!current_user_can('editor_turistico')) {
+        wp_send_json_error(['message' => 'Accesso negato']);
+    }
+    
+    // Per ora restituiamo dati di esempio - da implementare con sistema prenotazioni reale
+    $prenotazioni = [
+        [
+            'id' => 1,
+            'esperienza_title' => 'Tour guidato a piedi con una guida privata',
+            'name' => 'Mario Rossi',
+            'email' => 'mario.rossi@email.com',
+            'participants' => 2,
+            'date' => '15/10/2025',
+            'status' => 'confirmed',
+            'notes' => 'Richiesta visita guidata per gruppo famiglia'
+        ],
+        [
+            'id' => 2,
+            'esperienza_title' => 'Tour guidato a piedi con una guida privata',
+            'name' => 'Giulia Bianchi',
+            'email' => 'giulia.bianchi@email.com',
+            'participants' => 4,
+            'date' => '20/10/2025',
+            'status' => 'pending',
+            'notes' => 'Gruppo di amici in visita'
+        ]
+    ];
+    
+    wp_send_json_success($prenotazioni);
+}
+
+// === AJAX: Toggle Prenotazione Status ===
+add_action('wp_ajax_opencomune_toggle_prenotazione_status', 'opencomune_toggle_prenotazione_status_callback');
+function opencomune_toggle_prenotazione_status_callback() {
+    if (!current_user_can('editor_turistico')) {
+        wp_send_json_error(['message' => 'Accesso negato']);
+    }
+    
+    $id = intval($_POST['id'] ?? 0);
+    $status = sanitize_text_field($_POST['status'] ?? '');
+    
+    if (!$id) {
+        wp_send_json_error(['message' => 'ID prenotazione non valido']);
+    }
+    
+    if (!in_array($status, ['confirmed', 'pending'])) {
+        wp_send_json_error(['message' => 'Stato non valido']);
+    }
+    
+    // Per ora simuliamo l'aggiornamento - da implementare con sistema prenotazioni reale
+    $status_text = $status === 'confirmed' ? 'confermata' : 'annullata';
+    wp_send_json_success(['message' => "Prenotazione {$status_text} con successo"]);
+}
+
+// === AJAX: Delete Prenotazione ===
+add_action('wp_ajax_opencomune_delete_prenotazione', 'opencomune_delete_prenotazione_callback');
+function opencomune_delete_prenotazione_callback() {
+    if (!current_user_can('editor_turistico')) {
+        wp_send_json_error(['message' => 'Accesso negato']);
+    }
+    
+    $id = intval($_POST['id'] ?? 0);
+    
+    if (!$id) {
+        wp_send_json_error(['message' => 'ID prenotazione non valido']);
+    }
+    
+    // Per ora simuliamo l'eliminazione - da implementare con sistema prenotazioni reale
+    wp_send_json_success(['message' => 'Prenotazione eliminata con successo']);
+}
+
 // === AJAX: Elimina Esperienza ===
 add_action('wp_ajax_opencomune_delete_esperienza', 'opencomune_delete_esperienza_callback');
 function opencomune_delete_esperienza_callback() {
