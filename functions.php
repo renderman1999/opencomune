@@ -779,6 +779,144 @@ function opencomune_get_categorie_esperienze_callback() {
     wp_send_json_success($data);
 }
 
+// === AJAX: Statistiche Dashboard ===
+add_action('wp_ajax_opencomune_get_dashboard_stats', 'opencomune_get_dashboard_stats_callback');
+function opencomune_get_dashboard_stats_callback() {
+    if (!current_user_can('editor_turistico')) {
+        wp_send_json_error(['message' => 'Accesso negato']);
+    }
+    
+    $total_esperienze = wp_count_posts('esperienze');
+    $pubblicate = $total_esperienze->publish;
+    $bozza = $total_esperienze->draft;
+    $pending = $total_esperienze->pending;
+    
+    // Prenotazioni di oggi (placeholder - da implementare con sistema prenotazioni)
+    $prenotazioni_oggi = 0;
+    
+    wp_send_json_success([
+        'total_esperienze' => $pubblicate + $bozza + $pending,
+        'pubblicate' => $pubblicate,
+        'bozza' => $bozza,
+        'pending' => $pending,
+        'prenotazioni_oggi' => $prenotazioni_oggi
+    ]);
+}
+
+// === AJAX: Lista Esperienze Dashboard ===
+add_action('wp_ajax_opencomune_get_esperienze_dashboard', 'opencomune_get_esperienze_dashboard_callback');
+function opencomune_get_esperienze_dashboard_callback() {
+    if (!current_user_can('editor_turistico')) {
+        wp_send_json_error(['message' => 'Accesso negato']);
+    }
+    
+    $search = sanitize_text_field($_GET['search'] ?? '');
+    $status = sanitize_text_field($_GET['status'] ?? '');
+    $categoria = sanitize_text_field($_GET['categoria'] ?? '');
+    $sort = sanitize_text_field($_GET['sort'] ?? 'date_desc');
+    $page = intval($_GET['page'] ?? 1);
+    $per_page = 10;
+    
+    $args = [
+        'post_type' => 'esperienze',
+        'post_status' => $status ? [$status] : ['publish', 'draft', 'pending'],
+        'posts_per_page' => $per_page,
+        'paged' => $page,
+        'meta_query' => []
+    ];
+    
+    // Ricerca
+    if ($search) {
+        $args['s'] = $search;
+    }
+    
+    // Categoria
+    if ($categoria) {
+        $args['tax_query'] = [
+            [
+                'taxonomy' => 'categorie_esperienze',
+                'field' => 'slug',
+                'terms' => $categoria
+            ]
+        ];
+    }
+    
+    // Ordinamento
+    switch ($sort) {
+        case 'date_asc':
+            $args['orderby'] = 'date';
+            $args['order'] = 'ASC';
+            break;
+        case 'title_asc':
+            $args['orderby'] = 'title';
+            $args['order'] = 'ASC';
+            break;
+        case 'title_desc':
+            $args['orderby'] = 'title';
+            $args['order'] = 'DESC';
+            break;
+        default:
+            $args['orderby'] = 'date';
+            $args['order'] = 'DESC';
+    }
+    
+    $query = new WP_Query($args);
+    
+    $esperienze = [];
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $post_id = get_the_ID();
+            
+            $esperienze[] = [
+                'id' => $post_id,
+                'title' => get_the_title(),
+                'excerpt' => get_the_excerpt(),
+                'status' => get_post_status(),
+                'date' => get_the_date('d/m/Y'),
+                'edit_url' => home_url('/modifica-esperienza/?id=' . $post_id),
+                'view_url' => get_permalink(),
+                'views' => get_post_meta($post_id, 'views_count', true) ?: 0,
+                'likes' => get_post_meta($post_id, 'likes_count', true) ?: 0
+            ];
+        }
+    }
+    wp_reset_postdata();
+    
+    $pagination = [
+        'current_page' => $page,
+        'total_pages' => $query->max_num_pages,
+        'total_posts' => $query->found_posts
+    ];
+    
+    wp_send_json_success([
+        'esperienze' => $esperienze,
+        'pagination' => $pagination
+    ]);
+}
+
+// === AJAX: Elimina Esperienza ===
+add_action('wp_ajax_opencomune_delete_esperienza', 'opencomune_delete_esperienza_callback');
+function opencomune_delete_esperienza_callback() {
+    if (!current_user_can('editor_turistico')) {
+        wp_send_json_error(['message' => 'Accesso negato']);
+    }
+    
+    $id = intval($_POST['id'] ?? 0);
+    
+    if (!$id) {
+        wp_send_json_error(['message' => 'ID esperienza non valido']);
+    }
+    
+    $result = wp_delete_post($id, true);
+    
+    if ($result) {
+        wp_send_json_success(['message' => 'Esperienza eliminata con successo']);
+    } else {
+        wp_send_json_error(['message' => 'Errore durante l\'eliminazione']);
+    }
+}
+
 // === AJAX: Restituisce tutti i tour pubblicati con lat/lon per la mappa ===
 add_action('wp_ajax_opencomune_get_all_tours', 'opencomune_get_all_tours_callback');
 add_action('wp_ajax_nopriv_opencomune_get_all_tours', 'opencomune_get_all_tours_callback');
