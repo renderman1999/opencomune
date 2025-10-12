@@ -114,8 +114,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
             update_post_meta($edit_id, 'tour_address', $tour_address);
             
             // Gestione delle categorie
+            // Prima rimuovi tutte le categorie esistenti
+            wp_set_post_terms($edit_id, array(), 'categorie_esperienze');
+            
+            // Poi aggiungi le nuove categorie se ce ne sono
             if (!empty($tour_categories)) {
-                wp_set_post_terms($edit_id, $tour_categories, 'categorie_esperienze');
+                $result = wp_set_post_terms($edit_id, $tour_categories, 'categorie_esperienze');
+                if (is_wp_error($result)) {
+                    error_log('Errore nel salvataggio delle categorie: ' . $result->get_error_message());
+                } else {
+                    error_log('Categorie salvate con successo: ' . implode(', ', $tour_categories));
+                }
             }
             
             // Gestione dell'immagine

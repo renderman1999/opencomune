@@ -102,7 +102,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
             
             // Gestione delle categorie
             if (!empty($tour_categories)) {
-                wp_set_post_terms($post_id, $tour_categories, 'categorie_esperienze');
+                $result = wp_set_post_terms($post_id, $tour_categories, 'categorie_esperienze');
+                if (is_wp_error($result)) {
+                    error_log('Errore nel salvataggio delle categorie: ' . $result->get_error_message());
+                } else {
+                    error_log('Categorie salvate con successo: ' . implode(', ', $tour_categories));
+                }
             }
             
             // Gestione dell'immagine
