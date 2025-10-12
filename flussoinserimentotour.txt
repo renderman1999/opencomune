@@ -1,0 +1,224 @@
+DATI OBBLIGATORI:
+├─ Titolo evento (max 80 caratteri)
+├─ Categoria principale
+│  ├─ Arte e Musei
+│  ├─ Storia e Archeologia  
+│  ├─ Food & Wine
+│  ├─ Natura e Paesaggi
+│  └─ Tradizioni Locali
+├─ Città/Località
+├─ Durata stimata
+├─ Lingue disponibili
+└─ Prezzo per persona
+
+VALIDAZIONI REAL-TIME:
+├─ Titolo: No caratteri speciali, min 10 caratteri
+├─ Prezzo: Formato numerico, min €10, max €500
+├─ Durata: Formato "Xh Ym" o preset (1h, 2h, 3h, mezza giornata, giornata intera)
+└─ Città: Autocomplete da database città italiane
+
+CONTENUTI DESCRITTIVI:
+├─ Descrizione breve (per listing) - max 160 caratteri
+├─ Descrizione completa (editor WYSIWYG)
+│  ├─ Cosa include il tour
+│  ├─ Itinerario dettagliato
+│  ├─ Cosa non è incluso
+│  └─ Note importanti
+├─ Foto principale (obbligatoria)
+├─ Galleria immagini (max 8 foto)
+└─ Video presentazione (opzionale)
+
+OTTIMIZZAZIONI AUTOMATICHE:
+├─ Resize immagini → 1200x800px, 800x600px, 400x300px
+├─ Compressione WebP
+├─ Alt text suggerito con AI
+└─ Watermark opzionale "MyGuideLab"
+
+INFORMAZIONI PRATICHE:
+├─ Punto di ritrovo
+│  ├─ Indirizzo completo
+│  ├─ Coordinate GPS (auto-generate)
+│  ├─ Foto del punto ritrovo
+│  └─ Indicazioni per raggiungere
+├─ Difficoltà fisica
+│  ├─ Facile (tutti possono partecipare)
+│  ├─ Moderata (camminata di media durata)
+│  └─ Impegnativa (molta camminata/salite)
+├─ Accessibilità
+│  ├─ Accessibile carrozzine
+│  ├─ Accessibile mobilità ridotta
+│  └─ Non accessibile
+├─ Numero partecipanti
+│  ├─ Minimo (default: 2)
+│  ├─ Massimo (default: 15)
+│  └─ Prezzo gruppo privato
+└─ Cosa portare/indossare
+
+SETUP RICORRENZA:
+├─ Giorni della settimana
+│  ├─ Lunedì: [9:00, 15:00] o [Non disponibile]
+│  ├─ Martedì: [10:00, 16:00] o [Non disponibile]
+│  ├─ ...
+│  └─ Domenica: [Solo mattina] o [Non disponibile]
+├─ Periodo validità
+│  ├─ Data inizio (default: oggi + 3 giorni)
+│  ├─ Data fine (default: + 6 mesi)
+│  └─ Eccezioni (giorni chiusi, feste, etc)
+├─ Gestione prenotazioni
+│  ├─ Scadenza prenotazioni (24h prima)
+│  ├─ Cancellazione gratuita (48h prima)
+│  └─ Rimborso parziale (24h prima)
+└─ Disponibilità real-time
+   ├─ Calendario sincronizzato
+   ├─ Blocco automatico slot pieni
+   └─ Lista d'attesa per slot sold-out
+
+   EVENTO SPECIFICO:
+├─ Data e ora precise
+├─ Prevendita biglietti
+│  ├─ Early bird (-20% fino a X giorni prima)
+│  ├─ Prezzo standard
+│  └─ Last minute (+10% ultimi 3 giorni)
+├─ Gestione sold-out
+│  ├─ Lista d'attesa
+│  ├─ Notifiche automatiche liberazione posti
+│  └─ Possibilità replica evento
+└─ Follow-up post-evento
+   ├─ Richiesta recensione automatica
+   ├─ Foto evento condivise
+   └─ Suggerimenti eventi simili
+
+   VALIDAZIONI TECNICHE:
+├─ Tutti i campi obbligatori compilati ✓
+├─ Foto principale caricata e ottimizzata ✓
+├─ Descrizione minima 100 caratteri ✓
+├─ Prezzo in range ragionevole (€10-500) ✓
+├─ Durata realistica per categoria ✓
+├─ Punto ritrovo geocodificato ✓
+└─ Date future valide ✓
+
+CONTROLLI QUALITÀ CONTENUTI:
+├─ Spelling check italiano/inglese
+├─ Rilevamento contenuti duplicati
+├─ Verifica coerenza prezzo/durata/categoria
+├─ Controllo immagini appropriate
+└─ Blacklist termini non ammessi
+
+APPROVAZIONE AUTOMATICA:
+├─ Guida con rating >4.5 → Pubblicazione immediata
+├─ Guida nuova o rating <4.5 → Revisione manuale
+├─ Contenuti sospetti → Queue moderazione
+└─ Tutto OK → Live in 15 minuti
+
+PUNTEGGIO QUALITÀ EVENTO (0-100):
+├─ Completezza informazioni (30 punti)
+│  ├─ Tutti campi compilati: +15
+│  ├─ Descrizione dettagliata: +10  
+│  └─ Media ricchi (foto/video): +5
+├─ Attrattività (25 punti)
+│  ├─ Titolo accattivante: +10
+│  ├─ Descrizione coinvolgente: +10
+│  └─ Prezzo competitivo: +5
+├─ Professionalità (25 punti)
+│  ├─ Guida verificata: +10
+│  ├─ Foto professionali: +10
+│  └─ Informazioni precise: +5
+├─ Esperienza guida (20 punti)
+│  ├─ Rating guida >4.5: +10
+│  ├─ Numero recensioni >10: +5
+│  └─ Eventi pubblicati >5: +5
+
+AZIONI BASATE SU SCORE:
+├─ 90-100: Promozione homepage + newsletter
+├─ 75-89: Pubblicazione standard
+├─ 60-74: Suggerimenti miglioramento
+└─ <60: Revisione obbligatoria
+
+
+BOZZA → SOTTO_REVISIONE → PUBBLICATO → ATTIVO → CONCLUSO → ARCHIVIATO
+
+BOZZA:
+├─ Visibile solo alla guida
+├─ Modificabile liberamente  
+├─ Salvataggio automatico ogni 30s
+└─ Validazione real-time campi
+
+SOTTO_REVISIONE (solo guide nuove):
+├─ Non modificabile
+├─ Moderazione entro 24h lavorative
+├─ Possibili richieste modifiche
+└─ Notifica email esito
+
+PUBBLICATO:
+├─ Visibile nel catalogo
+├─ Prenotabile da utenti
+├─ Modifiche limitate (prezzo, date)
+└─ Statistiche visualizzazioni
+
+ATTIVO (con prenotazioni):
+├─ Modifiche critiche bloccate
+├─ Gestione prenotazioni attiva
+├─ Notifiche automatiche partecipanti
+└─ Check-in giorno evento
+
+CONCLUSO:
+├─ Raccolta recensioni
+├─ Report presenze/incassi
+├─ Possibilità replica
+└─ Statistiche performance
+
+ARCHIVIATO:
+├─ Non più prenotabile
+├─ Storico mantenuto
+├─ Dati analytics conservati
+└─ Possibile ripubblicazione
+
+PANORAMICA:
+├─ Eventi attivi (con prenotazioni imminenti)
+├─ Guadagni mese corrente
+├─ Prossimi appuntamenti (7 giorni)
+└─ Notifiche importanti
+
+GESTIONE EVENTI:
+├─ Lista tutti gli eventi
+│  ├─ Filtri: Stato, Categoria, Periodo
+│  ├─ Azioni rapide: Modifica, Duplica, Pausa
+│  └─ Statistiche: Views, Conversioni, Rating
+├─ Calendario disponibilità
+├─ Gestione prenotazioni
+│  ├─ Nuove prenotazioni
+│  ├─ Richieste modifiche
+│  ├─ Check-in evento
+│  └─ Follow-up recensioni
+└─ Analytics performance
+
+TOOLS GUIDA:
+├─ Duplica evento esistente
+├─ Template eventi ricorrenti
+├─ Calendario Google sync
+├─ Esporta lista partecipanti
+└─ Genera fatture/ricevute
+
+TRIGGER EVENTS:
+├─ Nuovo evento inserito
+│  ├─ Email conferma a guida
+│  ├─ Notifica team moderazione (se necessario)
+│  └─ Aggiornamento feed social (se autorizzato)
+├─ Evento approvato
+│  ├─ Email celebrazione + tips marketing
+│  ├─ Push notification mobile
+│  └─ Condivisione automatica profili social
+├─ Prima prenotazione
+│  ├─ Email congratulazioni
+│  ├─ Reminder preparazione evento
+│  └─ Unlock funzionalità avanzate dashboard
+├─ Evento sold-out
+│  ├─ Email achievement + badge
+│  ├─ Suggerimento date aggiuntive
+│  └─ Promozione eventi simili
+└─ Post-evento
+   ├─ Richiesta feedback esperienza
+   ├─ Invito pubblicazione prossimi eventi
+   └─ Report performance dettagliato
+
+   

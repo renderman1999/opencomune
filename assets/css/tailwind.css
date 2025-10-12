@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities; 
+
+body { font-family: "Atkinson Hyperlegible", sans-serif !important; }
+.logo_header{
+    width: 170px;
+    object-fit: contain;
+}
+.mobile-menu-close{
+    top: 10px;
+    right: 10px;
+}

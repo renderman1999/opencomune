@@ -1,0 +1,40 @@
+{
+  "name": "opencomune-wp-theme",
+  "version": "1.0.0",
+  "description": "Tema WordPress per gestione esperienze turistiche di enti e comuni",
+  "main": "index.php",
+  "scripts": {
+    "build": "echo 'Build process not configured yet'",
+    "dev": "echo 'Development process not configured yet'"
+  },
+  "keywords": [
+    "wordpress",
+    "theme",
+    "tourism",
+    "municipality",
+    "experiences",
+    "booking"
+  ],
+  "author": "Alessandro Lanciotti",
+  "license": "GPL-2.0-or-later",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/renderman1999/opencomune.git"
+  },
+  "bugs": {
+    "url": "https://github.com/renderman1999/opencomune/issues"
+  },
+  "homepage": "https://github.com/renderman1999/opencomune#readme",
+  "dependencies": {
+    "tailwindcss": "^3.4.0",
+    "flowbite": "^2.5.1"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.0",
+    "@tailwindcss/typography": "^0.5.0"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}
