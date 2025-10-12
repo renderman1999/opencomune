@@ -876,6 +876,7 @@ function opencomune_get_esperienze_dashboard_callback() {
                 'status' => get_post_status(),
                 'date' => get_the_date('d/m/Y'),
                 'edit_url' => home_url('/modifica-esperienza/?id=' . $post_id),
+                'debug_url' => home_url('/modifica-esperienza/?id=' . $post_id), // Debug temporaneo
                 'view_url' => get_permalink(),
                 'views' => get_post_meta($post_id, 'views_count', true) ?: 0,
                 'likes' => get_post_meta($post_id, 'likes_count', true) ?: 0,

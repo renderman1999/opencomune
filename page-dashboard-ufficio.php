@@ -542,7 +542,7 @@ function renderEsperienze(esperienze) {
                     
                     <!-- Azioni principali -->
                     <div class="flex space-x-2">
-                        <a href="${esperienza.edit_url}" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors">
+                        <a href="${esperienza.edit_url}" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors" title="${esperienza.edit_url}">
                             <i class="bi bi-pencil mr-1"></i>Modifica
                         </a>
                         <a href="${esperienza.view_url}" class="bg-gray-500 text-white px-3 py-1 rounded text-xs hover:bg-gray-600 transition-colors" target="_blank">
