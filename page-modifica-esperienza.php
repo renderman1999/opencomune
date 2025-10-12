@@ -726,39 +726,13 @@ document.addEventListener('DOMContentLoaded', function() {
         // Se tutto è valido, il form viene inviato
     });
     
-    // Gestione file upload
-    const fileInput = document.getElementById('tour_image');
-    fileInput.addEventListener('change', function(e) {
-        const file = e.target.files[0];
-        if (file) {
-            // Validazione dimensione (5MB)
-            if (file.size > 5 * 1024 * 1024) {
-        Swal.fire({
-                    title: 'File Troppo Grande',
-                    text: 'L\'immagine deve essere inferiore a 5MB',
-                    icon: 'error'
-                });
-                fileInput.value = '';
-            return;
-        }
-        
-            // Validazione tipo
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (!allowedTypes.includes(file.type)) {
-                Swal.fire({
-                    title: 'Formato Non Supportato',
-                    text: 'Usa solo file JPG, PNG o GIF',
-                    icon: 'error'
-                });
-                fileInput.value = '';
-            return;
-        }
-        }
-    });
+    // Validazione file upload (ora gestito da WordPress Media Uploader)
     
     // WordPress Media Uploader per immagine principale
     let featuredImageFrame;
-    document.getElementById('upload-featured-image').addEventListener('click', function(e) {
+    const uploadFeaturedBtn = document.getElementById('upload-featured-image');
+    if (uploadFeaturedBtn) {
+        uploadFeaturedBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
         if (featuredImageFrame) {
@@ -782,18 +756,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         featuredImageFrame.open();
-    });
+        });
+    }
     
     // Rimuovi immagine principale
-    document.getElementById('remove-featured-image').addEventListener('click', function(e) {
+    const removeFeaturedBtn = document.getElementById('remove-featured-image');
+    if (removeFeaturedBtn) {
+        removeFeaturedBtn.addEventListener('click', function(e) {
         e.preventDefault();
         document.getElementById('featured-image-id').value = '';
         document.getElementById('featured-image-preview').classList.add('hidden');
-    });
+        });
+    }
     
     // WordPress Media Uploader per galleria
     let galleryFrame;
-    document.getElementById('upload-gallery-images').addEventListener('click', function(e) {
+    const uploadGalleryBtn = document.getElementById('upload-gallery-images');
+    if (uploadGalleryBtn) {
+        uploadGalleryBtn.addEventListener('click', function(e) {
         e.preventDefault();
         
         if (galleryFrame) {
@@ -831,10 +811,13 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         galleryFrame.open();
-    });
+        });
+    }
     
     // Rimuovi immagini dalla galleria
-    document.getElementById('gallery-preview').addEventListener('click', function(e) {
+    const galleryPreview = document.getElementById('gallery-preview');
+    if (galleryPreview) {
+        galleryPreview.addEventListener('click', function(e) {
         if (e.target.tagName === 'IMG') {
             const imgId = e.target.dataset.id;
             const currentIds = document.getElementById('gallery-ids').value ? document.getElementById('gallery-ids').value.split(',') : [];
@@ -842,7 +825,8 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('gallery-ids').value = newIds.join(',');
             e.target.remove();
         }
-    });
+        });
+    }
 });
 </script>
 
