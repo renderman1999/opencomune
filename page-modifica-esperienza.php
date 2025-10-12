@@ -608,11 +608,26 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Inizializza Select2
-    $('#tour_categories').select2({
-        placeholder: 'Seleziona le categorie',
-        allowClear: true
-    });
+    // Inizializza Select2 con jQuery quando disponibile
+    if (typeof jQuery !== 'undefined') {
+        jQuery('#tour_categories').select2({
+            placeholder: 'Seleziona le categorie',
+            allowClear: true
+        });
+    } else {
+        // Fallback: inizializza Select2 dopo che jQuery è caricato
+        const initSelect2 = () => {
+            if (typeof jQuery !== 'undefined') {
+                jQuery('#tour_categories').select2({
+                    placeholder: 'Seleziona le categorie',
+                    allowClear: true
+                });
+            } else {
+                setTimeout(initSelect2, 100);
+            }
+        };
+        initSelect2();
+    }
     
     // Gestione del form
     const form = document.getElementById('modifica-esperienza-form');
