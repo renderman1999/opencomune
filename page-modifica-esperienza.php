@@ -144,14 +144,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
                 document.addEventListener("DOMContentLoaded", function() {
                     Swal.fire({
                         title: "Esperienza Aggiornata!",
-                        text: "' . $success_message . '",
+                        text: "' . esc_js($success_message) . '",
                         icon: "success",
                         confirmButtonText: "Vai alla Dashboard",
                         showCancelButton: true,
                         cancelButtonText: "Continua Modifica"
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = "' . $dashboard_url . '";
+                            window.location.href = "' . esc_js($dashboard_url) . '";
                         } else {
                             window.location.reload();
                         }
