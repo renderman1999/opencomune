@@ -48,6 +48,18 @@ function opencomune_enqueue_bootstrap_admin() {
 }
 add_action('wp_enqueue_scripts', 'opencomune_enqueue_bootstrap_admin');
 
+// Enqueue admin scripts per media uploader
+function opencomune_admin_scripts($hook) {
+    // Solo nella pagina delle impostazioni
+    if ($hook != 'toplevel_page_opencomune-settings') {
+        return;
+    }
+    
+    wp_enqueue_media();
+    wp_enqueue_script('jquery');
+}
+add_action('admin_enqueue_scripts', 'opencomune_admin_scripts');
+
 // Tassonomia per le categorie delle esperienze
 function opencomune_register_categorie_esperienze_taxonomy() {
     register_taxonomy(
@@ -1180,12 +1192,21 @@ function opencomune_theme_settings_page_content() {
                         <label for="swiper_slide_1_image">Slide 1 - Immagine Hero</label>
                     </th>
                     <td>
-                        <input type="url" 
-                               id="swiper_slide_1_image" 
-                               name="swiper_slide_1_image" 
-                               value="<?php echo esc_attr($swiper_slide_1_image); ?>" 
-                               class="regular-text">
-                        <p class="description">URL dell'immagine di sfondo per lo swiper hero fullscreen</p>
+                        <div class="swiper-image-upload">
+                            <input type="hidden" 
+                                   id="swiper_slide_1_image" 
+                                   name="swiper_slide_1_image" 
+                                   value="<?php echo esc_attr($swiper_slide_1_image); ?>" 
+                                   class="regular-text">
+                            <div class="image-preview" style="margin-bottom: 10px;">
+                                <?php if ($swiper_slide_1_image): ?>
+                                    <img src="<?php echo esc_url($swiper_slide_1_image); ?>" style="max-width: 200px; height: 100px; object-fit: cover; border-radius: 4px;" />
+                                <?php endif; ?>
+                            </div>
+                            <button type="button" class="button upload-image-button" data-target="swiper_slide_1_image">Seleziona Immagine</button>
+                            <button type="button" class="button remove-image-button" data-target="swiper_slide_1_image" style="margin-left: 10px; <?php echo $swiper_slide_1_image ? '' : 'display: none;'; ?>">Rimuovi</button>
+                        </div>
+                        <p class="description">Immagine di sfondo per lo swiper hero fullscreen</p>
                     </td>
                 </tr>
                 <tr>
@@ -1246,12 +1267,21 @@ function opencomune_theme_settings_page_content() {
                         <label for="swiper_slide_2_image">Slide 2 - Immagine Hero</label>
                     </th>
                     <td>
-                        <input type="url" 
-                               id="swiper_slide_2_image" 
-                               name="swiper_slide_2_image" 
-                               value="<?php echo esc_attr($swiper_slide_2_image); ?>" 
-                               class="regular-text">
-                        <p class="description">URL dell'immagine di sfondo per lo swiper hero fullscreen</p>
+                        <div class="swiper-image-upload">
+                            <input type="hidden" 
+                                   id="swiper_slide_2_image" 
+                                   name="swiper_slide_2_image" 
+                                   value="<?php echo esc_attr($swiper_slide_2_image); ?>" 
+                                   class="regular-text">
+                            <div class="image-preview" style="margin-bottom: 10px;">
+                                <?php if ($swiper_slide_2_image): ?>
+                                    <img src="<?php echo esc_url($swiper_slide_2_image); ?>" style="max-width: 200px; height: 100px; object-fit: cover; border-radius: 4px;" />
+                                <?php endif; ?>
+                            </div>
+                            <button type="button" class="button upload-image-button" data-target="swiper_slide_2_image">Seleziona Immagine</button>
+                            <button type="button" class="button remove-image-button" data-target="swiper_slide_2_image" style="margin-left: 10px; <?php echo $swiper_slide_2_image ? '' : 'display: none;'; ?>">Rimuovi</button>
+                        </div>
+                        <p class="description">Immagine di sfondo per lo swiper hero fullscreen</p>
                     </td>
                 </tr>
                 <tr>
@@ -1312,12 +1342,21 @@ function opencomune_theme_settings_page_content() {
                         <label for="swiper_slide_3_image">Slide 3 - Immagine Hero</label>
                     </th>
                     <td>
-                        <input type="url" 
-                               id="swiper_slide_3_image" 
-                               name="swiper_slide_3_image" 
-                               value="<?php echo esc_attr($swiper_slide_3_image); ?>" 
-                               class="regular-text">
-                        <p class="description">URL dell'immagine di sfondo per lo swiper hero fullscreen</p>
+                        <div class="swiper-image-upload">
+                            <input type="hidden" 
+                                   id="swiper_slide_3_image" 
+                                   name="swiper_slide_3_image" 
+                                   value="<?php echo esc_attr($swiper_slide_3_image); ?>" 
+                                   class="regular-text">
+                            <div class="image-preview" style="margin-bottom: 10px;">
+                                <?php if ($swiper_slide_3_image): ?>
+                                    <img src="<?php echo esc_url($swiper_slide_3_image); ?>" style="max-width: 200px; height: 100px; object-fit: cover; border-radius: 4px;" />
+                                <?php endif; ?>
+                            </div>
+                            <button type="button" class="button upload-image-button" data-target="swiper_slide_3_image">Seleziona Immagine</button>
+                            <button type="button" class="button remove-image-button" data-target="swiper_slide_3_image" style="margin-left: 10px; <?php echo $swiper_slide_3_image ? '' : 'display: none;'; ?>">Rimuovi</button>
+                        </div>
+                        <p class="description">Immagine di sfondo per lo swiper hero fullscreen</p>
                     </td>
                 </tr>
                 <tr>
@@ -1343,6 +1382,64 @@ function opencomune_theme_settings_page_content() {
             </p>
         </form>
     </div>
+    
+    <script>
+    jQuery(document).ready(function($) {
+        // Media uploader per le immagini swiper
+        $('.upload-image-button').click(function(e) {
+            e.preventDefault();
+            
+            var button = $(this);
+            var targetInput = button.data('target');
+            var previewContainer = button.siblings('.image-preview');
+            var removeButton = button.siblings('.remove-image-button');
+            
+            // Crea il media uploader
+            var mediaUploader = wp.media({
+                title: 'Seleziona Immagine',
+                button: {
+                    text: 'Usa questa immagine'
+                },
+                multiple: false
+            });
+            
+            // Quando viene selezionata un'immagine
+            mediaUploader.on('select', function() {
+                var attachment = mediaUploader.state().get('selection').first().toJSON();
+                
+                // Aggiorna il campo hidden
+                $('#' + targetInput).val(attachment.url);
+                
+                // Aggiorna l'anteprima
+                previewContainer.html('<img src="' + attachment.url + '" style="max-width: 200px; height: 100px; object-fit: cover; border-radius: 4px;" />');
+                
+                // Mostra il pulsante rimuovi
+                removeButton.show();
+            });
+            
+            // Apri il media uploader
+            mediaUploader.open();
+        });
+        
+        // Rimuovi immagine
+        $('.remove-image-button').click(function(e) {
+            e.preventDefault();
+            
+            var button = $(this);
+            var targetInput = button.data('target');
+            var previewContainer = button.siblings('.image-preview');
+            
+            // Pulisci il campo
+            $('#' + targetInput).val('');
+            
+            // Pulisci l'anteprima
+            previewContainer.empty();
+            
+            // Nascondi il pulsante rimuovi
+            button.hide();
+        });
+    });
+    </script>
     
     <script>
     jQuery(document).ready(function($) {
