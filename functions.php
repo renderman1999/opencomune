@@ -716,6 +716,30 @@ function opencomune_get_ufficio_info() {
     ];
 }
 
+// Menu di fallback per enti/comuni
+function opencomune_fallback_menu() {
+    echo '<ul class="flex space-x-4 font-light text-xl">';
+    echo '<li><a href="' . home_url('/') . '" class="hover:text-blue-600 transition-colors">Home</a></li>';
+    echo '<li><a href="' . home_url('/esperienze/') . '" class="hover:text-blue-600 transition-colors">Esperienze</a></li>';
+    echo '<li><a href="' . home_url('/mappa-esperienze/') . '" class="hover:text-blue-600 transition-colors">Mappa</a></li>';
+    echo '<li><a href="' . home_url('/partner/') . '" class="hover:text-blue-600 transition-colors">Partner</a></li>';
+    echo '<li><a href="' . home_url('/info-turistiche/') . '" class="hover:text-blue-600 transition-colors">Info</a></li>';
+    echo '<li><a href="' . home_url('/contatti/') . '" class="hover:text-blue-600 transition-colors">Contatti</a></li>';
+    echo '</ul>';
+}
+
+// Menu mobile di fallback per enti/comuni
+function opencomune_mobile_fallback_menu() {
+    echo '<ul class="flex flex-col items-center gap-8 text-2xl">';
+    echo '<li><a href="' . home_url('/') . '" class="hover:text-blue-600 transition-colors">Home</a></li>';
+    echo '<li><a href="' . home_url('/esperienze/') . '" class="hover:text-blue-600 transition-colors">Esperienze</a></li>';
+    echo '<li><a href="' . home_url('/mappa-esperienze/') . '" class="hover:text-blue-600 transition-colors">Mappa</a></li>';
+    echo '<li><a href="' . home_url('/partner/') . '" class="hover:text-blue-600 transition-colors">Partner</a></li>';
+    echo '<li><a href="' . home_url('/info-turistiche/') . '" class="hover:text-blue-600 transition-colors">Info</a></li>';
+    echo '<li><a href="' . home_url('/contatti/') . '" class="hover:text-blue-600 transition-colors">Contatti</a></li>';
+    echo '</ul>';
+}
+
 // === AJAX: Restituisce tutti i tour pubblicati con lat/lon per la mappa ===
 add_action('wp_ajax_opencomune_get_all_tours', 'opencomune_get_all_tours_callback');
 add_action('wp_ajax_nopriv_opencomune_get_all_tours', 'opencomune_get_all_tours_callback');

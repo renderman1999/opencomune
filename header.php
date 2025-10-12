@@ -43,7 +43,7 @@
                     'theme_location' => 'header',
                     'container' => false,
                     'menu_class' => 'flex space-x-4 font-light text-xl',
-                    'fallback_cb' => false
+                    'fallback_cb' => 'opencomune_fallback_menu'
                 ]);
                 ?>
             </nav>
@@ -98,7 +98,7 @@
                 'theme_location' => 'header',
                 'container' => false,
                 'menu_class' => 'flex flex-col items-center gap-8 text-2xl',
-                'fallback_cb' => false
+                'fallback_cb' => 'opencomune_mobile_fallback_menu'
             ]);
             ?>
             <div class="mt-8">
