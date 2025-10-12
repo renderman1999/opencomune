@@ -401,23 +401,19 @@ opencomune_show_home_reviews_swiper(8);
 const toursMarkers = [
 <?php
 $tour_query = new WP_Query([
-  'post_type' => 'experienze',
+  'post_type' => 'esperienze',
   'post_status' => 'publish',
   'posts_per_page' => -1,
 ]);
 if ($tour_query->have_posts()):
   while ($tour_query->have_posts()): $tour_query->the_post();
-    $gps = get_post_meta(get_the_ID(), 'gps', true);
+    $lat = get_post_meta(get_the_ID(), 'tour_latitude', true);
+    $lng = get_post_meta(get_the_ID(), 'tour_longitude', true);
     $img = get_the_post_thumbnail_url(get_the_ID(), 'thumbnail');
-    if ($gps && $img) {
-      $coords = explode(',', $gps);
-      if (count($coords) == 2) {
-        $lat = trim($coords[0]);
-        $lng = trim($coords[1]);
-        $title = addslashes(get_the_title());
-        $img_url = esc_url($img);
-        echo "  {lat: $lat, lng: $lng, title: '$title', img: '$img_url'},\n";
-      }
+    if ($lat && $lng && $img) {
+      $title = addslashes(get_the_title());
+      $img_url = esc_url($img);
+      echo "  {lat: $lat, lng: $lng, title: '$title', img: '$img_url'},\n";
     }
   endwhile;
   wp_reset_postdata();
