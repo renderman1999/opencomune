@@ -846,6 +846,17 @@ function opencomune_theme_settings_page_content() {
             update_option('opencomune_indirizzo_ufficio', sanitize_textarea_field($_POST['indirizzo_ufficio']));
             update_option('opencomune_orari_apertura', sanitize_textarea_field($_POST['orari_apertura']));
             
+            // Campi swiper homepage
+            update_option('opencomune_swiper_slide_1_title', sanitize_text_field($_POST['swiper_slide_1_title']));
+            update_option('opencomune_swiper_slide_1_text', sanitize_textarea_field($_POST['swiper_slide_1_text']));
+            update_option('opencomune_swiper_slide_1_icon', sanitize_text_field($_POST['swiper_slide_1_icon']));
+            update_option('opencomune_swiper_slide_2_title', sanitize_text_field($_POST['swiper_slide_2_title']));
+            update_option('opencomune_swiper_slide_2_text', sanitize_textarea_field($_POST['swiper_slide_2_text']));
+            update_option('opencomune_swiper_slide_2_icon', sanitize_text_field($_POST['swiper_slide_2_icon']));
+            update_option('opencomune_swiper_slide_3_title', sanitize_text_field($_POST['swiper_slide_3_title']));
+            update_option('opencomune_swiper_slide_3_text', sanitize_textarea_field($_POST['swiper_slide_3_text']));
+            update_option('opencomune_swiper_slide_3_icon', sanitize_text_field($_POST['swiper_slide_3_icon']));
+            
             echo '<div class="notice notice-success"><p>Impostazioni salvate con successo!</p></div>';
         }
     }
@@ -867,6 +878,17 @@ function opencomune_theme_settings_page_content() {
     $telefono_ufficio = get_option('opencomune_telefono_ufficio', '');
     $indirizzo_ufficio = get_option('opencomune_indirizzo_ufficio', '');
     $orari_apertura = get_option('opencomune_orari_apertura', '');
+    
+    // Swiper homepage
+    $swiper_slide_1_title = get_option('opencomune_swiper_slide_1_title', 'Vivi esperienze autentiche');
+    $swiper_slide_1_text = get_option('opencomune_swiper_slide_1_text', 'Partecipa a tour, eventi e attività uniche, guidate da esperti locali.');
+    $swiper_slide_1_icon = get_option('opencomune_swiper_slide_1_icon', 'bi-stars');
+    $swiper_slide_2_title = get_option('opencomune_swiper_slide_2_title', 'Scopri e prenota facilmente');
+    $swiper_slide_2_text = get_option('opencomune_swiper_slide_2_text', 'Trova l\'esperienza perfetta per te e prenota in pochi click, anche da mobile.');
+    $swiper_slide_2_icon = get_option('opencomune_swiper_slide_2_icon', 'bi-search');
+    $swiper_slide_3_title = get_option('opencomune_swiper_slide_3_title', 'Diventa protagonista');
+    $swiper_slide_3_text = get_option('opencomune_swiper_slide_3_text', 'Crea e condividi le tue esperienze, entra nella community di Explorando.');
+    $swiper_slide_3_icon = get_option('opencomune_swiper_slide_3_icon', 'bi-people');
     ?>
     <div class="wrap">
         <h1>OpenComune - Impostazioni Tema</h1>
@@ -1092,6 +1114,130 @@ function opencomune_theme_settings_page_content() {
                         <p class="description">
                             Orari di apertura dell'ufficio turistico
                         </p>
+                    </td>
+                </tr>
+                
+                <!-- Sezione Swiper Homepage -->
+                <tr>
+                    <th scope="row" colspan="2">
+                        <h3 style="margin: 20px 0 10px 0; padding: 10px 0; border-top: 1px solid #ddd;">Homepage Swiper - Configurazione Slide</h3>
+                    </th>
+                </tr>
+                
+                <!-- Slide 1 -->
+                <tr>
+                    <th scope="row">
+                        <label for="swiper_slide_1_title">Slide 1 - Titolo</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="swiper_slide_1_title" 
+                               name="swiper_slide_1_title" 
+                               value="<?php echo esc_attr($swiper_slide_1_title); ?>" 
+                               class="regular-text">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="swiper_slide_1_text">Slide 1 - Testo</label>
+                    </th>
+                    <td>
+                        <textarea id="swiper_slide_1_text" 
+                                  name="swiper_slide_1_text" 
+                                  rows="2" 
+                                  class="large-text"><?php echo esc_textarea($swiper_slide_1_text); ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="swiper_slide_1_icon">Slide 1 - Icona (Bootstrap Icons)</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="swiper_slide_1_icon" 
+                               name="swiper_slide_1_icon" 
+                               value="<?php echo esc_attr($swiper_slide_1_icon); ?>" 
+                               class="regular-text"
+                               placeholder="bi-stars">
+                        <p class="description">Nome dell'icona Bootstrap Icons (es: bi-stars, bi-search, bi-people)</p>
+                    </td>
+                </tr>
+                
+                <!-- Slide 2 -->
+                <tr>
+                    <th scope="row">
+                        <label for="swiper_slide_2_title">Slide 2 - Titolo</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="swiper_slide_2_title" 
+                               name="swiper_slide_2_title" 
+                               value="<?php echo esc_attr($swiper_slide_2_title); ?>" 
+                               class="regular-text">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="swiper_slide_2_text">Slide 2 - Testo</label>
+                    </th>
+                    <td>
+                        <textarea id="swiper_slide_2_text" 
+                                  name="swiper_slide_2_text" 
+                                  rows="2" 
+                                  class="large-text"><?php echo esc_textarea($swiper_slide_2_text); ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="swiper_slide_2_icon">Slide 2 - Icona (Bootstrap Icons)</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="swiper_slide_2_icon" 
+                               name="swiper_slide_2_icon" 
+                               value="<?php echo esc_attr($swiper_slide_2_icon); ?>" 
+                               class="regular-text"
+                               placeholder="bi-search">
+                        <p class="description">Nome dell'icona Bootstrap Icons (es: bi-stars, bi-search, bi-people)</p>
+                    </td>
+                </tr>
+                
+                <!-- Slide 3 -->
+                <tr>
+                    <th scope="row">
+                        <label for="swiper_slide_3_title">Slide 3 - Titolo</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="swiper_slide_3_title" 
+                               name="swiper_slide_3_title" 
+                               value="<?php echo esc_attr($swiper_slide_3_title); ?>" 
+                               class="regular-text">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="swiper_slide_3_text">Slide 3 - Testo</label>
+                    </th>
+                    <td>
+                        <textarea id="swiper_slide_3_text" 
+                                  name="swiper_slide_3_text" 
+                                  rows="2" 
+                                  class="large-text"><?php echo esc_textarea($swiper_slide_3_text); ?></textarea>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">
+                        <label for="swiper_slide_3_icon">Slide 3 - Icona (Bootstrap Icons)</label>
+                    </th>
+                    <td>
+                        <input type="text" 
+                               id="swiper_slide_3_icon" 
+                               name="swiper_slide_3_icon" 
+                               value="<?php echo esc_attr($swiper_slide_3_icon); ?>" 
+                               class="regular-text"
+                               placeholder="bi-people">
+                        <p class="description">Nome dell'icona Bootstrap Icons (es: bi-stars, bi-search, bi-people)</p>
                     </td>
                 </tr>
             </table>
@@ -2126,7 +2272,7 @@ function opencomune_settings_page() {
     
     ?>
     <div class="wrap">
-        <h1>MyGuideLab - Impostazioni Pagamenti</h1>
+        <h1>Gateway Pagamenti</h1>
         
         <form method="post" action="">
             <?php wp_nonce_field('opencomune_settings', 'opencomune_settings_nonce'); ?>

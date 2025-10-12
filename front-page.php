@@ -90,25 +90,37 @@ document.addEventListener('DOMContentLoaded', function() {
     <div class="mb-10">
       <div class="swiper box-swiper">
         <div class="swiper-wrapper">
+          <?php
+          // Recupera i valori dalle impostazioni
+          $slide_1_title = get_option('opencomune_swiper_slide_1_title', 'Vivi esperienze autentiche');
+          $slide_1_text = get_option('opencomune_swiper_slide_1_text', 'Partecipa a tour, eventi e attività uniche, guidate da esperti locali.');
+          $slide_1_icon = get_option('opencomune_swiper_slide_1_icon', 'bi-stars');
+          $slide_2_title = get_option('opencomune_swiper_slide_2_title', 'Scopri e prenota facilmente');
+          $slide_2_text = get_option('opencomune_swiper_slide_2_text', 'Trova l\'esperienza perfetta per te e prenota in pochi click, anche da mobile.');
+          $slide_2_icon = get_option('opencomune_swiper_slide_2_icon', 'bi-search');
+          $slide_3_title = get_option('opencomune_swiper_slide_3_title', 'Diventa protagonista');
+          $slide_3_text = get_option('opencomune_swiper_slide_3_text', 'Crea e condividi le tue esperienze, entra nella community di Explorando.');
+          $slide_3_icon = get_option('opencomune_swiper_slide_3_icon', 'bi-people');
+          ?>
           <div class="swiper-slide">
             <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
-              <i class="bi bi-stars mb-2 text-3xl text-blue-600"></i>
-              <div class="font-bold mb-1">Vivi esperienze autentiche</div>
-              <div class="text-gray-500 text-sm">Partecipa a tour, eventi e attività uniche, guidate da esperti locali.</div>
+              <i class="bi <?php echo esc_attr($slide_1_icon); ?> mb-2 text-3xl text-blue-600"></i>
+              <div class="font-bold mb-1"><?php echo esc_html($slide_1_title); ?></div>
+              <div class="text-gray-500 text-sm"><?php echo esc_html($slide_1_text); ?></div>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
-              <i class="bi bi-search mb-2 text-3xl text-blue-600"></i>
-              <div class="font-bold mb-1">Scopri e prenota facilmente</div>
-              <div class="text-gray-500 text-sm">Trova l'esperienza perfetta per te e prenota in pochi click, anche da mobile.</div>
+              <i class="bi <?php echo esc_attr($slide_2_icon); ?> mb-2 text-3xl text-blue-600"></i>
+              <div class="font-bold mb-1"><?php echo esc_html($slide_2_title); ?></div>
+              <div class="text-gray-500 text-sm"><?php echo esc_html($slide_2_text); ?></div>
             </div>
           </div>
           <div class="swiper-slide">
             <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center text-center">
-              <i class="bi bi-people mb-2 text-3xl text-blue-600"></i>
-              <div class="font-bold mb-1">Diventa protagonista</div>
-              <div class="text-gray-500 text-sm">Crea e condividi le tue esperienze, entra nella community di Explorando.</div>
+              <i class="bi <?php echo esc_attr($slide_3_icon); ?> mb-2 text-3xl text-blue-600"></i>
+              <div class="font-bold mb-1"><?php echo esc_html($slide_3_title); ?></div>
+              <div class="text-gray-500 text-sm"><?php echo esc_html($slide_3_text); ?></div>
             </div>
           </div>
         </div>
