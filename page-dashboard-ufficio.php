@@ -6,6 +6,12 @@ if (!is_user_logged_in() || !current_user_can('editor_turistico')) {
 }
 get_header();
 
+// Localizza ajaxurl per il frontend
+wp_localize_script('jquery', 'ajax_object', array(
+    'ajax_url' => admin_url('admin-ajax.php'),
+    'nonce' => wp_create_nonce('opencomune_nonce')
+));
+
 // Aggiungi SweetAlert
 wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array(), '11.0.0', true);
 ?>
@@ -143,9 +149,9 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
     <div class="loader-content">
         <div class="loader-spinner"></div>
         <div class="loader-text">Caricamento Dashboard Ufficio Turistico...</div>
-    </div>
-</div>
-
+                                </div>
+                            </div>
+                            
 <div class="min-h-screen bg-gray-50 py-8" id="dashboardContent" style="display: none;">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <!-- Header Dashboard -->
@@ -154,7 +160,7 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
                 <div>
                     <h1 class="text-3xl font-bold text-gray-900">Dashboard Ufficio Turistico</h1>
                     <p class="text-gray-600 mt-2">Gestisci le esperienze turistiche del tuo comune</p>
-                </div>
+                                </div>
                 <div class="flex space-x-4">
                     <a href="<?php echo home_url('/nuova-esperienza/'); ?>" class="action-btn">
                         <i class="bi bi-plus-circle mr-2"></i>
@@ -164,8 +170,8 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
                         <i class="bi bi-map mr-2"></i>
                         Visualizza Mappa
                     </a>
-                </div>
-            </div>
+        </div>
+    </div>
         </div>
 
         <!-- Statistiche -->
@@ -173,20 +179,20 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
             <div class="stat-card">
                 <div class="stat-number" id="totalEsperienze">-</div>
                 <div class="stat-label">Totale Esperienze</div>
-            </div>
+                            </div>
             <div class="stat-card">
                 <div class="stat-number" id="esperienzePubblicate">-</div>
                 <div class="stat-label">Pubblicate</div>
-            </div>
+                        </div>
             <div class="stat-card">
                 <div class="stat-number" id="esperienzeBozza">-</div>
                 <div class="stat-label">In Bozza</div>
-            </div>
+                        </div>
             <div class="stat-card">
                 <div class="stat-number" id="prenotazioniOggi">-</div>
                 <div class="stat-label">Prenotazioni Oggi</div>
             </div>
-        </div>
+                            </div>
 
         <!-- Filtri e Ricerca -->
         <div class="dashboard-card p-6 mb-8">
@@ -214,7 +220,7 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
                     </button>
                 </div>
             </div>
-        </div>
+            </div>
 
         <!-- Lista Esperienze -->
         <div class="dashboard-card p-6">
@@ -245,7 +251,7 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
             <!-- Paginazione -->
             <div id="pagination" class="mt-6 flex justify-center">
                 <!-- La paginazione verrà generata dinamicamente -->
-            </div>
+        </div>
         </div>
     </div>
 </div>
@@ -275,7 +281,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Carica dati dashboard
 function loadDashboardData() {
-    fetch(ajaxurl + '?action=opencomune_get_dashboard_stats')
+    fetch(ajax_object.ajax_url + '?action=opencomune_get_dashboard_stats')
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -292,7 +298,7 @@ function loadDashboardData() {
 
 // Carica categorie
 function loadCategorie() {
-    fetch(ajaxurl + '?action=opencomune_get_categorie_esperienze')
+    fetch(ajax_object.ajax_url + '?action=opencomune_get_categorie_esperienze')
         .then(response => response.json())
         .then(data => {
             if (data.success) {
@@ -325,7 +331,7 @@ function loadEsperienze(page = 1) {
         page: page
     });
     
-    fetch(ajaxurl + '?' + params.toString())
+    fetch(ajax_object.ajax_url + '?' + params.toString())
         .then(response => response.json())
         .then(data => {
             document.getElementById('esperienzeLoading').style.display = 'none';
@@ -350,7 +356,7 @@ function renderEsperienze(esperienze) {
     
     if (esperienze.length === 0) {
         container.innerHTML = '<div class="text-center py-8 text-gray-500">Nessuna esperienza trovata</div>';
-        return;
+      return;
     }
     
     container.innerHTML = esperienze.map(esperienza => `
@@ -438,7 +444,7 @@ function deleteEsperienza(id) {
         cancelButtonText: 'Annulla'
     }).then((result) => {
         if (result.isConfirmed) {
-            fetch(ajaxurl + '?action=opencomune_delete_esperienza&id=' + id, {
+            fetch(ajax_object.ajax_url + '?action=opencomune_delete_esperienza&id=' + id, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
@@ -449,7 +455,7 @@ function deleteEsperienza(id) {
                 if (data.success) {
                     Swal.fire('Eliminata!', 'L\'esperienza è stata eliminata.', 'success');
                     loadDashboardData();
-                } else {
+      } else {
                     Swal.fire('Errore!', data.message || 'Errore durante l\'eliminazione.', 'error');
                 }
             })
@@ -457,8 +463,8 @@ function deleteEsperienza(id) {
                 Swal.fire('Errore!', 'Errore di connessione.', 'error');
             });
         }
-    });
-}
+      });
+    }
 
 // Utility functions
 function getStatusLabel(status) {
@@ -483,4 +489,4 @@ function debounce(func, wait) {
 }
 </script>
 
-<?php get_footer(); ?>
+<?php get_footer(); ?> 
