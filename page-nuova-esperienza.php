@@ -6,9 +6,8 @@ require_once(ABSPATH . 'wp-admin/includes/image.php');
 require_once(ABSPATH . 'wp-admin/includes/file.php');
 require_once(ABSPATH . 'wp-admin/includes/media.php');
 
-// Carica Select2
-wp_enqueue_style('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css');
-wp_enqueue_script('select2', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js', array('jquery'));
+// Carica jQuery (non più necessario per Select2)
+wp_enqueue_script('jquery');
 
 // Carica SweetAlert2
 wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array(), null, true);
@@ -410,17 +409,22 @@ $categorie = get_terms(array(
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label for="tour_categories" class="form-label">
+                        <label class="form-label">
                             Categorie
                         </label>
-                        <select id="tour_categories" name="tour_categories[]" class="form-input" multiple>
+                        <div class="grid grid-cols-2 gap-3 mt-2">
                             <?php foreach ($categorie as $categoria): ?>
-                                <option value="<?php echo esc_attr($categoria->slug); ?>" 
-                                        <?php selected(in_array($categoria->slug, $_POST['tour_categories'] ?? []), true); ?>>
-                                    <?php echo esc_html($categoria->name); ?>
-                                </option>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" 
+                                           name="tour_categories[]" 
+                                           value="<?php echo esc_attr($categoria->slug); ?>" 
+                                           class="form-checkbox h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                           <?php checked(in_array($categoria->slug, $_POST['tour_categories'] ?? []), true); ?>>
+                                    <span class="text-sm text-gray-700"><?php echo esc_html($categoria->name); ?></span>
+                                </label>
                             <?php endforeach; ?>
-                        </select>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-2">Seleziona una o più categorie per l'esperienza</p>
                     </div>
                     
                     <div>
@@ -593,11 +597,7 @@ $categorie = get_terms(array(
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Inizializza Select2
-    $('#tour_categories').select2({
-        placeholder: 'Seleziona le categorie',
-        allowClear: true
-    });
+    // Checkbox per categorie - nessuna inizializzazione necessaria
     
     // Gestione del form
     const form = document.getElementById('nuova-esperienza-form');
