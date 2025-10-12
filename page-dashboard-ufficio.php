@@ -542,17 +542,17 @@ function renderEsperienze(esperienze) {
                     
                     <!-- Azioni principali -->
                     <div class="flex space-x-2">
-                        <a href="${esperienza.edit_url}" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors" title="Modifica: ${esperienza.edit_url}" style="display: inline-block;">
+                        <a href="${esperienza.edit_url}" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors" title="Modifica: ${esperienza.edit_url}" style="display: inline-block; background-color: #3b82f6 !important; color: white !important;">
                             <i class="bi bi-pencil mr-1"></i>Modifica
                         </a>
-                        <a href="${esperienza.view_url}" class="bg-gray-500 text-white px-3 py-1 rounded text-xs hover:bg-gray-600 transition-colors" target="_blank">
+                        <a href="${esperienza.view_url}" class="bg-gray-500 text-white px-3 py-1 rounded text-xs hover:bg-gray-600 transition-colors" target="_blank" style="background-color: #6b7280 !important; color: white !important;">
                             <i class="bi bi-eye mr-1"></i>Visualizza
                         </a>
                     </div>
                     
                     <!-- Azione eliminazione -->
                     <button onclick="deleteEsperienza(${esperienza.id})" 
-                            class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition-colors">
+                            class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition-colors" style="background-color: #ef4444 !important; color: white !important;">
                         <i class="bi bi-trash mr-1"></i>Elimina
                     </button>
                 </div>
