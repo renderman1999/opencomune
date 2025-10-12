@@ -16,7 +16,7 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
 // Carica Google Maps API
 $api_key = opencomune_get_google_maps_api_key();
 if (empty($api_key)) {
-    error_log('Google Maps API key is not set in Exxlpora settings');
+    error_log('Google Maps API key is not set in OpenComune settings');
 }
 wp_enqueue_script('google-maps', 'https://maps.googleapis.com/maps/api/js?key=' . $api_key . '&libraries=places', array(), null, true);
 
@@ -26,1125 +26,654 @@ wp_localize_script('select2', 'select2_params', array(
 ));
 
 get_header();
+
 if (!is_user_logged_in() || !current_user_can('editor_turistico')) {
     echo '<div class="container mx-auto p-8 text-center text-red-600 font-bold">' . esc_html__('Accesso riservato all\'Ufficio Turistico. Effettua il login con un account autorizzato.', 'opencomune') . '</div>';
     get_footer();
     exit;
 }
-// Debug per verificare se il form viene inviato
-error_log('=== DEBUG FORM SUBMISSION ===');
-error_log('REQUEST_METHOD: ' . $_SERVER['REQUEST_METHOD']);
-error_log('POST save_tour: ' . (isset($_POST['save_tour']) ? 'PRESENTE' : 'NON PRESENTE'));
-error_log('POST count: ' . count($_POST));
-error_log('POST data completo: ' . print_r($_POST, true));
-if (isset($_POST['save_tour'])) {
-    error_log('save_tour value: ' . $_POST['save_tour']);
-}
-
-// Il form verrà gestito direttamente dal JavaScript
 
 // Gestione del salvataggio del form
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
-    error_log('=== INIZIO SALVATAGGIO TOUR ===');
-    error_log('Metodo: ' . $_SERVER['REQUEST_METHOD']);
-    error_log('save_tour presente: ' . (isset($_POST['save_tour']) ? 'SI' : 'NO'));
-    error_log('Numero campi POST: ' . count($_POST));
-    // Aumenta il timeout e la memoria disponibile
-    set_time_limit(300); // 5 minuti
-    ini_set('memory_limit', '512M');
+    error_log('=== INIZIO SALVATAGGIO ESPERIENZA ===');
     
-    error_log('=== Inizio processo di salvataggio ===');
-    $current_user_id = get_current_user_id();
+    // Sanitizzazione dei dati
+    $tour_title = sanitize_text_field($_POST['tour_title'] ?? '');
+    $tour_description = wp_kses_post($_POST['tour_description'] ?? '');
+    $tour_duration = sanitize_text_field($_POST['tour_duration'] ?? '');
+    // $tour_price = floatval($_POST['tour_price'] ?? 0); // Rimosso per ente pubblico
+    $tour_max_participants = intval($_POST['tour_max_participants'] ?? 0);
+    $tour_difficulty = sanitize_text_field($_POST['tour_difficulty'] ?? '');
+    $tour_languages = sanitize_text_field($_POST['tour_languages'] ?? '');
+    $tour_meeting_point = sanitize_text_field($_POST['tour_meeting_point'] ?? '');
+    $tour_whats_included = wp_kses_post($_POST['tour_whats_included'] ?? '');
+    $tour_whats_not_included = wp_kses_post($_POST['tour_whats_not_included'] ?? '');
+    $tour_requirements = wp_kses_post($_POST['tour_requirements'] ?? '');
+    $tour_cancellation_policy = wp_kses_post($_POST['tour_cancellation_policy'] ?? '');
+    $tour_highlights = wp_kses_post($_POST['tour_highlights'] ?? '');
+    $tour_itinerary = wp_kses_post($_POST['tour_itinerary'] ?? '');
+    $tour_meeting_time = sanitize_text_field($_POST['tour_meeting_time'] ?? '');
+    $tour_meeting_date = sanitize_text_field($_POST['tour_meeting_date'] ?? '');
+    $tour_latitude = floatval($_POST['tour_latitude'] ?? 0);
+    $tour_longitude = floatval($_POST['tour_longitude'] ?? 0);
+    $tour_address = sanitize_text_field($_POST['tour_address'] ?? '');
+    $tour_categories = array_map('sanitize_text_field', $_POST['tour_categories'] ?? []);
     
-    // Verifica nonce
-    error_log('Nonce ricevuto: ' . (isset($_POST['tour_nonce']) ? $_POST['tour_nonce'] : 'NON PRESENTE'));
-    error_log('Debug nonce: ' . (isset($_POST['debug_nonce']) ? $_POST['debug_nonce'] : 'NON PRESENTE'));
-    error_log('Nonce valido: ' . (wp_verify_nonce($_POST['tour_nonce'] ?? '', 'save_tour_nonce') ? 'SI' : 'NO'));
-    
-    if (!isset($_POST['tour_nonce']) || !wp_verify_nonce($_POST['tour_nonce'], 'save_tour_nonce')) {
-        error_log('Errore di sicurezza: nonce non valido');
-        error_log('Nonce atteso: ' . wp_create_nonce('save_tour_nonce'));
-        echo '<script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // Chiudi il loader se è aperto
-                Swal.close();
-                
-                // Mostra il messaggio di errore
-                Swal.fire({
-                    title: "Errore di sicurezza",
-                    text: "Si è verificato un errore di sicurezza. Ricarica la pagina e riprova.",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                    confirmButtonColor: "#dc3545"
-                });
-            });
-        </script>';
-        exit;
-    }
-    
-    error_log('Preparazione dati post');
-    // Prepara i dati del post
-    $post_data = array(
-        'post_title'    => sanitize_text_field($_POST['titolo']),
-        'post_content'  => wp_kses_post($_POST['descrizione_completa']),
-        'post_excerpt'  => sanitize_text_field($_POST['descrizione_breve']),
-        'post_status'   => 'publish',
-        'post_type'     => 'tour',
-        'post_author'   => $current_user_id
-    );
-    
-    error_log('Salvataggio post principale');
-    // Se stiamo modificando un tour esistente
-    if (isset($_POST['post_id']) && !empty($_POST['post_id'])) {
-        $post_data['ID'] = intval($_POST['post_id']);
-        error_log('Aggiornamento tour esistente con ID: ' . $post_data['ID']);
-        $post_id = wp_update_post($post_data);
-        error_log('Risultato aggiornamento: ' . ($post_id ? $post_id : 'ERRORE'));
+    // Validazione
+    if (empty($tour_title)) {
+        $error_message = 'Il titolo è obbligatorio.';
+    } elseif (empty($tour_description)) {
+        $error_message = 'La descrizione è obbligatoria.';
+    } elseif (empty($tour_duration)) {
+        $error_message = 'La durata è obbligatoria.';
+    // } elseif ($tour_price <= 0) {
+    //     $error_message = 'Il prezzo deve essere maggiore di 0.';
     } else {
-        error_log('Creazione nuovo tour');
-        $post_id = wp_insert_post($post_data);
-        error_log('Risultato creazione: ' . ($post_id ? $post_id : 'ERRORE'));
-    }
-    
-    if (!is_wp_error($post_id)) {
-        error_log('Post salvato con ID: ' . $post_id);
-        error_log('Titolo salvato: ' . $post_data['post_title']);
-        
-        // Debug log for address fields
-        error_log('Address fields from POST:');
-        error_log('indirizzo_ritrovo: ' . (isset($_POST['indirizzo_ritrovo']) ? $_POST['indirizzo_ritrovo'] : 'not set'));
-        error_log('indirizzo_ritrovo_place_id: ' . (isset($_POST['indirizzo_ritrovo_place_id']) ? $_POST['indirizzo_ritrovo_place_id'] : 'not set'));
-        error_log('coordinate_ritrovo: ' . (isset($_POST['coordinate_ritrovo']) ? $_POST['coordinate_ritrovo'] : 'not set'));
-        error_log('gps: ' . (isset($_POST['gps']) ? $_POST['gps'] : 'not set'));
-        
-        // Debug essenziale per tutti i tour
-        error_log('Post ID: ' . (isset($_POST['post_id']) ? $_POST['post_id'] : 'NUOVO TOUR'));
-        error_log('Titolo: ' . (isset($_POST['titolo']) ? $_POST['titolo'] : 'NON PRESENTE'));
-        
-        // Debug coordinate conversion
-        if (isset($_POST['coordinate_ritrovo']) && !empty($_POST['coordinate_ritrovo'])) {
-            error_log('=== DEBUG COORDINATE CONVERSION ===');
-            error_log('coordinate_ritrovo POST: ' . $_POST['coordinate_ritrovo']);
-            $coordinate_array = json_decode($_POST['coordinate_ritrovo'], true);
-            error_log('coordinate_array: ' . print_r($coordinate_array, true));
-            if ($coordinate_array && isset($coordinate_array['lat']) && isset($coordinate_array['lng'])) {
-                $gps_value = $coordinate_array['lat'] . ',' . $coordinate_array['lng'];
-                error_log('gps value to save: ' . $gps_value);
-            }
-        }
-        
-        // Handle categories
-        if (isset($_POST['categoria']) && is_array($_POST['categoria'])) {
-            $categories = array_map('sanitize_text_field', $_POST['categoria']);
-            
-            // Filtra categorie vuote e rimuovi duplicati
-            $categories = array_filter($categories, function($cat) {
-                return !empty(trim($cat));
-            });
-            $categories = array_unique($categories);
-            
-            // Salva solo nella tassonomia personalizzata
-            wp_set_object_terms($post_id, $categories, 'categorie_tour');
-            
-            error_log('Categorie salvate nella tassonomia: ' . implode(', ', $categories));
-        }
-        
-        error_log('Inizio salvataggio meta');
-        // Prepara tutti i meta in un array
-        $meta_updates = array();
-        
-        // Handle address fields explicitly
-        if (isset($_POST['indirizzo_ritrovo'])) {
-            $meta_updates['indirizzo_ritrovo'] = sanitize_text_field($_POST['indirizzo_ritrovo']);
-            error_log('Saving indirizzo_ritrovo: ' . $meta_updates['indirizzo_ritrovo']);
-        }
-        if (isset($_POST['indirizzo_ritrovo_place_id'])) {
-            $meta_updates['indirizzo_ritrovo_place_id'] = sanitize_text_field($_POST['indirizzo_ritrovo_place_id']);
-            error_log('Saving indirizzo_ritrovo_place_id: ' . $meta_updates['indirizzo_ritrovo_place_id']);
-        }
-        
-        if (isset($_POST['coordinate_ritrovo']) && !empty($_POST['coordinate_ritrovo'])) {
-            $coordinate_data = sanitize_text_field($_POST['coordinate_ritrovo']);
-            // Converti le coordinate JSON in formato lat,lon per il campo gps
-            $coordinate_array = json_decode($coordinate_data, true);
-            if ($coordinate_array && isset($coordinate_array['lat']) && isset($coordinate_array['lng'])) {
-                $meta_updates['gps'] = $coordinate_array['lat'] . ',' . $coordinate_array['lng'];
-                error_log('Saving gps coordinates from coordinate_ritrovo: ' . $meta_updates['gps']);
-            }
-        }
-        if (isset($_POST['gps'])) {
-            $meta_updates['gps'] = sanitize_text_field($_POST['gps']);
-            error_log('Saving gps: ' . $meta_updates['gps']);
-        }
-        
-        // Add other meta fields
-        $meta_fields = array(
-            'citta' => 'citta',
-            'citta_place_id' => 'citta_place_id',
-            'durata' => 'durata',
-            'lingue' => 'lingue',
-            'prezzo' => 'prezzo',
-            'include' => 'include',
-            'non_include' => 'non_include',
-            'itinerario' => 'itinerario',
-            'note' => 'note',
-            'difficolta' => 'difficolta',
-            'accessibilita' => 'accessibilita',
-            'min_partecipanti' => 'min_partecipanti',
-            'max_partecipanti' => 'max_partecipanti',
-            'prezzo_privato' => 'prezzo_privato',
-            'cosa_portare' => 'cosa_portare',
-            'giorni' => 'giorni',
-            'data_inizio' => 'data_inizio',
-            'data_fine' => 'data_fine',
-            'eccezioni' => 'eccezioni',
-            'scadenza_prenotazioni' => 'scadenza_prenotazioni',
-            'cancellazione' => 'cancellazione',
-            'rimborso' => 'rimborso',
-            'evento_specifico' => 'evento_specifico',
-            'data_evento' => 'data_evento',
-            'ora_evento' => 'ora_evento'
+        // Creazione del post
+        $post_data = array(
+            'post_title' => $tour_title,
+            'post_content' => $tour_description,
+            'post_status' => 'draft',
+            'post_type' => 'esperienze',
+            'post_author' => get_current_user_id()
         );
         
-        // Prepara i meta in batch
-        foreach ($meta_fields as $field => $meta_key) {
-            if (isset($_POST[$field])) {
-                error_log("Preparazione meta: {$meta_key}");
-                if (is_array($_POST[$field])) {
-                    $meta_updates[$meta_key] = array_map(function($v) {
-                        return sanitize_text_field(stripslashes($v));
-                    }, $_POST[$field]);
-                } else {
-                    $meta_updates[$meta_key] = sanitize_text_field(stripslashes($_POST[$field]));
-                }
-            }
-        }
+        $post_id = wp_insert_post($post_data);
         
-        // Handle orari separately since they come from individual fields
-        $orari = array();
-        foreach (['lunedi', 'martedi', 'mercoledi', 'giovedi', 'venerdi', 'sabato', 'domenica'] as $giorno) {
-            if (isset($_POST['orari_' . $giorno])) {
-                $orari[$giorno] = sanitize_text_field($_POST['orari_' . $giorno]);
-            }
-        }
-        if (!empty($orari)) {
-            $meta_updates['orari'] = $orari;
-        }
-        
-        // Esegui un'unica query per aggiornare tutti i meta
-        if (!empty($meta_updates)) {
-            error_log('Esecuzione batch update dei meta');
-            global $wpdb;
+        if ($post_id && !is_wp_error($post_id)) {
+            // Salvataggio dei meta fields
+            update_post_meta($post_id, 'tour_duration', $tour_duration);
+            // update_post_meta($post_id, 'tour_price', $tour_price); // Rimosso per ente pubblico
+            update_post_meta($post_id, 'tour_max_participants', $tour_max_participants);
+            update_post_meta($post_id, 'tour_difficulty', $tour_difficulty);
+            update_post_meta($post_id, 'tour_languages', $tour_languages);
+            update_post_meta($post_id, 'tour_meeting_point', $tour_meeting_point);
+            update_post_meta($post_id, 'tour_whats_included', $tour_whats_included);
+            update_post_meta($post_id, 'tour_whats_not_included', $tour_whats_not_included);
+            update_post_meta($post_id, 'tour_requirements', $tour_requirements);
+            update_post_meta($post_id, 'tour_cancellation_policy', $tour_cancellation_policy);
+            update_post_meta($post_id, 'tour_highlights', $tour_highlights);
+            update_post_meta($post_id, 'tour_itinerary', $tour_itinerary);
+            update_post_meta($post_id, 'tour_meeting_time', $tour_meeting_time);
+            update_post_meta($post_id, 'tour_meeting_date', $tour_meeting_date);
+            update_post_meta($post_id, 'tour_latitude', $tour_latitude);
+            update_post_meta($post_id, 'tour_longitude', $tour_longitude);
+            update_post_meta($post_id, 'tour_address', $tour_address);
             
-            // Get existing gallery images before deleting meta
-            $existing_gallery = get_post_meta($post_id, 'galleria', true);
-            $gallery_keep = isset($_POST['gallery_keep']) ? json_decode(stripslashes($_POST['gallery_keep']), true) : array();
-            // Get existing thumbnail before deleting meta
-            $existing_thumbnail_id = get_post_meta($post_id, '_thumbnail_id', true);
-            
-            // First, delete existing meta for this post (but preserve thumbnail if not being replaced)
-            error_log('Eliminazione meta esistenti per post ID: ' . $post_id);
-            if (empty($_FILES['foto_principale']['name'])) {
-                // If no new photo is being uploaded, preserve the existing thumbnail
-                $deleted_count = $wpdb->query($wpdb->prepare(
-                    "DELETE FROM {$wpdb->postmeta} WHERE post_id = %d AND meta_key != %s",
-                    $post_id,
-                    '_thumbnail_id'
-                ));
-                error_log('Meta eliminati (thumbnail preservato): ' . $deleted_count);
-            } else {
-                // If new photo is being uploaded, delete all meta including thumbnail
-                $deleted_count = $wpdb->delete($wpdb->postmeta, array('post_id' => $post_id));
-                error_log('Meta eliminati (incluso thumbnail): ' . $deleted_count);
+            // Gestione delle categorie
+            if (!empty($tour_categories)) {
+                wp_set_post_terms($post_id, $tour_categories, 'categorie_esperienze');
             }
             
-            // Then insert all new meta values
-            error_log('Inserimento nuovi meta. Numero meta da inserire: ' . count($meta_updates));
-            $values = array();
-            $placeholders = array();
-            
-            foreach ($meta_updates as $meta_key => $meta_value) {
-                if (is_array($meta_value)) {
-                    $meta_value = maybe_serialize($meta_value);
-                    error_log("Meta array serializzato: $meta_key = " . $meta_value);
-                }
-                $values[] = $post_id;
-                $values[] = $meta_key;
-                $values[] = $meta_value;
-                $placeholders[] = "(%d, %s, %s)";
-            }
-            
-            // Esegui la query in batch
-            $query = $wpdb->prepare(
-                "INSERT INTO {$wpdb->postmeta} (post_id, meta_key, meta_value) VALUES " . 
-                implode(', ', $placeholders),
-                $values
-            );
-            
-            error_log('Esecuzione query batch meta: ' . substr($query, 0, 200) . '...');
-            $result = $wpdb->query($query);
-            error_log('Risultato query batch meta: ' . ($result !== false ? $result . ' righe inserite' : 'ERRORE: ' . $wpdb->last_error));
-            error_log('Batch update meta completato');
-            
-            // Debug: verifica che i meta siano stati salvati
-            if (isset($_POST['post_id']) && $_POST['post_id'] == 205) {
-                error_log('=== VERIFICA META SALVATI TOUR 205 ===');
-                error_log('indirizzo_ritrovo salvato: ' . get_post_meta($post_id, 'indirizzo_ritrovo', true));
-                error_log('coordinate_ritrovo salvato: ' . get_post_meta($post_id, 'coordinate_ritrovo', true));
-                error_log('gps salvato: ' . get_post_meta($post_id, 'gps', true));
-                error_log('citta salvato: ' . get_post_meta($post_id, 'citta', true));
-                error_log('prezzo salvato: ' . get_post_meta($post_id, 'prezzo', true));
-            }
-            // Thumbnail is already preserved if no new photo is uploaded
-        }
-        
-        error_log('Inizio gestione immagini');
-        
-        // Assicurati che la directory uploads esista
-        $upload_dir = wp_upload_dir();
-        $year_month_dir = $upload_dir['basedir'] . '/' . date('Y/m');
-        if (!file_exists($year_month_dir)) {
-            wp_mkdir_p($year_month_dir);
-            error_log('Creata directory: ' . $year_month_dir);
-        }
-        
-        // Gestione delle immagini
-        if (!empty($_FILES['foto_principale']['name'])) {
-            error_log('Elaborazione foto principale');
-            require_once(ABSPATH . 'wp-admin/includes/image.php');
-            require_once(ABSPATH . 'wp-admin/includes/file.php');
-            require_once(ABSPATH . 'wp-admin/includes/media.php');
-            
-            // Aumenta il timeout per l'upload delle immagini
-            set_time_limit(120);
-            
-            // Verifica il tipo di file
-            $file_type = wp_check_filetype($_FILES['foto_principale']['name']);
-            if (!$file_type['type']) {
-                error_log('Tipo file non valido per foto principale: ' . $_FILES['foto_principale']['name']);
-            } else {
-                // Imposta il nome del file
-                $_FILES['foto_principale']['name'] = sanitize_file_name($_FILES['foto_principale']['name']);
-                
-                // Gestisci l'upload
-                error_log('Upload foto principale in corso');
-                $attachment_id = media_handle_upload('foto_principale', $post_id);
-                if (!is_wp_error($attachment_id)) {
-                    set_post_thumbnail($post_id, $attachment_id);
-                    error_log('Foto principale salvata con ID: ' . $attachment_id);
-                } else {
-                    error_log('Errore upload foto principale: ' . $attachment_id->get_error_message());
-                    // Non bloccare il salvataggio del tour per un errore di immagine
-                    error_log('Continua il salvataggio del tour senza la foto principale');
-                }
-            }
-        }
-        
-        // Gestione della galleria
-        $gallery_ids = array();
-        
-        // Add kept images to gallery
-        if (!empty($gallery_keep)) {
-            error_log('Adding kept images to gallery: ' . implode(', ', $gallery_keep));
-            $gallery_ids = array_merge($gallery_ids, $gallery_keep);
-        }
-        
-        // Handle new gallery uploads
-        if (!empty($_FILES['galleria']['name'][0])) {
-            error_log('Inizio elaborazione nuove immagini galleria');
-            $max_size = 2 * 1024 * 1024; // 2MB
-            
-            foreach ($_FILES['galleria']['name'] as $key => $value) {
-                error_log("Elaborazione immagine galleria {$key}");
-                if ($_FILES['galleria']['error'][$key] === 0) {
-                    // Verifica dimensione
-                    if ($_FILES['galleria']['size'][$key] > $max_size) {
-                        error_log('Immagine troppo grande: ' . $_FILES['galleria']['name'][$key]);
-                        continue;
-                    }
+            // Gestione dell'immagine
+            if (!empty($_FILES['tour_image']['name'])) {
+                $upload = wp_handle_upload($_FILES['tour_image'], array('test_form' => false));
+                if (!isset($upload['error'])) {
+                    $attachment_id = wp_insert_attachment(array(
+                        'post_mime_type' => $upload['type'],
+                        'post_title' => sanitize_file_name($_FILES['tour_image']['name']),
+                        'post_content' => '',
+                        'post_status' => 'inherit'
+                    ), $upload['file'], $post_id);
                     
-                    // Verifica tipo di file
-                    $file_type = wp_check_filetype($_FILES['galleria']['name'][$key]);
-                    if (!$file_type['type']) {
-                        error_log('Tipo file non valido per immagine galleria: ' . $_FILES['galleria']['name'][$key]);
-                        continue;
-                    }
-                    
-                    // Prepara il file
-                    $file = array(
-                        'name'     => sanitize_file_name($_FILES['galleria']['name'][$key]),
-                        'type'     => $_FILES['galleria']['type'][$key],
-                        'tmp_name' => $_FILES['galleria']['tmp_name'][$key],
-                        'error'    => $_FILES['galleria']['error'][$key],
-                        'size'     => $_FILES['galleria']['size'][$key]
-                    );
-                    
-                    // Gestisci l'upload
-                    error_log('Upload immagine galleria in corso');
-                    $attachment_id = media_handle_sideload($file, $post_id);
                     if (!is_wp_error($attachment_id)) {
-                        $gallery_ids[] = $attachment_id;
-                        error_log('Immagine galleria salvata con ID: ' . $attachment_id);
-                    } else {
-                        error_log('Errore upload immagine galleria: ' . $attachment_id->get_error_message());
+                        wp_update_attachment_metadata($attachment_id, wp_generate_attachment_metadata($attachment_id, $upload['file']));
+                        set_post_thumbnail($post_id, $attachment_id);
                     }
                 }
             }
-        }
-        
-        // Save final gallery
-        if (!empty($gallery_ids)) {
-            error_log('Saving final gallery with ' . count($gallery_ids) . ' images');
-            update_post_meta($post_id, 'galleria', $gallery_ids);
-        }
-        
-        error_log('=== Fine processo di salvataggio ===');
-        $redirect_url = get_permalink($post_id);
-        error_log('Redirect URL: ' . $redirect_url);
-        error_log('Post ID per redirect: ' . $post_id);
-        
-        // Set success flag for SweetAlert confirmation
-        $success = true;
-        $tour_title = $post_data['post_title'];
-        $tour_id = $post_id;
-        error_log('Success flag impostato: ' . ($success ? 'true' : 'false'));
-        error_log('Tour salvato: ' . $tour_title . ' (ID: ' . $tour_id . ')');
-    } else {
-        error_log('Errore nel salvataggio del post: ' . $post_id->get_error_message());
-        $success = false;
-        $error_message = $post_id->get_error_message();
-        echo '<script>
-            document.addEventListener("DOMContentLoaded", function() {
-                // Chiudi il loader se è aperto
-                Swal.close();
-                
-                // Mostra il messaggio di errore
-                Swal.fire({
-                    title: "Errore nel salvataggio",
-                    text: "' . esc_js($error_message) . '",
-                    icon: "error",
-                    confirmButtonText: "OK",
-                    confirmButtonColor: "#dc3545"
+            
+            $success = true;
+            $success_message = 'L\'esperienza "' . esc_js($tour_title) . '" è stata creata con successo.';
+            $dashboard_url = esc_url(site_url('/dashboard-ufficio/'));
+            
+            echo '<script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    Swal.fire({
+                        title: "Esperienza Creata!",
+                        text: "' . $success_message . '",
+                        icon: "success",
+                        confirmButtonText: "Vai alla Dashboard",
+                        showCancelButton: true,
+                        cancelButtonText: "Crea Altra Esperienza"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "' . $dashboard_url . '";
+                        } else {
+                            window.location.reload();
+                        }
+                    });
                 });
-            });
-        </script>';
+            </script>';
+        } else {
+            $error_message = 'Errore durante la creazione dell\'esperienza.';
+        }
     }
 }
-// --- CONTROLLO LIMITE TOUR E SOTTOSCRIZIONE ---
-$current_user_id = get_current_user_id();
-require_once get_template_directory() . '/functions.php';
 
-// Add this at the very beginning of the file, right after the template name
-if (isset($success) && $success) {
-    error_log('Tour salvato con successo, mostrando SweetAlert');
-    $success_message = 'Il tour "' . esc_js($tour_title) . '" è stato creato con successo.';
-    $dashboard_url = esc_url(site_url('/dashboard-ufficio/'));
-    echo '<script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Chiudi il loader se è aperto
-            Swal.close();
-            
-            // Mostra il messaggio di successo
-            Swal.fire({
-                title: "Tour creato!",
-                text: "' . $success_message . '",
-                icon: "success",
-                showCancelButton: true,
-                confirmButtonText: "Torna alla Dashboard",
-                cancelButtonText: "Rimani qui",
-                confirmButtonColor: "#28a745",
-                cancelButtonColor: "#6c757d"
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    window.location.href = "' . $dashboard_url . '";
-                }
-            });
-        });
-    </script>';
-}
-
-if (!opencomune_check_tour_limit($current_user_id)) {
-    echo '<div class="container mx-auto p-8 text-center text-red-600 font-bold">Hai raggiunto il limite massimo di ' . esc_html(opencomune_get_tour_limit()) . ' tour.<br>Per crearne altri, <a href="' . esc_url(site_url('/sottoscrizione/')) . '" class="underline text-blue-700">attiva la sottoscrizione</a>.</div>';
-    get_footer();
-    exit;
-}
-
-global $wpdb;
-$comuni = $wpdb->get_results("SELECT Descrizione FROM wpmyguide_comuni WHERE DataFineVal IS NULL OR DataFineVal = '' ORDER BY Descrizione ASC");
-
-// Recupera tutte le categorie tour dalla tassonomia personalizzata
-$all_categorie = get_terms([
-    'taxonomy' => 'categorie_tour',
+// Carica le categorie
+$categorie = get_terms(array(
+    'taxonomy' => 'categorie_esperienze',
     'hide_empty' => false,
-]);
+    'orderby' => 'name',
+    'order' => 'ASC'
+));
 ?>
-<script>
-let galleryKeepIds = [];
-</script>
- 
 
-<div class="min-vh-100 bg-light py-4">
-    <div class="container">
-      
+<style>
+.form-section {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
 
+.form-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -3px rgba(0, 0, 0, 0.1);
+}
 
+.form-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    transition: all 0.3s ease;
+}
 
-        <form method="post" enctype="multipart/form-data" id="tour-form" action="<?php echo esc_url($_SERVER['REQUEST_URI']); ?>">
-            <?php 
-            $nonce = wp_create_nonce('save_tour_nonce');
-            error_log('Nonce generato: ' . $nonce);
-            wp_nonce_field('save_tour_nonce', 'tour_nonce'); 
-            ?>
-            <input type="hidden" name="debug_nonce" value="<?php echo esc_attr($nonce); ?>">
+.form-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
 
+.form-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    min-height: 120px;
+    resize: vertical;
+    transition: all 0.3s ease;
+}
 
-            <!-- Dati obbligatori -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h2 class="h4 mb-0"><?php _e('Dati obbligatori', 'opencomune'); ?></h2>
+.form-textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.form-required {
+    color: #ef4444;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+    background: #6b7280;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.btn-secondary:hover {
+    background: #4b5563;
+    transform: translateY(-1px);
+}
+
+.section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.error-message {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.success-message {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #16a34a;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #f3f4f6;
+    border-top: 4px solid #667eea;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Header -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between">
+                <div>
+                    <h1 class="text-3xl font-bold text-gray-900">Nuova Esperienza</h1>
+                    <p class="text-gray-600 mt-2">Crea una nuova esperienza turistica per il tuo comune</p>
                 </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="titolo" class="form-label fw-bold"><?php _e('Titolo evento', 'opencomune'); ?> *</label>
-                            <input type="text" id="titolo" name="titolo" value="" required class="form-control">
-                        </div>
-                        
-                        <div class="col-md-6 mb-3">
-                            <label for="categoria" class="form-label fw-bold"><?php _e('Categoria principale', 'opencomune'); ?> *</label>
-                            <select id="categoria" name="categoria[]" multiple required class="form-control">
-                                <?php 
-                                // Mostra le categorie esistenti come opzioni predefinite
-                                foreach ($all_categorie as $categoria): 
-                                ?>
-                                    <option value="<?php echo esc_attr($categoria->name); ?>"><?php echo esc_html($categoria->name); ?></option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
+                <div class="flex space-x-4">
+                    <a href="<?php echo home_url('/dashboard-ufficio/'); ?>" class="btn-secondary">
+                        <i class="bi bi-arrow-left mr-2"></i>
+                        Torna alla Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="citta" class="form-label fw-bold"><?php _e('Città/Località *', 'opencomune'); ?></label>
-                            <input type="text" 
-                                   id="citta" 
-                                   name="citta" 
-                                   class="form-control" 
-                                   required
-                                   value=""
-                                   placeholder="<?php _e('Inizia a digitare il nome della città...', 'opencomune'); ?>">
-                            <input type="hidden" id="citta_place_id" name="citta_place_id" value="">
-                        </div>
+        <!-- Messaggi di errore/successo -->
+        <?php if (isset($error_message)): ?>
+            <div class="error-message">
+                <i class="bi bi-exclamation-triangle mr-2"></i>
+                <?php echo esc_html($error_message); ?>
+            </div>
+        <?php endif; ?>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="durata" class="form-label fw-bold"><?php _e('Durata stimata', 'opencomune'); ?> *</label>
-                            <input type="text" id="durata" name="durata" value="" required class="form-control" placeholder="1h 30m, 2h, mezza giornata...">
-                        </div>
+        <?php if (isset($success_message)): ?>
+            <div class="success-message">
+                <i class="bi bi-check-circle mr-2"></i>
+                <?php echo esc_html($success_message); ?>
+            </div>
+        <?php endif; ?>
 
-                        <div class="col-md-6 mb-3">
-                            <label for="lingue" class="form-label fw-bold"><?php _e('Lingue disponibili', 'opencomune'); ?> *</label>
-                            <select id="lingue" name="lingue[]" multiple required class="form-control">
-                                <?php
-                                $lingue_predefinite = ['Italiano','English','Français','Deutsch','Español','Português','Русский','中文','日本語','العربية'];
-                                foreach ($lingue_predefinite as $lingua) {
-                                    echo '<option value="' . esc_attr($lingua) . '">' . esc_html($lingua) . '</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="prezzo" class="form-label fw-bold"><?php _e('Prezzo per persona (€)', 'opencomune'); ?> *</label>
-                            <input type="number" id="prezzo" name="prezzo" value="" min="10" max="500" step="1" required class="form-control">
-                        </div>
+        <!-- Form -->
+        <form method="POST" enctype="multipart/form-data" id="nuova-esperienza-form" class="space-y-8">
+            <!-- Sezione Informazioni Base -->
+            <div class="form-section p-6">
+                <h2 class="section-title">
+                    <i class="bi bi-info-circle mr-2"></i>
+                    Informazioni Base
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="md:col-span-2">
+                        <label for="tour_title" class="form-label">
+                            Titolo Esperienza <span class="form-required">*</span>
+                        </label>
+                        <input type="text" id="tour_title" name="tour_title" class="form-input" 
+                               value="<?php echo esc_attr($_POST['tour_title'] ?? ''); ?>" required>
+                    </div>
+                    
+                    <div class="md:col-span-2">
+                        <label for="tour_description" class="form-label">
+                            Descrizione <span class="form-required">*</span>
+                        </label>
+                        <textarea id="tour_description" name="tour_description" class="form-textarea" required><?php echo esc_textarea($_POST['tour_description'] ?? ''); ?></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="tour_duration" class="form-label">
+                            Durata <span class="form-required">*</span>
+                        </label>
+                        <input type="text" id="tour_duration" name="tour_duration" class="form-input" 
+                               placeholder="es. 2 ore, 1 giorno" value="<?php echo esc_attr($_POST['tour_duration'] ?? ''); ?>" required>
+                    </div>
+                    
+                    <!-- Campo prezzo rimosso per ente pubblico -->
+                    
+                    <div>
+                        <label for="tour_max_participants" class="form-label">
+                            Max Partecipanti
+                        </label>
+                        <input type="number" id="tour_max_participants" name="tour_max_participants" class="form-input" 
+                               min="1" value="<?php echo esc_attr($_POST['tour_max_participants'] ?? ''); ?>">
+                    </div>
+                    
+                    <div>
+                        <label for="tour_difficulty" class="form-label">
+                            Difficoltà
+                        </label>
+                        <select id="tour_difficulty" name="tour_difficulty" class="form-input">
+                            <option value="">Seleziona difficoltà</option>
+                            <option value="facile" <?php selected($_POST['tour_difficulty'] ?? '', 'facile'); ?>>Facile</option>
+                            <option value="medio" <?php selected($_POST['tour_difficulty'] ?? '', 'medio'); ?>>Medio</option>
+                            <option value="difficile" <?php selected($_POST['tour_difficulty'] ?? '', 'difficile'); ?>>Difficile</option>
+                        </select>
                     </div>
                 </div>
             </div>
 
-            <!-- Contenuti descrittivi -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h2 class="h4 mb-0"><?php _e('Contenuti descrittivi', 'opencomune'); ?></h2>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="descrizione_breve" class="form-label fw-bold"><?php _e('Descrizione breve', 'opencomune'); ?> *</label>
-                        <input type="text" id="descrizione_breve" name="descrizione_breve" value="" maxlength="160" required class="form-control">
+            <!-- Sezione Categorie e Immagine -->
+            <div class="form-section p-6">
+                <h2 class="section-title">
+                    <i class="bi bi-tags mr-2"></i>
+                    Categorie e Immagine
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="tour_categories" class="form-label">
+                            Categorie
+                        </label>
+                        <select id="tour_categories" name="tour_categories[]" class="form-input" multiple>
+                            <?php foreach ($categorie as $categoria): ?>
+                                <option value="<?php echo esc_attr($categoria->slug); ?>" 
+                                        <?php selected(in_array($categoria->slug, $_POST['tour_categories'] ?? []), true); ?>>
+                                    <?php echo esc_html($categoria->name); ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-
-                    <div class="mb-3">
-                        <label for="descrizione_completa" class="form-label fw-bold"><?php _e('Descrizione completa', 'opencomune'); ?> *</label>
-                        <textarea id="descrizione_completa" name="descrizione_completa" rows="6" required class="form-control"></textarea>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label for="include" class="form-label fw-bold"><?php _e('Cosa include il tour', 'opencomune'); ?></label>
-                            <textarea id="include" name="include" rows="3" class="form-control"></textarea>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label for="non_include" class="form-label fw-bold"><?php _e('Cosa non è incluso', 'opencomune'); ?></label>
-                            <textarea id="non_include" name="non_include" rows="3" class="form-control"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="itinerario" class="form-label fw-bold"><?php _e('Itinerario dettagliato', 'opencomune'); ?></label>
-                        <textarea id="itinerario" name="itinerario" rows="4" class="form-control"></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="note" class="form-label fw-bold"><?php _e('Note importanti', 'opencomune'); ?></label>
-                        <textarea id="note" name="note" rows="3" class="form-control"></textarea>
+                    
+                    <div>
+                        <label for="tour_image" class="form-label">
+                            Immagine Principale
+                        </label>
+                        <input type="file" id="tour_image" name="tour_image" class="form-input" accept="image/*">
+                        <p class="text-sm text-gray-500 mt-1">Formati supportati: JPG, PNG, GIF. Max 5MB</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Informazioni pratiche -->
-            <div class="card mb-4">
-                <div class="card-header">
-                    <h2 class="h4 mb-0"><?php _e('Informazioni pratiche', 'opencomune'); ?></h2>
-                </div>
-                <div class="card-body">
-                    <div class="mb-3">
-                        <label for="indirizzo_ritrovo" class="form-label fw-bold"><?php _e('Indirizzo completo punto di ritrovo *', 'opencomune'); ?></label>
-                        <input type="text" 
-                               id="indirizzo_ritrovo" 
-                               name="indirizzo_ritrovo" 
-                               class="form-control" 
-                               required
-                               value=""
-                               placeholder="<?php _e('Inizia a digitare l\'indirizzo...', 'opencomune'); ?>">
-                        <input type="hidden" id="indirizzo_ritrovo_place_id" name="indirizzo_ritrovo_place_id" value="">
-                        <input type="hidden" id="coordinate_ritrovo" name="coordinate_ritrovo" value="">
-                        <input type="hidden" id="gps" name="gps" value="">
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold"><?php _e('Difficoltà fisica', 'opencomune'); ?> *</label>
-                            <div class="form-check">
-                                <input type="radio" name="difficolta" value="facile" id="difficolta_facile" class="form-check-input" required>
-                                <label for="difficolta_facile" class="form-check-label"><?php _e('Facile', 'opencomune'); ?></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" name="difficolta" value="moderata" id="difficolta_moderata" class="form-check-input">
-                                <label for="difficolta_moderata" class="form-check-label"><?php _e('Moderata', 'opencomune'); ?></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" name="difficolta" value="impegnativa" id="difficolta_impegnativa" class="form-check-input">
-                                <label for="difficolta_impegnativa" class="form-check-label"><?php _e('Impegnativa', 'opencomune'); ?></label>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold"><?php _e('Accessibilità', 'opencomune'); ?> *</label>
-                            <div class="form-check">
-                                <input type="radio" name="accessibilita" value="carrozzine" id="accessibilita_carrozzine" class="form-check-input" required>
-                                <label for="accessibilita_carrozzine" class="form-check-label"><?php _e('Accessibile carrozzine', 'opencomune'); ?></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" name="accessibilita" value="ridotta" id="accessibilita_ridotta" class="form-check-input">
-                                <label for="accessibilita_ridotta" class="form-check-label"><?php _e('Accessibile mobilità ridotta', 'opencomune'); ?></label>
-                            </div>
-                            <div class="form-check">
-                                <input type="radio" name="accessibilita" value="no" id="accessibilita_no" class="form-check-input">
-                                <label for="accessibilita_no" class="form-check-label"><?php _e('Non accessibile', 'opencomune'); ?></label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <label for="min_partecipanti" class="form-label fw-bold"><?php _e('Numero minimo partecipanti', 'opencomune'); ?> *</label>
-                            <input type="number" id="min_partecipanti" name="min_partecipanti" value="2" min="1" max="100" required class="form-control">
-                        </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label for="max_partecipanti" class="form-label fw-bold"><?php _e('Numero massimo partecipanti', 'opencomune'); ?> *</label>
-                            <input type="number" id="max_partecipanti" name="max_partecipanti" value="15" min="1" max="100" required class="form-control">
-                        </div>
-
-                        <div class="col-md-4 mb-3">
-                            <label for="prezzo_privato" class="form-label fw-bold"><?php _e('Prezzo gruppo privato (€)', 'opencomune'); ?></label>
-                            <input type="number" id="prezzo_privato" name="prezzo_privato" value="" min="10" max="5000" step="1" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="cosa_portare" class="form-label fw-bold"><?php _e('Cosa portare/indossare', 'opencomune'); ?></label>
-                        <textarea id="cosa_portare" name="cosa_portare" rows="3" class="form-control"></textarea>
-                    </div>
-                </div>
-            </div>
-
-
-
-            <!-- Media -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h2 class="text-2xl font-bold mb-4"><?php _e('Media', 'opencomune'); ?></h2>
+            <!-- Sezione Dettagli -->
+            <div class="form-section p-6">
+                <h2 class="section-title">
+                    <i class="bi bi-list-ul mr-2"></i>
+                    Dettagli Esperienza
+                </h2>
+                
                 <div class="space-y-6">
                     <div>
-                        <label for="foto_principale" class="block font-semibold mb-1"><?php _e('Foto principale', 'opencomune'); ?> *</label>
-
-                        <input type="file" id="foto_principale" name="foto_principale" accept="image/*" class="w-full border rounded p-2">
+                        <label for="tour_highlights" class="form-label">
+                            Punti Salienti
+                        </label>
+                        <textarea id="tour_highlights" name="tour_highlights" class="form-textarea" 
+                                  placeholder="Elenca i punti salienti dell'esperienza..."><?php echo esc_textarea($_POST['tour_highlights'] ?? ''); ?></textarea>
                     </div>
-
+                    
                     <div>
-                        <label for="galleria" class="block font-semibold mb-1"><?php _e('Galleria immagini', 'opencomune'); ?> (max 8)</label>
-
-                        <input type="file" id="galleria" name="galleria[]" accept="image/*" multiple class="form-control">
+                        <label for="tour_itinerary" class="form-label">
+                            Itinerario
+                        </label>
+                        <textarea id="tour_itinerary" name="tour_itinerary" class="form-textarea" 
+                                  placeholder="Descrivi l'itinerario dettagliato..."><?php echo esc_textarea($_POST['tour_itinerary'] ?? ''); ?></textarea>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="tour_whats_included" class="form-label">
+                                Cosa Include
+                            </label>
+                            <textarea id="tour_whats_included" name="tour_whats_included" class="form-textarea" 
+                                      placeholder="Cosa è incluso nel prezzo..."><?php echo esc_textarea($_POST['tour_whats_included'] ?? ''); ?></textarea>
+                        </div>
+                        
+                        <div>
+                            <label for="tour_whats_not_included" class="form-label">
+                                Cosa Non Include
+                            </label>
+                            <textarea id="tour_whats_not_included" name="tour_whats_not_included" class="form-textarea" 
+                                      placeholder="Cosa non è incluso..."><?php echo esc_textarea($_POST['tour_whats_not_included'] ?? ''); ?></textarea>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="tour_requirements" class="form-label">
+                            Requisiti
+                        </label>
+                        <textarea id="tour_requirements" name="tour_requirements" class="form-textarea" 
+                                  placeholder="Requisiti per partecipare..."><?php echo esc_textarea($_POST['tour_requirements'] ?? ''); ?></textarea>
                     </div>
                 </div>
             </div>
 
-            <div class="d-flex justify-content-end">
-                <button type="submit" name="save_tour" class="btn btn-primary btn-lg">
-                    <?php _e('Salva e pubblica', 'opencomune'); ?>
+            <!-- Sezione Incontro -->
+            <div class="form-section p-6">
+                <h2 class="section-title">
+                    <i class="bi bi-geo-alt mr-2"></i>
+                    Punto di Incontro
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="tour_meeting_point" class="form-label">
+                            Luogo di Incontro
+                        </label>
+                        <input type="text" id="tour_meeting_point" name="tour_meeting_point" class="form-input" 
+                               placeholder="es. Piazza del Duomo" value="<?php echo esc_attr($_POST['tour_meeting_point'] ?? ''); ?>">
+                    </div>
+                    
+                    <div>
+                        <label for="tour_meeting_time" class="form-label">
+                            Orario di Incontro
+                        </label>
+                        <input type="time" id="tour_meeting_time" name="tour_meeting_time" class="form-input" 
+                               value="<?php echo esc_attr($_POST['tour_meeting_time'] ?? ''); ?>">
+                    </div>
+                    
+                    <div>
+                        <label for="tour_meeting_date" class="form-label">
+                            Data di Incontro
+                        </label>
+                        <input type="date" id="tour_meeting_date" name="tour_meeting_date" class="form-input" 
+                               value="<?php echo esc_attr($_POST['tour_meeting_date'] ?? ''); ?>">
+                    </div>
+                    
+                    <div>
+                        <label for="tour_languages" class="form-label">
+                            Lingue
+                        </label>
+                        <input type="text" id="tour_languages" name="tour_languages" class="form-input" 
+                               placeholder="es. Italiano, Inglese" value="<?php echo esc_attr($_POST['tour_languages'] ?? ''); ?>">
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <label for="tour_address" class="form-label">
+                        Indirizzo Completo
+                    </label>
+                    <input type="text" id="tour_address" name="tour_address" class="form-input" 
+                           placeholder="Indirizzo completo del punto di incontro" value="<?php echo esc_attr($_POST['tour_address'] ?? ''); ?>">
+                </div>
+                
+                <div class="mt-6">
+                    <label class="form-label">Posizione sulla Mappa</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="tour_latitude" class="form-label">Latitudine</label>
+                            <input type="number" id="tour_latitude" name="tour_latitude" class="form-input" 
+                                   step="any" placeholder="es. 40.123456" value="<?php echo esc_attr($_POST['tour_latitude'] ?? ''); ?>">
+                        </div>
+                        <div>
+                            <label for="tour_longitude" class="form-label">Longitudine</label>
+                            <input type="number" id="tour_longitude" name="tour_longitude" class="form-input" 
+                                   step="any" placeholder="es. 18.123456" value="<?php echo esc_attr($_POST['tour_longitude'] ?? ''); ?>">
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-2">Usa Google Maps per trovare le coordinate precise</p>
+                </div>
+            </div>
+
+            <!-- Sezione Politiche -->
+            <div class="form-section p-6">
+                <h2 class="section-title">
+                    <i class="bi bi-shield-check mr-2"></i>
+                    Politiche e Termini
+                </h2>
+                
+                <div>
+                    <label for="tour_cancellation_policy" class="form-label">
+                        Politica di Cancellazione
+                    </label>
+                    <textarea id="tour_cancellation_policy" name="tour_cancellation_policy" class="form-textarea" 
+                              placeholder="Descrivi la politica di cancellazione..."><?php echo esc_textarea($_POST['tour_cancellation_policy'] ?? ''); ?></textarea>
+                </div>
+            </div>
+
+            <!-- Pulsanti di Azione -->
+            <div class="flex justify-end space-x-4 pb-8">
+                <a href="<?php echo home_url('/dashboard-ufficio/'); ?>" class="btn-secondary">
+                    <i class="bi bi-x-circle mr-2"></i>
+                    Annulla
+                </a>
+                <button type="submit" name="save_tour" class="btn-primary">
+                    <i class="bi bi-check-circle mr-2"></i>
+                    Salva Esperienza
                 </button>
             </div>
         </form>
     </div>
 </div>
 
-<script>
-// Funzione per loggare nel debug.log
-function debugLog(message) {
-    jQuery.ajax({
-        url: '<?php echo admin_url("admin-ajax.php"); ?>',
-        type: 'POST',
-        data: {
-            action: 'debug_log',
-            message: message,
-            nonce: '<?php echo wp_create_nonce("debug_log_nonce"); ?>'
-        },
-        success: function(response) {
-            // Debug log inviato con successo
-        },
-        error: function() {
-            // Errore nell'invio del debug log
-        }
-    });
-}
+<!-- Loading Overlay -->
+<div id="loading-overlay" class="loading-overlay" style="display: none;">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <div class="loading-spinner mx-auto mb-4"></div>
+        <p class="text-gray-600">Salvataggio in corso...</p>
+    </div>
+</div>
 
-debugLog('Script tour form caricato');
-jQuery(document).ready(function($) {
-    debugLog('jQuery ready, inizializzazione form tour');
-    try {
-    // Il loader verrà mostrato solo dopo la conferma, non automaticamente
-    // Verifica che il form esista
-    if ($('#tour-form').length === 0) {
-        debugLog('ERRORE: Form tour-form non trovato!');
-        return;
-    }
-    debugLog('Form tour-form trovato, aggiungendo event listener');
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Inizializza Select2
+    $('#tour_categories').select2({
+        placeholder: 'Seleziona le categorie',
+        allowClear: true
+    });
     
-    // Gestione submit del form con SweetAlert
-    $('#tour-form').on('submit', function(e) {
-        debugLog('Form submit intercettato');
-        console.log('Form submit event triggered');
-        e.preventDefault();
-        e.stopPropagation();
+    // Gestione del form
+    const form = document.getElementById('nuova-esperienza-form');
+    const loadingOverlay = document.getElementById('loading-overlay');
+    
+    form.addEventListener('submit', function(e) {
+        // Mostra loading
+        loadingOverlay.style.display = 'flex';
         
-        debugLog('Inizio validazione campi obbligatori');
+        // Validazione lato client
+        const requiredFields = ['tour_title', 'tour_description', 'tour_duration'];
+        let isValid = true;
         
-        // Verifica che tutti i campi obbligatori siano compilati
-        var requiredFields = $(this).find('[required]');
-        debugLog('Campi obbligatori trovati: ' + requiredFields.length);
-        var isValid = true;
-        var missingFields = [];
-        
-        requiredFields.each(function() {
-            var $field = $(this);
-            var fieldValue = $field.val();
-            var isEmpty = false;
-            
-            // Controllo specifico per select multipli
-            if ($field.is('select[multiple]')) {
-                isEmpty = !fieldValue || fieldValue.length === 0;
-            } else {
-                isEmpty = !fieldValue || fieldValue.trim() === '';
-            }
-            
-            if (isEmpty) {
+        requiredFields.forEach(fieldName => {
+            const field = document.getElementById(fieldName);
+            if (!field.value.trim()) {
+                field.style.borderColor = '#ef4444';
                 isValid = false;
-                var fieldName = $field.attr('name');
-                var fieldLabel = $field.closest('.mb-3').find('label').text() || 
-                                $field.closest('.col-md-6').find('label').text() || 
-                                fieldName;
-                var cleanLabel = fieldLabel.replace('*', '').trim();
-                missingFields.push(cleanLabel);
-                debugLog('Campo mancante: ' + fieldName + ' Label: ' + cleanLabel);
             } else {
-                debugLog('Campo valido: ' + $field.attr('name'));
+                field.style.borderColor = '#d1d5db';
             }
         });
-        
-        debugLog('Validazione completata. Valido: ' + isValid + ' Campi mancanti: ' + missingFields.length);
         
         if (!isValid) {
-            debugLog('Mostrando alert per campi mancanti');
-            var missingFieldsText = missingFields.slice(0, 3).join(', ');
-            if (missingFields.length > 3) {
-                missingFieldsText += ' e altri ' + (missingFields.length - 3) + ' campi';
-            }
-            
-            // Evidenzia i campi mancanti
-            requiredFields.each(function() {
-                var $field = $(this);
-                var fieldValue = $field.val();
-                var isEmpty = false;
-                
-                if ($field.is('select[multiple]')) {
-                    isEmpty = !fieldValue || fieldValue.length === 0;
-                } else {
-                    isEmpty = !fieldValue || fieldValue.trim() === '';
-                }
-                
-                if (isEmpty) {
-                    $field.addClass('border-danger');
-                    $field.closest('.mb-3, .col-md-6').find('label').addClass('text-danger');
-                }
-            });
-            
+            e.preventDefault();
+            loadingOverlay.style.display = 'none';
             Swal.fire({
-                title: 'Campi obbligatori mancanti',
-                html: '<div class="text-left">' +
-                      '<p class="mb-3">I seguenti campi sono obbligatori:</p>' +
-                      '<ul class="text-left mb-3">' +
-                      missingFields.map(function(field) {
-                          return '<li><strong>' + field + '</strong></li>';
-                      }).join('') +
-                      '</ul>' +
-                      '<p class="text-sm text-muted">Compila tutti i campi obbligatori prima di salvare.</p>' +
-                      '</div>',
-                icon: 'warning',
-                confirmButtonText: 'OK, ho capito',
-                confirmButtonColor: '#ffc107',
-                width: '500px'
-            }).then(() => {
-                // Scroll al primo campo mancante
-                var firstMissingField = requiredFields.filter(function() {
-                    var $field = $(this);
-                    var fieldValue = $field.val();
-                    if ($field.is('select[multiple]')) {
-                        return !fieldValue || fieldValue.length === 0;
-                    } else {
-                        return !fieldValue || fieldValue.trim() === '';
-                    }
-                }).first();
-                
-                if (firstMissingField.length) {
-                    $('html, body').animate({
-                        scrollTop: firstMissingField.offset().top - 100
-                    }, 500);
-                    firstMissingField.focus();
-                }
+                title: 'Campi Obbligatori',
+                text: 'Compila tutti i campi obbligatori',
+                icon: 'warning'
             });
-            return false;
+            return;
         }
         
-        debugLog('Tutti i campi sono validi, mostrando conferma salvataggio');
-        
-        // Mostra conferma prima del salvataggio
-        Swal.fire({
-            title: 'Conferma salvataggio',
-            text: 'Sei sicuro di voler salvare questo tour?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Sì, salva',
-            cancelButtonText: 'Annulla',
-            confirmButtonColor: '#28a745',
-            cancelButtonColor: '#6c757d'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                // Mostra loader prima di inviare il form
+        // Se tutto è valido, il form viene inviato
+    });
+    
+    // Gestione file upload
+    const fileInput = document.getElementById('tour_image');
+    fileInput.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            // Validazione dimensione (5MB)
+            if (file.size > 5 * 1024 * 1024) {
                 Swal.fire({
-                    title: 'Salvataggio in corso...',
-                    text: 'Attendi mentre salvo il tour...',
-                    allowOutsideClick: false,
-                    allowEscapeKey: false,
-                    showConfirmButton: false,
-                    timer: 30000, // 30 secondi di timeout
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
+                    title: 'File Troppo Grande',
+                    text: 'L\'immagine deve essere inferiore a 5MB',
+                    icon: 'error'
                 });
-                
-                // Aggiungi il campo save_tour al form e invialo
-                var saveTourInput = $('<input>').attr({
-                    type: 'hidden',
-                    name: 'save_tour',
-                    value: '1'
+                fileInput.value = '';
+                return;
+            }
+            
+            // Validazione tipo
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                Swal.fire({
+                    title: 'Formato Non Supportato',
+                    text: 'Usa solo file JPG, PNG o GIF',
+                    icon: 'error'
                 });
-                $('#tour-form').append(saveTourInput);
-                debugLog('Campo save_tour aggiunto al form');
-                console.log('Form data dopo aggiunta save_tour:', $('#tour-form').serialize());
-                
-                // Invia il form dopo un breve delay per permettere al loader di apparire
-                setTimeout(() => {
-                    debugLog('Invio form tour');
-                    console.log('Form data prima dell\'invio:', $('#tour-form').serialize());
-                    console.log('Form action:', $('#tour-form').attr('action'));
-                    console.log('Form method:', $('#tour-form').attr('method'));
-                    $('#tour-form')[0].submit();
-                }, 100);
+                fileInput.value = '';
+                return;
             }
+        }
+    });
+    
+    // Auto-save draft (opzionale)
+    let autoSaveTimeout;
+    const autoSaveFields = ['tour_title', 'tour_description', 'tour_duration'];
+    
+    autoSaveFields.forEach(fieldName => {
+        const field = document.getElementById(fieldName);
+        field.addEventListener('input', function() {
+            clearTimeout(autoSaveTimeout);
+            autoSaveTimeout = setTimeout(() => {
+                // Qui potresti implementare un auto-save
+                console.log('Auto-save triggered for:', fieldName);
+            }, 2000);
         });
     });
-    // Debug per verificare che select2_params sia definito
-    console.log('select2_params:', select2_params);
-
-
-
-    // Inizializzazione Select2 per le categorie
-    $('#categoria').select2({
-        placeholder: '<?php _e('Seleziona le categorie', 'opencomune'); ?>',
-        allowClear: true,
-        width: '100%',
-        tags: true,
-        tokenSeparators: [',', ' '],
-        ajax: {
-            url: select2_params.ajaxurl,
-            dataType: 'json',
-            delay: 250,
-            data: function(params) {
-                return {
-                    q: params.term,
-                    action: 'search_categorie',
-                    nonce: '<?php echo wp_create_nonce('search_categorie_nonce'); ?>'
-                };
-            },
-            processResults: function(data) {
-                return {
-                    results: data
-                };
-            },
-            cache: true
-        },
-        minimumInputLength: 2,
-        createTag: function(params) {
-            var term = $.trim(params.term);
-            if (term === '') {
-                return null;
-            }
-            
-            // Controlla se il termine esiste già nelle opzioni
-            var existingOptions = $('#categoria option').map(function() {
-                return $(this).val().toLowerCase();
-            }).get();
-            
-            if (existingOptions.indexOf(term.toLowerCase()) !== -1) {
-                return null;
-            }
-            
-            // Crea la nuova categoria sul server
-            $.ajax({
-                url: select2_params.ajaxurl,
-                type: 'POST',
-                data: {
-                    action: 'create_categoria',
-                    categoria: term,
-                    nonce: '<?php echo wp_create_nonce('create_categoria_nonce'); ?>'
-                },
-                async: false,
-                success: function(response) {
-                    if (response.success) {
-                        console.log('Categoria creata:', response.data.message);
-                    } else {
-                        console.error('Errore creazione categoria:', response.data);
-                    }
-                },
-                error: function() {
-                    console.error('Errore nella richiesta AJAX per creare categoria');
-                }
-            });
-            
-            return {
-                id: term,
-                text: term,
-                newTag: true
-            };
-        }
-    });
-
-    // Inizializzazione Select2 per le lingue
-    $('#lingue').select2({
-        placeholder: '<?php _e('Seleziona le lingue', 'opencomune'); ?>',
-        allowClear: true,
-        width: '100%',
-        tags: true,
-        tokenSeparators: [',', ' '],
-        minimumInputLength: 1
-    });
-
-    // Initialize Google Maps Places Autocomplete
-    function initializeGoogleMaps() {
-        console.log('Initializing Google Maps...');
-        
-        // Initialize city autocomplete
-        const cittaInput = document.getElementById('citta');
-        if (!cittaInput) {
-            console.error('City input element not found');
-            return;
-        }
-        
-        try {
-            const cittaAutocomplete = new google.maps.places.Autocomplete(cittaInput, {
-                types: ['(cities)'],
-                fields: ['formatted_address', 'place_id', 'geometry'],
-                componentRestrictions: { country: 'it' }
-            });
-
-            cittaAutocomplete.addListener('place_changed', function() {
-                const place = cittaAutocomplete.getPlace();
-                console.log('City place selected:', place);
-                if (place.place_id) {
-                    var cittaPlaceIdElement = document.getElementById('citta_place_id');
-                    if (cittaPlaceIdElement) {
-                        cittaPlaceIdElement.value = place.place_id;
-                    }
-                    cittaInput.value = place.formatted_address;
-                }
-            });
-        } catch (error) {
-            console.error('Error initializing city autocomplete:', error);
-        }
-
-        // Initialize meeting point address autocomplete
-        const indirizzoInput = document.getElementById('indirizzo_ritrovo');
-        if (!indirizzoInput) {
-            console.error('Address input element not found');
-            return;
-        }
-
-        try {
-            const indirizzoAutocomplete = new google.maps.places.Autocomplete(indirizzoInput, {
-                types: ['address'],
-                fields: ['formatted_address', 'place_id', 'geometry'],
-                componentRestrictions: { country: 'it' }
-            });
-
-            indirizzoAutocomplete.addListener('place_changed', function() {
-                const place = indirizzoAutocomplete.getPlace();
-                console.log('Address place selected:', place);
-                if (place.place_id) {
-                    var indirizzoPlaceIdElement = document.getElementById('indirizzo_ritrovo_place_id');
-                    if (indirizzoPlaceIdElement) {
-                        indirizzoPlaceIdElement.value = place.place_id;
-                    }
-                    document.getElementById('indirizzo_ritrovo').value = place.formatted_address;
-                
-                    // Salva le coordinate
-                    if (place.geometry && place.geometry.location) {
-                        var lat = place.geometry.location.lat();
-                        var lng = place.geometry.location.lng();
-                        var coordinateElement = document.getElementById('coordinate_ritrovo');
-                        if (coordinateElement) {
-                            coordinateElement.value = JSON.stringify({
-                                lat: lat,
-                                lng: lng
-                            });
-                        }
-                    }
-                    
-                    // Update GPS coordinates
-                    if (place.geometry && place.geometry.location) {
-                        const lat = place.geometry.location.lat();
-                        const lng = place.geometry.location.lng();
-                        var gpsElement = document.getElementById('gps');
-                        if (gpsElement) {
-                            gpsElement.value = `${lat},${lng}`;
-                        }
-                    }
-                }
-            });
-        } catch (error) {
-            console.error('Error initializing address autocomplete:', error);
-        }
-    }
-
-    // Check if Google Maps is loaded
-    if (typeof google !== 'undefined' && google.maps && google.maps.places) {
-        console.log('Google Maps API is loaded');
-        initializeGoogleMaps();
-    } else {
-        console.error('Google Maps API not loaded');
-        // Try to initialize after a short delay
-        setTimeout(function() {
-            if (typeof google !== 'undefined' && google.maps && google.maps.places) {
-                console.log('Google Maps API loaded after delay');
-                initializeGoogleMaps();
-            } else {
-                console.error('Google Maps API still not loaded after delay');
-            }
-        }, 1000);
-    }
-
-    // Gestione del form submit
-    $('#tour-form').on('submit', function(e) {
-        // Mostra il loading overlay
-        $('#loading-overlay').removeClass('d-none');
-        
-        // Log per debug
-        console.log('Form submission started');
-        
-        // Aggiungi un listener per il completamento della richiesta
-        $(window).on('beforeunload', function() {
-            console.log('Page is about to unload');
-        });
-    });
-
-    // Add this to your existing JavaScript
-    function removeGalleryImage(imageId) {
-        if (confirm('Sei sicuro di voler rimuovere questa immagine?')) {
-            const container = document.querySelector(`[data-image-id="${imageId}"]`);
-            if (container) {
-                container.remove();
-            }
-        }
-    }
-
-    // Modify your form submission to handle gallery images
-    $('#tour-form').on('submit', function(e) {
-        // Show loading overlay
-        $('#loading-overlay').removeClass('d-none');
-        
-        // Get all gallery images to keep
-        const galleryKeep = [];
-        $('input[name="gallery_keep[]"]').each(function() {
-            galleryKeep.push($(this).val());
-        });
-        
-        // Add gallery keep data to form
-        if (galleryKeep.length > 0) {
-            $('<input>').attr({
-                type: 'hidden',
-                name: 'gallery_keep',
-                value: JSON.stringify(galleryKeep)
-            }).appendTo('#tour-form');
-        }
-    });
-        // Rimuovi le classi di errore quando l'utente inizia a compilare
-        $('[required]').on('input change', function() {
-            var $field = $(this);
-            var fieldValue = $field.val();
-            var hasValue = false;
-            
-            if ($field.is('select[multiple]')) {
-                hasValue = fieldValue && fieldValue.length > 0;
-            } else {
-                hasValue = fieldValue && fieldValue.trim() !== '';
-            }
-            
-            if (hasValue) {
-                $field.removeClass('border-danger');
-                $field.closest('.mb-3, .col-md-6').find('label').removeClass('text-danger');
-            }
-        });
-    } catch (error) {
-        console.error('Error in tour form JavaScript:', error);
-    }
 });
 </script>
 
