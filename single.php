@@ -1,4 +1,11 @@
-<?php get_header(); ?>
+<?php 
+// Redirect to specific template for esperienze post type
+if (get_post_type() === 'esperienze') {
+    include(get_template_directory() . '/single-esperienza.php');
+    return;
+}
+
+get_header(); ?>
 <main class="container mx-auto px-4 py-8">
     <?php if (have_posts()) : while (have_posts()) : the_post(); ?>
         <article>

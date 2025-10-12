@@ -6,6 +6,7 @@ if (have_posts()) : while (have_posts()) : the_post();
     $titolo = get_the_title();
     $durata = get_post_meta($id, 'tour_duration', true);
     $difficolta = get_post_meta($id, 'tour_difficulty', true);
+    
     $desc_breve = get_the_excerpt();
     $desc_completa = get_the_content();
     $citta = get_post_meta($id, 'citta', true);
