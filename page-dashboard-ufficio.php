@@ -6,14 +6,17 @@ if (!is_user_logged_in() || !current_user_can('editor_turistico')) {
 }
 get_header();
 
+// Enqueue jQuery se non è già presente
+wp_enqueue_script('jquery');
+
+// Aggiungi SweetAlert
+wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array(), '11.0.0', true);
+
 // Localizza ajaxurl per il frontend
 wp_localize_script('jquery', 'ajax_object', array(
     'ajax_url' => admin_url('admin-ajax.php'),
     'nonce' => wp_create_nonce('opencomune_nonce')
 ));
-
-// Aggiungi SweetAlert
-wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', array(), '11.0.0', true);
 ?>
 
 <!-- Aggiungi CSS per il loader -->
