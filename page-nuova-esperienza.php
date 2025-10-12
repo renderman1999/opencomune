@@ -138,46 +138,45 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
                 error_log('Nessuna categoria da salvare (nuova esperienza)');
             }
             
-            // Gestione dell'immagine
-            if (!empty($_FILES['tour_image']['name'])) {
-                $upload = wp_handle_upload($_FILES['tour_image'], array('test_form' => false));
-                if (!isset($upload['error'])) {
-                    $attachment_id = wp_insert_attachment(array(
-                        'post_mime_type' => $upload['type'],
-                        'post_title' => sanitize_file_name($_FILES['tour_image']['name']),
-                        'post_content' => '',
-                        'post_status' => 'inherit'
-                    ), $upload['file'], $post_id);
-                    
-                    if (!is_wp_error($attachment_id)) {
-                        wp_update_attachment_metadata($attachment_id, wp_generate_attachment_metadata($attachment_id, $upload['file']));
-                        set_post_thumbnail($post_id, $attachment_id);
-                    }
+            // Gestione dell'immagine principale
+            $featured_image_id = intval($_POST['featured_image_id'] ?? 0);
+            if ($featured_image_id > 0) {
+                set_post_thumbnail($post_id, $featured_image_id);
+            }
+            
+            // Gestione della galleria fotografica
+            $gallery_ids = array();
+            if (!empty($_POST['gallery_ids'])) {
+                $gallery_ids = array_map('intval', explode(',', $_POST['gallery_ids']));
+                $gallery_ids = array_filter($gallery_ids); // Rimuove valori vuoti
+                
+                if (!empty($gallery_ids)) {
+                    update_post_meta($post_id, 'galleria', $gallery_ids);
                 }
             }
             
-            $success = true;
+        $success = true;
             $success_message = 'L\'esperienza "' . esc_js($tour_title) . '" è stata creata con successo.';
             $dashboard_url = esc_url(site_url('/dashboard-ufficio/'));
             
-            echo '<script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    Swal.fire({
+    echo '<script>
+        document.addEventListener("DOMContentLoaded", function() {
+            Swal.fire({
                         title: "Esperienza Creata!",
-                        text: "' . $success_message . '",
-                        icon: "success",
+                text: "' . $success_message . '",
+                icon: "success",
                         confirmButtonText: "Vai alla Dashboard",
-                        showCancelButton: true,
+                showCancelButton: true,
                         cancelButtonText: "Crea Altra Esperienza"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            window.location.href = "' . $dashboard_url . '";
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "' . $dashboard_url . '";
                 } else {
                             window.location.reload();
-                        }
-                    });
-                });
-            </script>';
+                }
+            });
+        });
+    </script>';
         } else {
             $error_message = 'Errore durante la creazione dell\'esperienza.';
         }
@@ -353,23 +352,23 @@ $categorie = get_terms(array(
                         <i class="bi bi-arrow-left mr-2"></i>
                         Torna alla Dashboard
                     </a>
-                </div>
-            </div>
-        </div>
+                        </div>
+                        </div>
+                        </div>
 
         <!-- Messaggi di errore/successo -->
         <?php if (isset($error_message)): ?>
             <div class="error-message">
                 <i class="bi bi-exclamation-triangle mr-2"></i>
                 <?php echo esc_html($error_message); ?>
-            </div>
+                        </div>
         <?php endif; ?>
 
         <?php if (isset($success_message)): ?>
             <div class="success-message">
                 <i class="bi bi-check-circle mr-2"></i>
                 <?php echo esc_html($success_message); ?>
-            </div>
+                        </div>
         <?php endif; ?>
 
         <!-- Form -->
@@ -389,7 +388,7 @@ $categorie = get_terms(array(
                         <input type="text" id="tour_title" name="tour_title" class="form-input" 
                                value="<?php echo esc_attr($_POST['tour_title'] ?? ''); ?>" required>
                     </div>
-                    
+
                     <div class="md:col-span-2">
                         <label for="tour_excerpt" class="form-label">
                             Descrizione Breve
@@ -399,14 +398,14 @@ $categorie = get_terms(array(
                                   maxlength="160" rows="3"><?php echo esc_textarea($_POST['tour_excerpt'] ?? ''); ?></textarea>
                         <p class="text-sm text-gray-500 mt-1">Questa descrizione apparirà nelle anteprime e nei risultati di ricerca</p>
                     </div>
-                    
+
                     <div class="md:col-span-2">
                         <label for="tour_description" class="form-label">
                             Descrizione Completa <span class="form-required">*</span>
                         </label>
                         <textarea id="tour_description" name="tour_description" class="form-textarea" required><?php echo esc_textarea($_POST['tour_description'] ?? ''); ?></textarea>
-                    </div>
-                    
+                        </div>
+
                     <div>
                         <label for="tour_duration" class="form-label">
                             Durata <span class="form-required">*</span>
@@ -414,7 +413,7 @@ $categorie = get_terms(array(
                         <input type="text" id="tour_duration" name="tour_duration" class="form-input" 
                                placeholder="es. 2 ore, 1 giorno" value="<?php echo esc_attr($_POST['tour_duration'] ?? ''); ?>" required>
                     </div>
-                    
+
                     <!-- Campo prezzo rimosso per ente pubblico -->
                     
                     <div>
@@ -423,8 +422,8 @@ $categorie = get_terms(array(
                         </label>
                         <input type="number" id="tour_max_participants" name="tour_max_participants" class="form-input" 
                                min="1" value="<?php echo esc_attr($_POST['tour_max_participants'] ?? ''); ?>">
-                        </div>
-                        
+                    </div>
+
                     <div>
                         <label for="tour_difficulty" class="form-label">
                             Difficoltà
@@ -435,9 +434,9 @@ $categorie = get_terms(array(
                             <option value="medio" <?php selected($_POST['tour_difficulty'] ?? '', 'medio'); ?>>Medio</option>
                             <option value="difficile" <?php selected($_POST['tour_difficulty'] ?? '', 'difficile'); ?>>Difficile</option>
                             </select>
-                        </div>
-                        </div>
-                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Sezione Categorie e Immagine -->
             <div class="form-section p-6 mt-8">
@@ -462,18 +461,44 @@ $categorie = get_terms(array(
                                     <span class="text-sm text-gray-700"><?php echo esc_html($categoria->name); ?></span>
                                 </label>
                             <?php endforeach; ?>
-                        </div>
+                </div>
                         <p class="text-sm text-gray-500 mt-2">Seleziona una o più categorie per l'esperienza</p>
-            </div>
+                    </div>
 
                     <div>
-                        <label for="tour_image" class="form-label">
+                        <label class="form-label">
                             Immagine Principale
                         </label>
-                        <input type="file" id="tour_image" name="tour_image" class="form-input" accept="image/*">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                            <button type="button" id="upload-featured-image" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                Seleziona Immagine
+                            </button>
+                            <div id="featured-image-preview" class="mt-2 hidden">
+                                <img id="featured-image-preview-img" src="" alt="" class="w-24 h-24 object-cover rounded mx-auto">
+                                <button type="button" id="remove-featured-image" class="text-red-600 text-sm mt-1">Rimuovi</button>
+                            </div>
+                            <input type="hidden" id="featured-image-id" name="featured_image_id" value="">
+                            </div>
                         <p class="text-sm text-gray-500 mt-1">Formati supportati: JPG, PNG, GIF. Max 5MB</p>
-                </div>
-                    </div>
+                            </div>
+                        </div>
+
+                <div class="mt-6">
+                    <label class="form-label">
+                        Galleria Fotografica
+                    </label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                        <button type="button" id="upload-gallery-images" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                            Seleziona Immagini
+                        </button>
+                        <div id="gallery-preview" class="mt-4 grid grid-cols-4 gap-2 hidden">
+                            <!-- Le anteprime delle immagini verranno inserite qui -->
+                            </div>
+                        <input type="hidden" id="gallery-ids" name="gallery_ids" value="">
+                            </div>
+                    <p class="text-sm text-gray-500 mt-1">Seleziona più immagini per la galleria (JPG, PNG, GIF. Max 5MB ciascuna)</p>
+                            </div>
+                        </div>
                     </div>
 
             <!-- Sezione Dettagli -->
@@ -490,7 +515,7 @@ $categorie = get_terms(array(
                         </label>
                         <textarea id="tour_highlights" name="tour_highlights" class="form-textarea" 
                                   placeholder="Elenca i punti salienti dell'esperienza..."><?php echo esc_textarea($_POST['tour_highlights'] ?? ''); ?></textarea>
-                    </div>
+                        </div>
 
                     <div>
                         <label for="tour_itinerary" class="form-label">
@@ -498,7 +523,7 @@ $categorie = get_terms(array(
                         </label>
                         <textarea id="tour_itinerary" name="tour_itinerary" class="form-textarea" 
                                   placeholder="Descrivi l'itinerario dettagliato..."><?php echo esc_textarea($_POST['tour_itinerary'] ?? ''); ?></textarea>
-                    </div>
+                        </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
@@ -507,7 +532,7 @@ $categorie = get_terms(array(
                             </label>
                             <textarea id="tour_whats_included" name="tour_whats_included" class="form-textarea" 
                                       placeholder="Cosa è incluso nel prezzo..."><?php echo esc_textarea($_POST['tour_whats_included'] ?? ''); ?></textarea>
-            </div>
+                        </div>
 
                         <div>
                             <label for="tour_whats_not_included" class="form-label">
@@ -515,7 +540,7 @@ $categorie = get_terms(array(
                             </label>
                             <textarea id="tour_whats_not_included" name="tour_whats_not_included" class="form-textarea" 
                                       placeholder="Cosa non è incluso..."><?php echo esc_textarea($_POST['tour_whats_not_included'] ?? ''); ?></textarea>
-                </div>
+                        </div>
                     </div>
 
                     <div>
@@ -524,9 +549,9 @@ $categorie = get_terms(array(
                         </label>
                         <textarea id="tour_requirements" name="tour_requirements" class="form-textarea" 
                                   placeholder="Requisiti per partecipare..."><?php echo esc_textarea($_POST['tour_requirements'] ?? ''); ?></textarea>
-                            </div>
-                            </div>
-                            </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Sezione Incontro -->
             <div class="form-section p-6 mt-8">
@@ -558,8 +583,8 @@ $categorie = get_terms(array(
                         </label>
                         <input type="date" id="tour_meeting_date" name="tour_meeting_date" class="form-input" 
                                value="<?php echo esc_attr($_POST['tour_meeting_date'] ?? ''); ?>">
-                            </div>
-                    
+                    </div>
+
                     <div>
                         <label for="tour_languages" class="form-label">
                             Lingue
@@ -575,7 +600,7 @@ $categorie = get_terms(array(
                     </label>
                     <input type="text" id="tour_address" name="tour_address" class="form-input" 
                            placeholder="Indirizzo completo del punto di incontro" value="<?php echo esc_attr($_POST['tour_address'] ?? ''); ?>">
-                        </div>
+                    </div>
 
                 <div class="mt-6">
                     <label class="form-label">Posizione sulla Mappa</label>
@@ -717,6 +742,80 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Auto-save triggered for:', fieldName);
             }, 2000);
         });
+    });
+    
+    // WordPress Media Uploader per immagine principale
+    let featuredImageFrame;
+    document.getElementById('upload-featured-image').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if (featuredImageFrame) {
+            featuredImageFrame.open();
+            return;
+        }
+        
+        featuredImageFrame = wp.media({
+            title: 'Seleziona Immagine Principale',
+            button: {
+                text: 'Usa questa immagine'
+            },
+            multiple: false
+        });
+        
+        featuredImageFrame.on('select', function() {
+            const attachment = featuredImageFrame.state().get('selection').first().toJSON();
+            document.getElementById('featured-image-id').value = attachment.id;
+            document.getElementById('featured-image-preview-img').src = attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url;
+            document.getElementById('featured-image-preview').classList.remove('hidden');
+        });
+        
+        featuredImageFrame.open();
+    });
+    
+    // Rimuovi immagine principale
+    document.getElementById('remove-featured-image').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('featured-image-id').value = '';
+        document.getElementById('featured-image-preview').classList.add('hidden');
+    });
+    
+    // WordPress Media Uploader per galleria
+    let galleryFrame;
+    document.getElementById('upload-gallery-images').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if (galleryFrame) {
+            galleryFrame.open();
+            return;
+        }
+        
+        galleryFrame = wp.media({
+            title: 'Seleziona Immagini per la Galleria',
+            button: {
+                text: 'Aggiungi alla galleria'
+            },
+            multiple: true
+        });
+        
+        galleryFrame.on('select', function() {
+            const attachments = galleryFrame.state().get('selection').toJSON();
+            const galleryIds = attachments.map(att => att.id);
+            document.getElementById('gallery-ids').value = galleryIds.join(',');
+            
+            // Mostra anteprime
+            const preview = document.getElementById('gallery-preview');
+            preview.innerHTML = '';
+            attachments.forEach(att => {
+                const img = document.createElement('img');
+                img.src = att.sizes.thumbnail ? att.sizes.thumbnail.url : att.url;
+                img.className = 'w-16 h-16 object-cover rounded';
+                img.alt = att.alt;
+                preview.appendChild(img);
+            });
+            preview.classList.remove('hidden');
+        });
+        
+        galleryFrame.open();
     });
 });
 </script>

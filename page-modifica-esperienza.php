@@ -155,22 +155,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
                 error_log('Nessuna categoria da salvare');
             }
             
-            // Gestione dell'immagine
-            if (!empty($_FILES['tour_image']['name'])) {
-                $upload = wp_handle_upload($_FILES['tour_image'], array('test_form' => false));
-                if (!isset($upload['error'])) {
-                    $attachment_id = wp_insert_attachment(array(
-                        'post_mime_type' => $upload['type'],
-                        'post_title' => sanitize_file_name($_FILES['tour_image']['name']),
-                        'post_content' => '',
-                        'post_status' => 'inherit'
-                    ), $upload['file'], $edit_id);
-                    
-                    if (!is_wp_error($attachment_id)) {
-                        wp_update_attachment_metadata($attachment_id, wp_generate_attachment_metadata($attachment_id, $upload['file']));
-                        set_post_thumbnail($edit_id, $attachment_id);
-                    }
-                }
+            // Gestione dell'immagine principale
+            $featured_image_id = intval($_POST['featured_image_id'] ?? 0);
+            if ($featured_image_id > 0) {
+                set_post_thumbnail($edit_id, $featured_image_id);
+            } else {
+                // Rimuovi immagine principale se non selezionata
+                delete_post_thumbnail($edit_id);
+            }
+            
+            // Gestione della galleria fotografica
+            $gallery_ids = array();
+            if (!empty($_POST['gallery_ids'])) {
+                $gallery_ids = array_map('intval', explode(',', $_POST['gallery_ids']));
+                $gallery_ids = array_filter($gallery_ids); // Rimuove valori vuoti
+                
+                update_post_meta($edit_id, 'galleria', $gallery_ids);
+            } else {
+                // Rimuovi galleria se vuota
+                delete_post_meta($edit_id, 'galleria');
             }
             
             $success = true;
@@ -482,18 +485,46 @@ $existing_categories = wp_get_post_terms($edit_id, 'categorie_esperienze', array
             </div>
 
                     <div>
-                        <label for="tour_image" class="form-label">
+                        <label class="form-label">
                             Immagine Principale
                         </label>
-                        <input type="file" id="tour_image" name="tour_image" class="form-input" accept="image/*">
+                        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                            <button type="button" id="upload-featured-image" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                                Seleziona Immagine
+                            </button>
+                            <div id="featured-image-preview" class="mt-2 <?php echo has_post_thumbnail($edit_id) ? '' : 'hidden'; ?>">
+                                <img id="featured-image-preview-img" src="<?php echo has_post_thumbnail($edit_id) ? get_the_post_thumbnail_url($edit_id, 'thumbnail') : ''; ?>" alt="" class="w-24 h-24 object-cover rounded mx-auto">
+                                <button type="button" id="remove-featured-image" class="text-red-600 text-sm mt-1">Rimuovi</button>
+                            </div>
+                            <input type="hidden" id="featured-image-id" name="featured_image_id" value="<?php echo has_post_thumbnail($edit_id) ? get_post_thumbnail_id($edit_id) : ''; ?>">
+                        </div>
                         <p class="text-sm text-gray-500 mt-1">Formati supportati: JPG, PNG, GIF. Max 5MB</p>
-                        <?php if (has_post_thumbnail($edit_id)): ?>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-600 mb-2">Immagine attuale:</p>
-                                <?php echo get_the_post_thumbnail($edit_id, 'thumbnail', array('class' => 'w-24 h-24 object-cover rounded')); ?>
-                </div>
-                        <?php endif; ?>
                     </div>
+                </div>
+                
+                <div class="mt-6">
+                    <label class="form-label">
+                        Galleria Fotografica
+                    </label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                        <button type="button" id="upload-gallery-images" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+                            Seleziona Immagini
+                        </button>
+                        <div id="gallery-preview" class="mt-4 grid grid-cols-4 gap-2">
+                            <?php 
+                            $existing_gallery = get_post_meta($edit_id, 'galleria', true);
+                            if (is_array($existing_gallery) && !empty($existing_gallery)): 
+                                foreach($existing_gallery as $gallery_id): 
+                                    $img_url = wp_get_attachment_image_url($gallery_id, 'thumbnail');
+                                    if ($img_url): ?>
+                                        <img src="<?php echo esc_url($img_url); ?>" alt="" class="w-16 h-16 object-cover rounded" data-id="<?php echo $gallery_id; ?>">
+                                    <?php endif;
+                                endforeach;
+                            endif; ?>
+                        </div>
+                        <input type="hidden" id="gallery-ids" name="gallery_ids" value="<?php echo is_array($existing_gallery) ? implode(',', $existing_gallery) : ''; ?>">
+                    </div>
+                    <p class="text-sm text-gray-500 mt-1">Seleziona più immagini per la galleria (JPG, PNG, GIF. Max 5MB ciascuna)</p>
                     </div>
                         </div>
 
@@ -722,6 +753,94 @@ document.addEventListener('DOMContentLoaded', function() {
                 fileInput.value = '';
             return;
         }
+        }
+    });
+    
+    // WordPress Media Uploader per immagine principale
+    let featuredImageFrame;
+    document.getElementById('upload-featured-image').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if (featuredImageFrame) {
+            featuredImageFrame.open();
+            return;
+        }
+        
+        featuredImageFrame = wp.media({
+            title: 'Seleziona Immagine Principale',
+            button: {
+                text: 'Usa questa immagine'
+            },
+            multiple: false
+        });
+        
+        featuredImageFrame.on('select', function() {
+            const attachment = featuredImageFrame.state().get('selection').first().toJSON();
+            document.getElementById('featured-image-id').value = attachment.id;
+            document.getElementById('featured-image-preview-img').src = attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url;
+            document.getElementById('featured-image-preview').classList.remove('hidden');
+        });
+        
+        featuredImageFrame.open();
+    });
+    
+    // Rimuovi immagine principale
+    document.getElementById('remove-featured-image').addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById('featured-image-id').value = '';
+        document.getElementById('featured-image-preview').classList.add('hidden');
+    });
+    
+    // WordPress Media Uploader per galleria
+    let galleryFrame;
+    document.getElementById('upload-gallery-images').addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        if (galleryFrame) {
+            galleryFrame.open();
+            return;
+        }
+        
+        galleryFrame = wp.media({
+            title: 'Seleziona Immagini per la Galleria',
+            button: {
+                text: 'Aggiungi alla galleria'
+            },
+            multiple: true
+        });
+        
+        galleryFrame.on('select', function() {
+            const attachments = galleryFrame.state().get('selection').toJSON();
+            const currentIds = document.getElementById('gallery-ids').value ? document.getElementById('gallery-ids').value.split(',') : [];
+            const newIds = attachments.map(att => att.id);
+            const allIds = [...new Set([...currentIds, ...newIds])]; // Rimuove duplicati
+            document.getElementById('gallery-ids').value = allIds.join(',');
+            
+            // Mostra anteprime
+            const preview = document.getElementById('gallery-preview');
+            preview.innerHTML = '';
+            allIds.forEach(id => {
+                const attachment = attachments.find(att => att.id == id) || { sizes: { thumbnail: { url: '' } }, url: '' };
+                const img = document.createElement('img');
+                img.src = attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url;
+                img.className = 'w-16 h-16 object-cover rounded';
+                img.alt = attachment.alt || '';
+                img.dataset.id = id;
+                preview.appendChild(img);
+            });
+        });
+        
+        galleryFrame.open();
+    });
+    
+    // Rimuovi immagini dalla galleria
+    document.getElementById('gallery-preview').addEventListener('click', function(e) {
+        if (e.target.tagName === 'IMG') {
+            const imgId = e.target.dataset.id;
+            const currentIds = document.getElementById('gallery-ids').value ? document.getElementById('gallery-ids').value.split(',') : [];
+            const newIds = currentIds.filter(id => id != imgId);
+            document.getElementById('gallery-ids').value = newIds.join(',');
+            e.target.remove();
         }
     });
 });
