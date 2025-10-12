@@ -107,6 +107,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['save_tour'])) {
             
             if (!empty($tour_categories)) {
                 error_log('Tentativo di salvare categorie (nuova esperienza): ' . implode(', ', $tour_categories));
+                
+                // Verifica se i termini esistono, se non esistono creali
+                foreach ($tour_categories as $category_slug) {
+                    $term = get_term_by('slug', $category_slug, 'categorie_esperienze');
+                    if (!$term) {
+                        error_log('Termine non trovato, creo (nuova esperienza): ' . $category_slug);
+                        $term_result = wp_insert_term($category_slug, 'categorie_esperienze');
+                        if (is_wp_error($term_result)) {
+                            error_log('Errore nella creazione del termine: ' . $term_result->get_error_message());
+                        } else {
+                            error_log('Termine creato con successo: ' . $category_slug);
+                        }
+                    } else {
+                        error_log('Termine esistente trovato: ' . $category_slug);
+                    }
+                }
+                
                 $result = wp_set_post_terms($post_id, $tour_categories, 'categorie_esperienze');
                 if (is_wp_error($result)) {
                     error_log('Errore nel salvataggio delle categorie: ' . $result->get_error_message());
