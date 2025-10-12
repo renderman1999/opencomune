@@ -137,6 +137,22 @@ wp_enqueue_script('sweetalert2', 'https://cdn.jsdelivr.net/npm/sweetalert2@11', 
     background-color: #dbeafe;
     color: #1e40af;
 }
+
+.line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.experience-card {
+    transition: all 0.3s ease;
+}
+
+.experience-card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 25px -3px rgba(0, 0, 0, 0.1);
+}
 </style>
 
 <div class="page-loader" id="pageLoader">
@@ -356,34 +372,68 @@ function renderEsperienze(esperienze) {
     
     if (esperienze.length === 0) {
         container.innerHTML = '<div class="text-center py-8 text-gray-500">Nessuna esperienza trovata</div>';
-      return;
+        return;
     }
     
     container.innerHTML = esperienze.map(esperienza => `
         <div class="experience-card">
-            <div class="flex items-start justify-between">
-                <div class="flex-1">
-                    <div class="flex items-center space-x-3 mb-2">
-                        <h3 class="text-lg font-semibold text-gray-900">${esperienza.title}</h3>
-                        <span class="status-badge status-${esperienza.status}">
-                            ${getStatusLabel(esperienza.status)}
-                        </span>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-2">${esperienza.excerpt || 'Nessuna descrizione disponibile'}</p>
-                    <div class="flex items-center space-x-4 text-sm text-gray-500">
-                        <span><i class="bi bi-calendar mr-1"></i>${esperienza.date}</span>
-                        <span><i class="bi bi-eye mr-1"></i>${esperienza.views || 0} visualizzazioni</span>
-                        <span><i class="bi bi-heart mr-1"></i>${esperienza.likes || 0} preferiti</span>
+            <div class="flex items-start space-x-4">
+                <!-- Immagine di copertina -->
+                <div class="flex-shrink-0">
+                    <div class="w-24 h-24 bg-gray-200 rounded-lg overflow-hidden">
+                        ${esperienza.thumbnail ? 
+                            `<img src="${esperienza.thumbnail}" alt="${esperienza.title}" class="w-full h-full object-cover">` :
+                            `<div class="w-full h-full flex items-center justify-center text-gray-400">
+                                <i class="bi bi-image text-2xl"></i>
+                            </div>`
+                        }
                     </div>
                 </div>
-                <div class="flex items-center space-x-2 ml-4">
-                    <a href="${esperienza.edit_url}" class="bg-blue-500 text-white px-3 py-1 rounded text-sm hover:bg-blue-600">
-                        <i class="bi bi-pencil mr-1"></i>Modifica
-                    </a>
-                    <a href="${esperienza.view_url}" class="bg-gray-500 text-white px-3 py-1 rounded text-sm hover:bg-gray-600" target="_blank">
-                        <i class="bi bi-eye mr-1"></i>Visualizza
-                    </a>
-                    <button onclick="deleteEsperienza(${esperienza.id})" class="bg-red-500 text-white px-3 py-1 rounded text-sm hover:bg-red-600">
+                
+                <!-- Contenuto principale -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-start justify-between">
+                        <div class="flex-1">
+                            <div class="flex items-center space-x-3 mb-2">
+                                <h3 class="text-lg font-semibold text-gray-900 truncate">${esperienza.title}</h3>
+                                <span class="status-badge status-${esperienza.status}">
+                                    ${getStatusLabel(esperienza.status)}
+                                </span>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3 line-clamp-2">${esperienza.excerpt || 'Nessuna descrizione disponibile'}</p>
+                            <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                <span><i class="bi bi-calendar mr-1"></i>${esperienza.date}</span>
+                                <span><i class="bi bi-clock mr-1"></i>${esperienza.duration || 'N/A'}</span>
+                                <span><i class="bi bi-people mr-1"></i>${esperienza.max_participants || 'N/A'} max</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Azioni -->
+                <div class="flex flex-col space-y-2 ml-4">
+                    <!-- Controllo stato -->
+                    <div class="flex space-x-2">
+                        <button onclick="toggleEsperienzaStatus(${esperienza.id}, '${esperienza.status}')" 
+                                class="px-3 py-1 rounded text-xs font-medium transition-colors ${esperienza.status === 'publish' ? 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200' : 'bg-green-100 text-green-800 hover:bg-green-200'}">
+                            <i class="bi bi-${esperienza.status === 'publish' ? 'eye-slash' : 'eye'} mr-1"></i>
+                            ${esperienza.status === 'publish' ? 'Nascondi' : 'Pubblica'}
+                        </button>
+                    </div>
+                    
+                    <!-- Azioni principali -->
+                    <div class="flex space-x-2">
+                        <a href="${esperienza.edit_url}" class="bg-blue-500 text-white px-3 py-1 rounded text-xs hover:bg-blue-600 transition-colors">
+                            <i class="bi bi-pencil mr-1"></i>Modifica
+                        </a>
+                        <a href="${esperienza.view_url}" class="bg-gray-500 text-white px-3 py-1 rounded text-xs hover:bg-gray-600 transition-colors" target="_blank">
+                            <i class="bi bi-eye mr-1"></i>Visualizza
+                        </a>
+                    </div>
+                    
+                    <!-- Azione eliminazione -->
+                    <button onclick="deleteEsperienza(${esperienza.id})" 
+                            class="bg-red-500 text-white px-3 py-1 rounded text-xs hover:bg-red-600 transition-colors">
                         <i class="bi bi-trash mr-1"></i>Elimina
                     </button>
                 </div>
@@ -429,6 +479,45 @@ function renderPagination(pagination) {
 // Filtra esperienze
 function filterEsperienze() {
     loadEsperienze(1);
+}
+
+// Cambia stato esperienza
+function toggleEsperienzaStatus(id, currentStatus) {
+    const newStatus = currentStatus === 'publish' ? 'draft' : 'publish';
+    const actionText = newStatus === 'publish' ? 'pubblicare' : 'nascondere';
+    
+    Swal.fire({
+        title: 'Conferma Azione',
+        text: `Sei sicuro di voler ${actionText} questa esperienza?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: newStatus === 'publish' ? '#10b981' : '#f59e0b',
+        cancelButtonColor: '#6b7280',
+        confirmButtonText: `Sì, ${actionText}`,
+        cancelButtonText: 'Annulla'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            fetch(ajax_object.ajax_url + '?action=opencomune_toggle_esperienza_status', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `id=${id}&status=${newStatus}`
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    Swal.fire('Aggiornato!', data.message, 'success');
+                    loadDashboardData(); // Ricarica i dati
+                } else {
+                    Swal.fire('Errore!', data.message || 'Errore durante l\'aggiornamento.', 'error');
+                }
+            })
+            .catch(error => {
+                Swal.fire('Errore!', 'Errore di connessione.', 'error');
+            });
+        }
+    });
 }
 
 // Elimina esperienza

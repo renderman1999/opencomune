@@ -397,7 +397,7 @@ $categorie = get_terms(array(
             </div>
 
             <!-- Sezione Categorie e Immagine -->
-            <div class="form-section p-6">
+            <div class="form-section p-6 mt-8">
                 <h2 class="section-title">
                     <i class="bi bi-tags mr-2"></i>
                     Categorie e Immagine
@@ -429,7 +429,7 @@ $categorie = get_terms(array(
             </div>
 
             <!-- Sezione Dettagli -->
-            <div class="form-section p-6">
+            <div class="form-section p-6 mt-8">
                 <h2 class="section-title">
                     <i class="bi bi-list-ul mr-2"></i>
                     Dettagli Esperienza
@@ -481,7 +481,7 @@ $categorie = get_terms(array(
             </div>
 
             <!-- Sezione Incontro -->
-            <div class="form-section p-6">
+            <div class="form-section p-6 mt-8">
                 <h2 class="section-title">
                     <i class="bi bi-geo-alt mr-2"></i>
                     Punto di Incontro
@@ -548,7 +548,7 @@ $categorie = get_terms(array(
             </div>
 
             <!-- Sezione Politiche -->
-            <div class="form-section p-6">
+            <div class="form-section p-6 mt-8">
                 <h2 class="section-title">
                     <i class="bi bi-shield-check mr-2"></i>
                     Politiche e Termini

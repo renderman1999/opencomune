@@ -878,7 +878,10 @@ function opencomune_get_esperienze_dashboard_callback() {
                 'edit_url' => home_url('/modifica-esperienza/?id=' . $post_id),
                 'view_url' => get_permalink(),
                 'views' => get_post_meta($post_id, 'views_count', true) ?: 0,
-                'likes' => get_post_meta($post_id, 'likes_count', true) ?: 0
+                'likes' => get_post_meta($post_id, 'likes_count', true) ?: 0,
+                'thumbnail' => get_the_post_thumbnail_url($post_id, 'thumbnail'),
+                'duration' => get_post_meta($post_id, 'tour_duration', true),
+                'max_participants' => get_post_meta($post_id, 'tour_max_participants', true)
             ];
         }
     }
@@ -894,6 +897,43 @@ function opencomune_get_esperienze_dashboard_callback() {
         'esperienze' => $esperienze,
         'pagination' => $pagination
     ]);
+}
+
+// === AJAX: Cambia Stato Esperienza ===
+add_action('wp_ajax_opencomune_toggle_esperienza_status', 'opencomune_toggle_esperienza_status_callback');
+function opencomune_toggle_esperienza_status_callback() {
+    if (!current_user_can('editor_turistico')) {
+        wp_send_json_error(['message' => 'Accesso negato']);
+    }
+    
+    $id = intval($_POST['id'] ?? 0);
+    $status = sanitize_text_field($_POST['status'] ?? '');
+    
+    if (!$id) {
+        wp_send_json_error(['message' => 'ID esperienza non valido']);
+    }
+    
+    if (!in_array($status, ['publish', 'draft'])) {
+        wp_send_json_error(['message' => 'Stato non valido']);
+    }
+    
+    // Verifica che l'utente sia il proprietario del post
+    $post = get_post($id);
+    if (!$post || $post->post_author != get_current_user_id()) {
+        wp_send_json_error(['message' => 'Non hai i permessi per modificare questa esperienza']);
+    }
+    
+    $result = wp_update_post([
+        'ID' => $id,
+        'post_status' => $status
+    ]);
+    
+    if ($result && !is_wp_error($result)) {
+        $status_text = $status === 'publish' ? 'pubblicata' : 'nascosta';
+        wp_send_json_success(['message' => "Esperienza {$status_text} con successo"]);
+    } else {
+        wp_send_json_error(['message' => 'Errore durante l\'aggiornamento']);
+    }
 }
 
 // === AJAX: Elimina Esperienza ===
