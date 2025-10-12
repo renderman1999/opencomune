@@ -1078,9 +1078,9 @@ function opencomune_get_all_tours_callback() {
     $tours = [];
     foreach ($query->posts as $post) {
         $id = $post->ID;
-        $gps = get_post_meta($id, 'gps', true);
-        if (!$gps || strpos($gps, ',') === false) continue;
-        list($lat, $lon) = array_map('trim', explode(',', $gps));
+        $lat = get_post_meta($id, 'tour_latitude', true);
+        $lon = get_post_meta($id, 'tour_longitude', true);
+        if (!$lat || !$lon) continue;
         
         // Get tour's first image (featured image)
         $tour_img = '';
@@ -1094,15 +1094,15 @@ function opencomune_get_all_tours_callback() {
             }
         }
         
-        $tags = wp_get_post_terms($id, 'post_tag', ['fields' => 'names']);
+        $categorie = wp_get_post_terms($id, 'categorie_esperienze', ['fields' => 'names']);
         $tours[] = [
             'id' => $id,
             'titolo' => get_the_title($id),
             'desc_breve' => get_the_excerpt($id),
-            'categoria' => implode(', ', $tags), // per retrocompatibilità
-            'categorie_array' => $tags, // array di tag
-            'lingue' => get_post_meta($id, 'lingue', true),
-            'citta' => get_post_meta($id, 'citta', true),
+            'categoria' => implode(', ', $categorie), // per retrocompatibilità
+            'categorie_array' => $categorie, // array di categorie
+            'lingue' => get_post_meta($id, 'tour_languages', true),
+            'citta' => get_post_meta($id, 'tour_address', true),
             'lat' => $lat,
             'lon' => $lon,
             'link' => get_permalink($id),
