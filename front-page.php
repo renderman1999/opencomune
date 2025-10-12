@@ -17,48 +17,48 @@
   <div class="swiper hero-swiper h-full">
     <div class="swiper-wrapper">
       <?php
-      // Recupera i valori dello swiper hero dalle impostazioni
-      $hero_slide_1_title = get_option('opencomune_hero_slide_1_title', 'Scopri luoghi veri, vivi emozioni autentiche');
-      $hero_slide_1_text = get_option('opencomune_hero_slide_1_text', 'Dimentica i soliti itinerari. Con Explorando entri nel cuore del territorio: esperienze locali, sapori genuini, storie da ricordare.');
-      $hero_slide_1_image = get_option('opencomune_hero_slide_1_image', 'https://betadev.it/explora/wp-content/uploads/2025/06/lecce_home.jpg');
-      $hero_slide_1_link = get_option('opencomune_hero_slide_1_link', '#');
-      $hero_slide_2_title = get_option('opencomune_hero_slide_2_title', 'Eventi, tour e attività… a due passi da te');
-      $hero_slide_2_text = get_option('opencomune_hero_slide_2_text', 'Che sia una gita in natura, un workshop artigianale o una serata sotto le stelle, Explorando ti porta dove succede la magia.');
-      $hero_slide_2_image = get_option('opencomune_hero_slide_2_image', 'https://betadev.it/explora/wp-content/uploads/2025/06/polignano.jpg');
-      $hero_slide_2_link = get_option('opencomune_hero_slide_2_link', '#');
-      $hero_slide_3_title = get_option('opencomune_hero_slide_3_title', 'Esperienze da condividere, ricordi da custodire');
-      $hero_slide_3_text = get_option('opencomune_hero_slide_3_text', 'Scopri proposte per coppie, famiglie e gruppi. Condividi momenti unici e crea connessioni autentiche, una tappa alla volta.');
-      $hero_slide_3_image = get_option('opencomune_hero_slide_3_image', 'https://betadev.it/explora/wp-content/uploads/2025/06/vendemmia_puglia.jpeg');
-      $hero_slide_3_link = get_option('opencomune_hero_slide_3_link', '#');
+      // Recupera i valori unificati dello swiper dalle impostazioni
+      $swiper_slide_1_title = get_option('opencomune_swiper_slide_1_title', 'Scopri luoghi veri, vivi emozioni autentiche');
+      $swiper_slide_1_text = get_option('opencomune_swiper_slide_1_text', 'Dimentica i soliti itinerari. Con Explorando entri nel cuore del territorio: esperienze locali, sapori genuini, storie da ricordare.');
+      $swiper_slide_1_image = get_option('opencomune_swiper_slide_1_image', 'https://betadev.it/explora/wp-content/uploads/2025/06/lecce_home.jpg');
+      $swiper_slide_1_link = get_option('opencomune_swiper_slide_1_link', '#');
+      $swiper_slide_2_title = get_option('opencomune_swiper_slide_2_title', 'Eventi, tour e attività… a due passi da te');
+      $swiper_slide_2_text = get_option('opencomune_swiper_slide_2_text', 'Che sia una gita in natura, un workshop artigianale o una serata sotto le stelle, Explorando ti porta dove succede la magia.');
+      $swiper_slide_2_image = get_option('opencomune_swiper_slide_2_image', 'https://betadev.it/explora/wp-content/uploads/2025/06/polignano.jpg');
+      $swiper_slide_2_link = get_option('opencomune_swiper_slide_2_link', '#');
+      $swiper_slide_3_title = get_option('opencomune_swiper_slide_3_title', 'Esperienze da condividere, ricordi da custodire');
+      $swiper_slide_3_text = get_option('opencomune_swiper_slide_3_text', 'Scopri proposte per coppie, famiglie e gruppi. Condividi momenti unici e crea connessioni autentiche, una tappa alla volta.');
+      $swiper_slide_3_image = get_option('opencomune_swiper_slide_3_image', 'https://betadev.it/explora/wp-content/uploads/2025/06/vendemmia_puglia.jpeg');
+      $swiper_slide_3_link = get_option('opencomune_swiper_slide_3_link', '#');
       ?>
       <!-- Slide 1 -->
       <div class="swiper-slide relative w-full h-full">
-        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="<?php echo esc_url($hero_slide_1_image); ?>" class="object-cover w-full h-full lazyload" alt="Esperienza 1" />
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="<?php echo esc_url($swiper_slide_1_image); ?>" class="object-cover w-full h-full lazyload" alt="Esperienza 1" />
         <div class="absolute inset-0 bg-black/40"></div>
         <div class="absolute inset-0 flex flex-col justify-center items-center text-center pl-0 md:items-start md:text-left md:pl-40 z-10">
-          <h2 class="text-white text-5xl font-bold mb-4"><?php echo esc_html($hero_slide_1_title); ?></h2>
-          <div class="text-white text-lg mb-2"><?php echo esc_html($hero_slide_1_text); ?></div>
-          <a href="<?php echo esc_url($hero_slide_1_link); ?>" class="inline-block mt-4 px-6 py-3 bg-white text-blue-700 font-semibold rounded shadow hover:bg-blue-100">Scopri di più</a>
+          <h2 class="text-white text-5xl font-bold mb-4"><?php echo esc_html($swiper_slide_1_title); ?></h2>
+          <div class="text-white text-lg mb-2"><?php echo esc_html($swiper_slide_1_text); ?></div>
+          <a href="<?php echo esc_url($swiper_slide_1_link); ?>" class="inline-block mt-4 px-6 py-3 bg-white text-blue-700 font-semibold rounded shadow hover:bg-blue-100">Scopri di più</a>
         </div>
       </div>
       <!-- Slide 2 -->
       <div class="swiper-slide relative w-full h-full">
-        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="<?php echo esc_url($hero_slide_2_image); ?>" class="object-cover w-full h-full lazyload" alt="Esperienza 2" />
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="<?php echo esc_url($swiper_slide_2_image); ?>" class="object-cover w-full h-full lazyload" alt="Esperienza 2" />
         <div class="absolute inset-0 bg-black/40"></div>
         <div class="absolute inset-0 flex flex-col justify-center items-center text-center pl-0 md:items-start md:text-left md:pl-40 z-10">
-          <h2 class="text-white text-5xl font-bold mb-4"><?php echo esc_html($hero_slide_2_title); ?></h2>
-          <div class="text-white text-lg mb-2"><?php echo esc_html($hero_slide_2_text); ?></div>
-          <a href="<?php echo esc_url($hero_slide_2_link); ?>" class="inline-block mt-4 px-6 py-3 bg-white text-blue-700 font-semibold rounded shadow hover:bg-blue-100">Scopri di più</a>
+          <h2 class="text-white text-5xl font-bold mb-4"><?php echo esc_html($swiper_slide_2_title); ?></h2>
+          <div class="text-white text-lg mb-2"><?php echo esc_html($swiper_slide_2_text); ?></div>
+          <a href="<?php echo esc_url($swiper_slide_2_link); ?>" class="inline-block mt-4 px-6 py-3 bg-white text-blue-700 font-semibold rounded shadow hover:bg-blue-100">Scopri di più</a>
         </div>
       </div>
       <!-- Slide 3 -->
       <div class="swiper-slide relative w-full h-full">
-        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="<?php echo esc_url($hero_slide_3_image); ?>" class="object-cover w-full h-full lazyload" alt="Esperienza 3" />
+        <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" data-src="<?php echo esc_url($swiper_slide_3_image); ?>" class="object-cover w-full h-full lazyload" alt="Esperienza 3" />
         <div class="absolute inset-0 bg-black/40"></div>
         <div class="absolute inset-0 flex flex-col justify-center items-center text-center pl-0 md:items-start md:text-left md:pl-40 z-10">
-          <h2 class="text-white text-5xl font-bold mb-4"><?php echo esc_html($hero_slide_3_title); ?></h2>
-          <div class="text-white text-lg mb-2"><?php echo esc_html($hero_slide_3_text); ?></div>
-          <a href="<?php echo esc_url($hero_slide_3_link); ?>" class="inline-block mt-4 px-6 py-3 bg-white text-blue-700 font-semibold rounded shadow hover:bg-blue-100">Scopri di più</a>
+          <h2 class="text-white text-5xl font-bold mb-4"><?php echo esc_html($swiper_slide_3_title); ?></h2>
+          <div class="text-white text-lg mb-2"><?php echo esc_html($swiper_slide_3_text); ?></div>
+          <a href="<?php echo esc_url($swiper_slide_3_link); ?>" class="inline-block mt-4 px-6 py-3 bg-white text-blue-700 font-semibold rounded shadow hover:bg-blue-100">Scopri di più</a>
         </div>
       </div>
     </div>
@@ -153,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function() {
       </script>
     </div>
 
-    <!-- SWIPER TOUR CARDS DINAMICO -->
+    <!-- SWIPER ESPERIENZE CARDS DINAMICO -->
     <div class="container mx-auto px-4 py-8">
       <h2 class="text-2xl font-bold mb-4">Esperienze consigliate</h2>
       <div class="swiper tour-swiper">
