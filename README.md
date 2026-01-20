@@ -1,8 +1,8 @@
-# OpenComune - Tema WordPress per Uffici Turistici Comunali
+# OpenComune - Tema WP per Uffici Turistici Comunali
 
 ## Panoramica
 
-OpenComune è un tema WordPress svlipuppato per essere utilizzato da uffici turistici comunali (e non). Il sistema permette la gestione di esperienze turistiche in modo centralizzato.
+OpenComune è un tema WP sviluppato per essere utilizzato da uffici turistici comunali (e non). Il sistema permette la gestione di esperienze turistiche in modo centralizzato.
 
 
 ### Gestione Utenti
