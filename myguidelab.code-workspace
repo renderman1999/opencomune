@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "../../../../myguidelab"
+		},
+		{
+			"path": "../../../../anyvox-api"
+		},
+		{
+			"path": "../../.."
+		}
+	],
+	"settings": {}
+}

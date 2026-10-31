@@ -1,0 +1,50 @@
+.oc-exp-itinerary-steps__lead {
+    margin-bottom: 1.25rem;
+}
+
+.oc-exp-itinerary-steps-modal .oc-exp-start-times-modal__dialog {
+    width: min(56rem, calc(100vw - 2rem));
+    max-width: none;
+}
+
+.oc-exp-itinerary-steps-modal__description textarea.large-text {
+    width: 100%;
+    min-height: 10rem;
+    box-sizing: border-box;
+}
+
+.oc-exp-itinerary-steps-modal .wp-editor-wrap {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.oc-exp-itinerary-steps-modal .wp-editor-container {
+    min-height: 12rem;
+}
+
+.oc-exp-itinerary-steps-modal__map {
+    height: 220px;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    margin-top: 0.75rem;
+}
+
+.oc-exp-itinerary-steps-modal__gallery {
+    margin-top: 0.5rem;
+}
+
+.oc-exp-itinerary-steps-modal__gallery-add {
+    margin-bottom: 0.75rem;
+}
+
+.oc-exp-itinerary-steps-modal .oc-exp-mp-modal__field {
+    margin-bottom: 1rem;
+}
+
+body.oc-exp-itinerary-steps-modal-open .mce-menu,
+body.oc-exp-itinerary-steps-modal-open .mce-panel,
+body.oc-exp-itinerary-steps-modal-open .mce-window,
+body.oc-exp-itinerary-steps-modal-open .mce-tooltip {
+    z-index: 100200 !important;
+}

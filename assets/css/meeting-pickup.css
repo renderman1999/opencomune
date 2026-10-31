@@ -1,0 +1,228 @@
+.oc-exp-pickup-arrival__title,
+.oc-exp-meeting-points__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 0.5rem;
+}
+
+.oc-exp-pickup-arrival__lead,
+.oc-exp-meeting-points__lead {
+    color: #4b5563;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    margin: 0 0 1.5rem;
+}
+
+.oc-exp-pickup-arrival__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.oc-exp-pickup-arrival__card {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 1.25rem 1.5rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.oc-exp-pickup-arrival__card.is-selected {
+    border-color: #111827;
+    box-shadow: 0 0 0 1px #111827;
+}
+
+.oc-exp-pickup-arrival__card-title {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 0.35rem;
+}
+
+.oc-exp-pickup-arrival__card-desc {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.45;
+}
+
+.oc-exp-meeting-points__empty {
+    padding: 1.25rem;
+    border: 1px dashed #93c5fd;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.oc-exp-meeting-points__empty.is-hidden {
+    display: none;
+}
+
+.oc-exp-meeting-points__add {
+    display: block;
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background: #f9fafb;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 2rem;
+}
+
+.oc-exp-meeting-points__add:hover {
+    background: #f3f4f6;
+}
+
+.oc-exp-meeting-points__list {
+    list-style: none;
+    margin: 0 0 2rem;
+    padding: 0;
+}
+
+.oc-exp-meeting-points__row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.oc-exp-meeting-points__row strong {
+    display: block;
+    font-size: 0.9375rem;
+    color: #111827;
+}
+
+.oc-exp-meeting-points__row span {
+    font-size: 0.8125rem;
+    color: #6b7280;
+}
+
+.oc-exp-meeting-points__row-actions {
+    display: flex;
+    gap: 0.35rem;
+}
+
+.oc-exp-meeting-points__group-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.oc-exp-meeting-points__group-toggle h3 {
+    margin: 0 0 0.25rem;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.oc-exp-meeting-points__group-toggle p {
+    margin: 0;
+    font-size: 0.8125rem;
+    color: #6b7280;
+}
+
+.oc-exp-mp-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100080;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.45);
+}
+
+.oc-exp-mp-modal[hidden] {
+    display: none !important;
+}
+
+.oc-exp-mp-modal__panel {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 36rem;
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 1.25rem 1.5rem;
+}
+
+.oc-exp-mp-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.oc-exp-mp-modal__label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+}
+
+.oc-exp-mp-modal__google {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.oc-exp-mp-modal__manual {
+    display: inline-block;
+    margin: 0.5rem 0 1rem;
+    font-size: 0.8125rem;
+    color: #2563eb;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.oc-exp-mp-modal__map {
+    width: 100%;
+    height: 220px;
+    border-radius: 8px;
+    background: #e5e7eb;
+    margin-bottom: 1rem;
+}
+
+.oc-exp-mp-modal__manual-fields.is-hidden {
+    display: none;
+}
+
+.oc-exp-mp-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.form-required {
+    color: #dc2626;
+}
+
+/* Suggerimenti Google Places sopra il modale punto di incontro */
+.pac-container {
+    z-index: 100100 !important;
+}

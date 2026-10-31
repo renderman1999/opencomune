@@ -1,0 +1,2531 @@
+html:has(body.oc-dashboard-app-body) {
+    margin: 0 !important;
+    padding: 0;
+    height: 100%;
+}
+
+.oc-dashboard-app-body {
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.oc-dashboard-app-body #wpadminbar {
+    display: none !important;
+}
+
+.oc-dashboard-app {
+    min-height: 100vh;
+    background: #ffffff;
+}
+
+.oc-dashboard-sidebar {
+    width: 260px;
+    background: #111827;
+    color: #f9fafb;
+    padding: 1.5rem 1rem;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.oc-dashboard-sidebar__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.oc-dashboard-sidebar__subtitle {
+    margin: 0.35rem 0 0;
+    font-size: 0.8125rem;
+    color: #9ca3af;
+    line-height: 1.4;
+}
+
+.oc-dashboard-sidebar__nav {
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.oc-dashboard-sidebar__link {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.625rem 0.75rem;
+    border-radius: 0.5rem;
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.oc-dashboard-sidebar__link:hover,
+.oc-dashboard-sidebar__link.is-active {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.oc-dashboard-sidebar__link-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.oc-dashboard-sidebar__badges {
+    display: inline-flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 0.25rem;
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.oc-dashboard-sidebar__badge {
+    min-width: 1.125rem;
+    padding: 0.05rem 0.35rem;
+    font-size: 0.625rem;
+    line-height: 1.25;
+}
+
+.oc-dashboard-sidebar__subnav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin: 0.125rem 0 0.5rem 0;
+    padding-left: 2rem;
+    border-left: 2px solid rgba(255, 255, 255, 0.12);
+    margin-left: 0.75rem;
+}
+
+.oc-dashboard-sidebar__sublink {
+    display: block;
+    padding: 0.45rem 0.65rem;
+    border-radius: 0.375rem;
+    color: #d1d5db;
+    text-decoration: none;
+    font-size: 0.875rem;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.oc-dashboard-sidebar__sublink:hover,
+.oc-dashboard-sidebar__sublink.is-active {
+    background: rgba(255, 255, 255, 0.08);
+    color: #fff;
+}
+
+.oc-dashboard-sidebar__actions {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.oc-dashboard-sidebar__action {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    font-size: 0.875rem;
+    color: #e5e7eb;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.oc-dashboard-sidebar__action.is-primary {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+    font-weight: 600;
+}
+
+.oc-dashboard-sidebar__profile {
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.oc-dashboard-sidebar__profile-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 0.75rem;
+    border-radius: 0.5rem;
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 0.8125rem;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.oc-dashboard-sidebar__profile-link:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.oc-dashboard-sidebar__profile-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.oc-dashboard-sidebar__profile-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+    color: #f9fafb;
+}
+
+.oc-dashboard-sidebar__profile-email {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.oc-dashboard-sidebar__logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.5rem;
+    padding: 0.55rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #e5e7eb;
+    text-decoration: none;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.oc-dashboard-sidebar__logout:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #fff;
+}
+
+.oc-dashboard-sidebar__profile-edit {
+    flex-shrink: 0;
+    opacity: 0.75;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-main {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+    min-width: 0;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+body.page-template-page-dashboard-partner .oc-dashboard-app #section-prenotazioni {
+    display: none;
+}
+
+html.oc-dashboard-view-prenotazioni body.page-template-page-dashboard-partner .oc-dashboard-app #section-prenotazioni,
+body.page-template-page-dashboard-partner .oc-dashboard-app.is-view-prenotazioni #section-prenotazioni {
+    display: block;
+}
+
+html.oc-dashboard-view-prenotazioni body.page-template-page-dashboard-partner .oc-dashboard-app #section-overview,
+body.page-template-page-dashboard-partner .oc-dashboard-app.is-view-prenotazioni #section-overview {
+    display: none;
+}
+
+.oc-dashboard-panel {
+    background: #fff;
+     
+}
+
+.oc-dashboard-section {
+    margin-bottom: 1.5rem;
+}
+
+.oc-dashboard-section__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 1rem;
+}
+
+.oc-dashboard-create-cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.oc-dashboard-create-cta__text {
+    margin: 0;
+    color: #4b5563;
+    font-size: 0.9375rem;
+    max-width: 36rem;
+}
+
+.oc-dashboard-create-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-radius: 0.5rem;
+    background: #2563eb;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+    font-size: 0.9375rem;
+    transition: background 0.15s ease;
+}
+
+.oc-dashboard-create-btn:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+.oc-dashboard-table-wrap {
+    overflow-x: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background: #fff;
+}
+
+.oc-dashboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-table th,
+.oc-dashboard-table td {
+    padding: 0.75rem 0.875rem;
+    border-bottom: 1px solid #f3f4f6;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.oc-dashboard-table th {
+    background: #f9fafb;
+    color: #4b5563;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.oc-dashboard-table tr:last-child td {
+    border-bottom: none;
+}
+
+.oc-dashboard-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 0.5rem;
+    object-fit: cover;
+    background: #e5e7eb;
+    display: block;
+}
+
+.oc-dashboard-thumb--empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-size: 1.25rem;
+}
+
+.oc-dashboard-title-cell {
+    min-width: 180px;
+}
+
+.oc-dashboard-empty {
+    text-align: center;
+    color: #6b7280;
+    padding: 2rem 1rem;
+}
+
+.oc-dashboard-empty--error {
+    color: #b91c1c;
+}
+
+.oc-booking-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.2rem 0.6rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.oc-booking-status--confirmed {
+    background: #d1fae5;
+    color: #065f46;
+    border-color: #a7f3d0;
+}
+
+.oc-booking-status--pending {
+    background: #fef3c7;
+    color: #92400e;
+    border-color: #fde68a;
+}
+
+.oc-booking-status--pending-approval {
+    background: #ffedd5;
+    color: #9a3412;
+    border-color: #fed7aa;
+}
+
+.oc-booking-status--cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+    border-color: #fecaca;
+}
+
+.oc-booking-status--refunded {
+    background: #e0e7ff;
+    color: #3730a3;
+    border-color: #c7d2fe;
+}
+
+.oc-booking-status--failed {
+    background: #fce7f3;
+    color: #9d174d;
+    border-color: #fbcfe8;
+}
+
+.oc-booking-detail__header-status {
+    flex-shrink: 0;
+    align-self: center;
+    margin-top: 0.15rem;
+}
+
+.oc-booking-status--header {
+    min-height: 2.125rem;
+    padding: 0.4rem 1.1rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.01em;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.oc-booking-status--header.oc-booking-status--confirmed {
+    background: linear-gradient(180deg, #ecfdf5 0%, #d1fae5 100%);
+    color: #047857;
+}
+
+.oc-booking-status--header.oc-booking-status--pending {
+    background: linear-gradient(180deg, #fffbeb 0%, #fef3c7 100%);
+    color: #b45309;
+}
+
+.oc-booking-status--header.oc-booking-status--cancelled {
+    background: linear-gradient(180deg, #fef2f2 0%, #fee2e2 100%);
+    color: #b91c1c;
+}
+
+.oc-booking-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    margin-top: 0.25rem;
+    font-size: 0.8125rem;
+    color: #6b7280;
+}
+
+.oc-booking-contact a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.oc-booking-contact a:hover {
+    text-decoration: underline;
+}
+
+.oc-booking-payment {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.oc-booking-id-cell {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.oc-booking-id-link {
+    text-decoration: none;
+}
+
+.oc-booking-id-link:hover {
+    text-decoration: underline;
+}
+
+.oc-dashboard-bookings-pagination__nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem 1rem;
+}
+
+.oc-dashboard-bookings-pagination__summary {
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.oc-dashboard-bookings-pagination__btn {
+    padding: 0.4rem 0.85rem;
+    font-size: 0.875rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    background: #fff;
+    color: #374151;
+    cursor: pointer;
+}
+
+.oc-dashboard-bookings-pagination__btn:hover:not(:disabled) {
+    background: #f9fafb;
+}
+
+.oc-dashboard-bookings-pagination__btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.oc-booking-participants {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.oc-booking-meta {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    white-space: nowrap;
+}
+
+.oc-dashboard-table--bookings td {
+    vertical-align: top;
+}
+
+.oc-booking-detail__back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.9375rem;
+}
+
+.oc-booking-detail__back:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+.oc-booking-detail__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 1rem;
+}
+
+.oc-booking-detail__card {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+}
+
+.oc-booking-detail__card-title {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.oc-booking-detail__meta {
+    margin: 0;
+}
+
+.oc-booking-detail__meta dt {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: #6b7280;
+    margin-top: 0.65rem;
+}
+
+.oc-booking-detail__meta dt:first-child {
+    margin-top: 0;
+}
+
+.oc-booking-detail__meta dd {
+    margin: 0.15rem 0 0;
+    color: #111827;
+    font-size: 0.9375rem;
+}
+
+.oc-booking-detail .form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.35rem;
+}
+
+.oc-booking-detail .form-input {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.9375rem;
+}
+
+.oc-booking-detail .form-required {
+    color: #dc2626;
+}
+
+.oc-booking-detail__code {
+    font-size: 0.8125rem;
+    word-break: break-all;
+    background: #fff;
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    border: 1px solid #e5e7eb;
+}
+
+.oc-booking-detail__card--sumup {
+    background: #fff;
+}
+
+.oc-booking-activity-log {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.oc-booking-activity-log__item {
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.oc-booking-activity-log__item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.oc-booking-activity-log__meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1rem;
+    font-size: 0.8125rem;
+    color: #6b7280;
+    margin-bottom: 0.35rem;
+}
+
+.oc-booking-activity-log__transition {
+    margin: 0 0 0.35rem;
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.oc-booking-activity-log__reason {
+    margin: 0;
+    font-size: 0.9375rem;
+    color: #111827;
+    white-space: pre-wrap;
+}
+
+.oc-booking-cancel-modal__summary {
+    text-align: left;
+    margin-bottom: 0.5rem;
+}
+
+.oc-booking-cancel-modal__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid #f3f4f6;
+    font-size: 0.875rem;
+}
+
+.oc-booking-cancel-modal__label {
+    color: #6b7280;
+    flex-shrink: 0;
+}
+
+.oc-booking-cancel-modal__value {
+    color: #111827;
+    text-align: right;
+}
+
+.oc-booking-cancel-modal__hint {
+    margin: 0.75rem 0 0;
+    font-size: 0.8125rem;
+    color: #92400e;
+    background: #fffbeb;
+    padding: 0.5rem 0.65rem;
+    border-radius: 0.375rem;
+}
+
+.swal2-popup.oc-booking-cancel-modal {
+    max-width: 32rem;
+}
+
+.swal2-textarea.oc-booking-cancel-modal__textarea {
+    min-height: 5.5rem;
+    font-size: 0.9375rem;
+}
+
+.oc-incassi-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1rem;
+}
+
+.oc-incassi-stat {
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1rem 1.15rem;
+}
+
+.oc-incassi-stat--highlight {
+    background: #ecfdf5;
+    border-color: #a7f3d0;
+}
+
+.oc-incassi-stat--refund {
+    background: #fffbeb;
+    border-color: #fde68a;
+}
+
+.oc-incassi-stat__sub {
+    display: block;
+    font-size: 0.8125rem;
+    color: #b45309;
+    margin-top: 0.15rem;
+}
+
+.oc-dashboard-table--incassi tr.oc-incassi-row--refund td {
+    color: #92400e;
+}
+
+.oc-incassi-stat__label {
+    display: block;
+    font-size: 0.8125rem;
+    color: #6b7280;
+    margin-bottom: 0.35rem;
+}
+
+.oc-incassi-stat__value {
+    display: block;
+    font-size: 1.35rem;
+    line-height: 1.2;
+    color: #111827;
+}
+
+.oc-incassi-charts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1rem;
+}
+
+.oc-incassi-chart-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1rem 1.15rem 1.25rem;
+    min-height: 280px;
+}
+
+.oc-incassi-chart-card canvas {
+    max-height: 240px;
+}
+
+.oc-dashboard-table--incassi td {
+    vertical-align: top;
+    font-size: 0.875rem;
+}
+
+.oc-booking-accordion {
+    padding: 0;
+    overflow: hidden;
+}
+
+.oc-booking-accordion__summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+}
+
+.oc-booking-accordion__summary::-webkit-details-marker {
+    display: none;
+}
+
+.oc-booking-accordion__summary-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.oc-booking-accordion__title {
+    margin: 0;
+}
+
+.oc-booking-accordion__hint {
+    font-size: 0.8125rem;
+    color: #6b7280;
+    font-weight: 400;
+}
+
+.oc-booking-accordion__chevron {
+    flex-shrink: 0;
+    color: #6b7280;
+    transition: transform 0.2s ease;
+}
+
+.oc-booking-accordion[open] .oc-booking-accordion__chevron {
+    transform: rotate(180deg);
+}
+
+.oc-booking-accordion__panel {
+    padding: 0 1.25rem 1.25rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.oc-booking-accordion__panel .oc-booking-detail__meta dt:first-child {
+    margin-top: 0.75rem;
+}
+
+.oc-dashboard-title-cell strong {
+    display: block;
+    color: #111827;
+    font-weight: 600;
+}
+
+.oc-dashboard-title-cell small {
+    display: block;
+    margin-top: 0.35rem;
+}
+
+.oc-dashboard-title-cell .status-badge {
+    display: inline-block;
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.oc-dashboard-title-cell .status-badge.status-publish {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.oc-dashboard-title-cell .status-badge.status-draft {
+    background-color: #fef3c7;
+    color: #92400e;
+}
+
+.oc-dashboard-title-cell .status-badge.status-pending {
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.oc-dashboard-lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin-bottom: 0.25rem;
+    color: #374151;
+}
+
+.oc-dashboard-lang-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.75rem;
+    padding: 0.1rem 0.35rem;
+    border-radius: 0.25rem;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+}
+
+.oc-dashboard-lang-badge--it {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.oc-dashboard-lang-badge--en {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.oc-dashboard-lang-badge--pending {
+    background: #f3f4f6;
+    color: #9ca3af;
+    border: 1px dashed #d1d5db;
+}
+
+.oc-dashboard-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+}
+
+.oc-dashboard-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    border: none;
+    border-radius: 0.375rem;
+    padding: 0.35rem 0.55rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1.2;
+}
+
+.oc-dashboard-btn--icon {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+}
+
+.oc-dashboard-btn--edit {
+    background: #2563eb;
+    color: #fff;
+}
+
+.oc-dashboard-btn--view {
+    background: #0d9488;
+    color: #fff;
+}
+
+.oc-dashboard-btn--delete {
+    background: #ef4444;
+    color: #fff;
+}
+
+.oc-dashboard-btn--refund {
+    background: #d97706;
+    color: #fff;
+}
+
+.oc-dashboard-btn--refund:hover {
+    background: #b45309;
+    color: #fff;
+}
+
+.oc-dashboard-btn--refund-done {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.5rem;
+    background: #ecfdf5;
+    color: #047857;
+    cursor: default;
+}
+
+.oc-operations-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 0.2rem 0.5rem;
+    border-radius: 9999px;
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.oc-operations-badge--cancel {
+    background: #fef2f2;
+    color: #b91c1c;
+}
+
+.oc-operations-badge--refund {
+    background: #fffbeb;
+    color: #b45309;
+}
+
+.oc-operations-badge--payment {
+    background: #ecfdf5;
+    color: #047857;
+}
+
+.oc-operations-badge--login {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.oc-dashboard-table--operations .oc-operations-detail {
+    font-size: 0.875rem;
+    max-width: 280px;
+}
+
+.oc-dashboard-btn--qr {
+    background: #111827;
+    color: #fff;
+}
+
+.oc-dashboard-btn--status {
+    white-space: nowrap;
+}
+
+.oc-dashboard-btn--to-publish {
+    background: #059669;
+    color: #fff;
+}
+
+.oc-dashboard-btn--to-draft {
+    background: #f59e0b;
+    color: #fff;
+}
+
+.oc-dashboard-btn--secondary {
+    background: #fff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.oc-dashboard-btn--secondary:hover {
+    background: #f9fafb;
+    border-color: #9ca3af;
+    color: #374151;
+}
+
+.oc-dashboard-btn--primary {
+    background: #2563eb;
+    color: #fff;
+    transition: background-color 0.15s ease;
+}
+
+.oc-dashboard-btn--primary:hover {
+    background: #1d4ed8;
+    color: #fff;
+}
+
+body.oc-dashboard-app-body .btn-primary,
+.oc-dashboard-app .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    color: #fff;
+    background-color: #2563eb;
+    border: none;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease;
+}
+
+body.oc-dashboard-app-body .btn-primary:hover,
+.oc-dashboard-app .btn-primary:hover {
+    background-color: #1d4ed8;
+    color: #fff;
+}
+
+body.oc-dashboard-app-body .btn-secondary,
+.oc-dashboard-app .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    color: #374151;
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+body.oc-dashboard-app-body .btn-secondary:hover,
+.oc-dashboard-app .btn-secondary:hover {
+    background-color: #f9fafb;
+    border-color: #9ca3af;
+    color: #374151;
+}
+
+.oc-dashboard-qr-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.oc-dashboard-qr-modal[hidden] {
+    display: none !important;
+}
+
+.oc-dashboard-qr-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.55);
+}
+
+.oc-dashboard-qr-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+}
+
+.oc-dashboard-qr-modal__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.oc-dashboard-qr-modal__header h3 {
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+.oc-dashboard-qr-modal__close {
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.oc-dashboard-qr-modal__hint {
+    margin: 0.5rem 0 1rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-qr-modal__canvas-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 0.75rem;
+}
+
+.oc-dashboard-qr-modal__url {
+    font-size: 0.75rem;
+    color: #4b5563;
+    word-break: break-all;
+    margin: 0 0 1rem;
+}
+
+.oc-dashboard-qr-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.oc-dashboard-trans-cell {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.oc-dashboard-trans-cell .oc-dashboard-lang {
+    margin-bottom: 0;
+}
+
+.oc-dashboard-trans-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10060;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.oc-dashboard-trans-modal[hidden],
+.oc-dashboard-trans-modal__loading[hidden] {
+    display: none !important;
+}
+
+.oc-dashboard-trans-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(17, 24, 39, 0.55);
+}
+
+.oc-dashboard-trans-modal__panel {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 720px;
+    max-height: min(90vh, 900px);
+    background: #fff;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.18);
+    display: flex;
+    flex-direction: column;
+}
+
+.oc-dashboard-trans-modal__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+}
+
+.oc-dashboard-trans-modal__header h3 {
+    margin: 0;
+    font-size: 1.125rem;
+}
+
+.oc-dashboard-trans-modal__subtitle {
+    margin: 0.25rem 0 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.oc-dashboard-trans-modal__close {
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.oc-dashboard-app .oc-partner-ai-enable-bar {
+    margin-top: 0;
+}
+
+.oc-dashboard-trans-modal__ai {
+    margin-top: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: #f9fafb;
+}
+
+.oc-dashboard-trans-modal__ai-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.oc-dashboard-trans-modal__ai-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.oc-dashboard-trans-modal__ai-track {
+    position: relative;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 1.5rem;
+    background-color: #d1d5db;
+    border-radius: 9999px;
+    transition: background-color 0.2s ease;
+}
+
+.oc-dashboard-trans-modal__ai-thumb {
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.oc-dashboard-trans-modal__ai-input:checked + .oc-dashboard-trans-modal__ai-track {
+    background-color: #2563eb;
+}
+
+.oc-dashboard-trans-modal__ai-input:checked + .oc-dashboard-trans-modal__ai-track .oc-dashboard-trans-modal__ai-thumb {
+    transform: translateX(1.25rem);
+}
+
+.oc-dashboard-trans-modal__ai-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.oc-dashboard-trans-modal__panel.oc-dashboard-trans-modal--ai-on .oc-ai-field-actions {
+    display: block;
+}
+
+.oc-ai-field-actions {
+    display: none;
+    margin-top: 0.5rem;
+}
+
+.oc-dashboard-trans-modal__hint {
+    margin: 0.5rem 0 0.75rem;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-trans-modal__body {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    flex: 1;
+}
+
+.oc-dashboard-trans-modal__fields {
+    overflow-y: auto;
+    padding-right: 0.25rem;
+    margin-bottom: 1rem;
+}
+
+.oc-dashboard-trans-modal__fields .form-input,
+.oc-dashboard-trans-modal__fields .form-textarea {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-trans-modal__fields .form-textarea {
+    min-height: 6rem;
+    resize: vertical;
+}
+
+.oc-dashboard-trans-modal__fields .opencomune-bilingual-field + .opencomune-bilingual-field {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.oc-dashboard-trans-it-ref {
+    color: #374151;
+}
+
+.oc-dashboard-trans-it-html {
+    max-height: 14rem;
+    overflow: auto;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.25rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    background: #f9fafb;
+    font-size: 0.875rem;
+    line-height: 1.55;
+    color: #374151;
+}
+
+.oc-dashboard-trans-it-html p {
+    margin: 0 0 0.75rem;
+}
+
+.oc-dashboard-trans-it-html p:last-child {
+    margin-bottom: 0;
+}
+
+.oc-dashboard-trans-modal__fields .oc-trans-html-editor-wrap {
+    width: 100%;
+}
+
+.oc-dashboard-trans-modal__fields .oc-trans-html-editor-wrap .wp-editor-wrap {
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.oc-dashboard-trans-modal__fields .oc-trans-html-editor-wrap .wp-editor-container {
+    border: none;
+}
+
+.oc-dashboard-trans-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    flex-shrink: 0;
+}
+
+.oc-dashboard-trans-modal__loading {
+    position: absolute;
+    inset: 0;
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.oc-dashboard-trans-modal__spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #e5e7eb;
+    border-top-color: #2563eb;
+    border-radius: 50%;
+    animation: oc-dashboard-spin 0.8s linear infinite;
+}
+
+@keyframes oc-dashboard-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.oc-dashboard-btn--translations {
+    background: #eef2ff;
+    color: #3730a3;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page {
+    width: 100%;
+    max-width: none;
+    box-sizing: border-box;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .form-section {
+    width: 100%;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    padding: 1.75rem 2rem;
+}
+
+.oc-dashboard-app .oc-profilo-partner-form,
+.oc-dashboard-app .oc-profilo-partner-payment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .form-section .grid {
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .oc-dashboard-app .oc-profilo-partner-page .form-section .grid {
+        gap: 1.75rem 2rem;
+    }
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .form-label {
+    display: block;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .form-required {
+    color: #ef4444;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .form-input,
+.oc-dashboard-app .oc-profilo-partner-page .form-textarea,
+.oc-dashboard-app .oc-profilo-partner-page select.form-input,
+.oc-dashboard-app .oc-profilo-partner-page textarea.form-input {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #111827;
+    background-color: #fff;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page select.form-input {
+    padding-right: 2rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+    background-position: right 0.65rem center;
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .form-textarea,
+.oc-dashboard-app .oc-profilo-partner-page textarea.form-input {
+    min-height: 7.5rem;
+    resize: vertical;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .form-input:focus,
+.oc-dashboard-app .oc-profilo-partner-page .form-textarea:focus,
+.oc-dashboard-app .oc-profilo-partner-page select.form-input:focus,
+.oc-dashboard-app .oc-profilo-partner-page textarea.form-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .section-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 1.25rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #e5e7eb;
+}
+
+.oc-dashboard-app .oc-profilo-partner-payment-actions,
+.oc-dashboard-app .oc-profilo-partner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+    padding: 1.5rem 0 0.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.oc-dashboard-app .oc-profilo-partner-payment-actions {
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .error-message {
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .success-message {
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    color: #16a34a;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker-wrap {
+    margin-bottom: 1.25rem;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker--inline {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker--inline > li {
+    flex: 1 1 0;
+    min-width: min(100%, 12rem);
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker__card {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker__card:hover:not(:disabled) {
+    border-color: #9ca3af;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker__card.is-selected {
+    border-color: #111827;
+    box-shadow: 0 0 0 1px #111827;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker__card:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker__icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 8px;
+    background: #f3f4f6;
+    color: #111827;
+    font-size: 1.25rem;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker__card.is-selected .oc-partner-gateway-picker__icon {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.oc-dashboard-app .oc-partner-gateway-picker__desc {
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.45;
+}
+
+.oc-dashboard-app .oc-partner-gateway-config {
+    margin-top: 0.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .partner-gateway-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 768px) {
+    .oc-dashboard-app .oc-profilo-partner-page .partner-gateway-fields {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+.oc-dashboard-app .oc-profilo-partner-page .hidden {
+    display: none !important;
+}
+
+@media (max-width: 1024px) {
+    .oc-dashboard-sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        min-height: 0;
+    }
+
+    .oc-dashboard-main {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .oc-dashboard-sidebar__nav {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+}
+
+/* Pianificatore (dashboard admin) */
+.oc-dashboard-app .oc-planner-admin__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.oc-dashboard-app .oc-planner-admin__toolbar--sub {
+    margin-bottom: 1rem;
+}
+
+.oc-dashboard-app .oc-planner-admin__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.oc-dashboard-app .oc-planner-admin__tab {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.25rem;
+    color: #374151;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.oc-dashboard-app .oc-planner-admin__tab:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+    color: #111827;
+}
+
+.oc-dashboard-app .oc-planner-admin__tab.is-active {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: #fff;
+}
+
+.oc-dashboard-app .oc-planner-admin__toolbar-action {
+    flex-shrink: 0;
+}
+
+.oc-dashboard-app .oc-planner-admin-map {
+    width: 100%;
+    height: 280px;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    background: #f3f4f6;
+}
+
+.oc-dashboard-app .oc-planner-poi-edit-form {
+    max-width: none;
+    width: 100%;
+}
+
+.oc-dashboard-app .oc-planner-poi-edit__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    width: 100%;
+}
+
+@media (min-width: 960px) {
+    .oc-dashboard-app .oc-planner-poi-edit__row {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: stretch;
+    }
+
+    .oc-dashboard-app .oc-planner-poi-edit__row > .form-section {
+        height: 100%;
+    }
+
+    .oc-dashboard-app .oc-planner-poi-edit__row .oc-planner-admin-map {
+        min-height: 220px;
+        height: min(280px, 40vh);
+    }
+}
+
+.oc-dashboard-app .oc-planner-admin__checks {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.25rem;
+}
+
+.oc-dashboard-app .oc-planner-admin__checkbox {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+    color: #374151;
+    cursor: pointer;
+}
+
+.oc-dashboard-app .oc-planner-admin__checkbox input[type="checkbox"] {
+    width: 1rem;
+    height: 1rem;
+    margin: 0;
+    accent-color: #2563eb;
+}
+
+.oc-dashboard-app .oc-dashboard-table__actions {
+    width: 1%;
+    white-space: nowrap;
+    text-align: right;
+}
+
+.oc-dashboard-app .oc-planner-admin__inline-form {
+    margin: 0;
+    display: inline-block;
+}
+
+.oc-dashboard-app .oc-planner-request-dl {
+    display: grid;
+    grid-template-columns: minmax(0, 10rem) minmax(0, 1fr);
+    gap: 0.35rem 1rem;
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-app .oc-planner-request-dl dt {
+    margin: 0;
+    font-weight: 600;
+    color: #374151;
+}
+
+.oc-dashboard-app .oc-planner-request-dl dd {
+    margin: 0;
+    color: #111827;
+}
+
+.oc-dashboard-app .oc-planner-admin__btn-sm {
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8125rem;
+}
+
+.oc-dashboard-section--hero {
+    margin-bottom: 0;
+}
+
+.oc-dashboard-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 280px;
+    background-color: #1f2937;
+    background-image:
+        linear-gradient(105deg, rgba(15, 23, 42, 0.88) 0%, rgba(15, 23, 42, 0.45) 55%, rgba(15, 23, 42, 0.25) 100%),
+        var(--oc-dashboard-hero-bg, none);
+    background-size: cover;
+    background-position: center;
+}
+
+.oc-dashboard-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(0, 0, 0, 0.35) 100%);
+    pointer-events: none;
+}
+
+.oc-dashboard-hero__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1.5rem;
+    min-height: 280px;
+    padding: 1.5rem 1.25rem;
+}
+
+@media (min-width: 768px) {
+    .oc-dashboard-hero__content {
+        padding: 2rem 2rem 1.75rem;
+        min-height: 320px;
+    }
+}
+
+.oc-dashboard-hero__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+}
+
+.oc-dashboard-hero__title {
+    margin: 0 0 0.35rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+}
+
+.oc-dashboard-hero__lead {
+    margin: 0;
+    max-width: 36rem;
+    font-size: 0.9375rem;
+    line-height: 1.45;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.oc-dashboard-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.oc-dashboard-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.55rem 1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-decoration: none;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.oc-dashboard-hero__btn--ghost {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.55);
+    color: #fff;
+}
+
+.oc-dashboard-hero__btn--ghost:hover {
+    background: rgba(255, 255, 255, 0.16);
+    color: #fff;
+}
+
+.oc-dashboard-hero__btn--primary {
+    background: var(--brand-primary, #ffad02);
+    color: var(--text-on-brand, #1a1200);
+    border-color: var(--brand-primary, #ffad02);
+}
+
+.oc-dashboard-hero__btn--primary:hover {
+    filter: brightness(1.04);
+    color: var(--text-on-brand, #1a1200);
+}
+
+.oc-dashboard-hero__card {
+    align-self: flex-start;
+    width: 100%;
+    max-width: 300px;
+    padding: 1rem 1.1rem;
+    border-radius: 0.85rem;
+    background: #fff;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
+.oc-dashboard-hero__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: auto;
+    max-width: 100%;
+    align-self: flex-start;
+}
+
+@media (min-width: 768px) {
+    .oc-dashboard-hero__cards {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: stretch;
+    }
+
+    .oc-dashboard-hero__cards .oc-dashboard-hero__card {
+        flex: 0 1 300px;
+        width: 300px;
+        max-width: 300px;
+    }
+}
+
+.oc-dashboard-hero__stats--duo {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.oc-dashboard-hero__card-foot {
+    margin: 0.85rem 0 0;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f3f4f6;
+}
+
+.oc-dashboard-hero__card-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.oc-dashboard-hero__card-link:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+.oc-dashboard-hero__card-kicker {
+    margin: 0 0 0.65rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+.oc-dashboard-hero__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+}
+
+.oc-dashboard-hero__stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.oc-dashboard-hero__stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #111827;
+}
+
+.oc-dashboard-hero__stat-label {
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #6b7280;
+}
+
+@media (max-width: 480px) {
+    .oc-dashboard-hero__stat-value {
+        font-size: 1.35rem;
+    }
+}
+
+.oc-dashboard-esperienze-dt .dataTables_wrapper {
+    margin-top: 0.5rem;
+}
+
+.oc-dashboard-esperienze-dt .dataTables_filter input {
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.65rem;
+    margin-left: 0.5rem;
+}
+
+.oc-dashboard-esperienze-dt .dataTables_length select {
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.35rem;
+}
+
+.oc-dashboard-esperienze-dt .dataTables_info {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-esperienze-dt .dataTables_paginate .paginate_button {
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.35rem 0.65rem;
+    margin: 0 0.125rem;
+}
+
+.oc-dashboard-esperienze-dt .dataTables_paginate .paginate_button.current {
+    background: #2563eb;
+    color: #fff !important;
+    border-color: #2563eb;
+}
+
+.oc-dashboard-app .oc-dashboard-actions-cell {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.oc-dashboard-esperienze-dt .oc-dashboard-actions {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+.oc-dashboard-esperienze-dt .oc-dashboard-actions .oc-dashboard-btn {
+    flex-shrink: 0;
+}
+
+.oc-dashboard-bookings-dt .dataTables_wrapper {
+    margin-top: 0.5rem;
+}
+
+.oc-dashboard-bookings-dt .dataTables_filter input {
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.65rem;
+    margin-left: 0.5rem;
+}
+
+.oc-dashboard-bookings-dt .dataTables_length select {
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.35rem;
+}
+
+.oc-dashboard-bookings-dt .dataTables_info {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-bookings-dt .dataTables_paginate .paginate_button {
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.35rem 0.65rem;
+    margin: 0 0.125rem;
+}
+
+.oc-dashboard-bookings-dt .dataTables_paginate .paginate_button.current {
+    background: #2563eb;
+    color: #fff !important;
+    border-color: #2563eb;
+}
+
+.oc-dashboard-bookings-dt .oc-dashboard-actions {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+.oc-dashboard-bookings-dt .oc-dashboard-actions .oc-dashboard-btn {
+    flex-shrink: 0;
+}
+
+.oc-dashboard-home {
+    padding: 1.75rem 1.25rem 2.5rem;
+    background: #f3f4f6;
+}
+
+@media (min-width: 768px) {
+    .oc-dashboard-home {
+        padding: 2rem 2rem 2.75rem;
+    }
+}
+
+.oc-dashboard-home-block + .oc-dashboard-home-block {
+    margin-top: 2.5rem;
+}
+
+.oc-dashboard-home-block__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+.oc-dashboard-home-block__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.375rem;
+    font-weight: 600;
+    color: #111827;
+    letter-spacing: -0.02em;
+}
+
+.oc-dashboard-home-block__lead {
+    margin: 0;
+    max-width: 40rem;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: #6b7280;
+}
+
+.oc-dashboard-home-block__intro--spaced {
+    margin-bottom: 1.25rem;
+}
+
+.oc-dashboard-home-period__select {
+    appearance: none;
+    border: 1px solid #d1d5db;
+    border-radius: 999px;
+    padding: 0.5rem 2rem 0.5rem 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+    background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236b7280' d='M1 1l5 5 5-5'/%3E%3C/svg%3E") no-repeat right 0.85rem center;
+    cursor: pointer;
+}
+
+.oc-dashboard-home-metrics {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .oc-dashboard-home-metrics {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1100px) {
+    .oc-dashboard-home-metrics {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.oc-dashboard-metric {
+    display: flex;
+    flex-direction: column;
+    min-height: 148px;
+    padding: 1.1rem 1.15rem 0.85rem;
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.5rem;
+}
+
+.oc-dashboard-metric__label {
+    margin: 0 0 0.65rem;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.oc-dashboard-metric__value {
+    margin: 0;
+    flex: 1;
+    font-size: clamp(1.75rem, 4vw, 2.35rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: #111827;
+    letter-spacing: -0.03em;
+}
+
+.oc-dashboard-metric__spark {
+    margin-top: 0.75rem;
+    height: 2.5rem;
+    border-bottom: 2px dashed #d1d5db;
+    opacity: 0.85;
+}
+
+.oc-dashboard-metric--top .oc-dashboard-metric__value {
+    display: none;
+}
+
+.oc-dashboard-metric__top {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
+.oc-dashboard-metric__top-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+    line-height: 1.35;
+    color: #374151;
+}
+
+.oc-dashboard-metric__top-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.oc-dashboard-metric__top-count {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: #111827;
+}
+
+.oc-dashboard-metric__empty {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #9ca3af;
+    line-height: 1.45;
+}
+
+.oc-dashboard-home-block--discover .oc-dashboard-home-block__intro--spaced {
+    text-align: left;
+}
+
+.oc-dashboard-promo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 240px));
+    gap: 1.25rem;
+    justify-content: start;
+    width: 100%;
+}
+
+.oc-dashboard-promo-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.65rem;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+}
+
+.oc-dashboard-promo-card__visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 96px;
+    background: #0f172a;
+    color: #fff;
+}
+
+.oc-dashboard-promo-card__visual i {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    font-size: 1.2rem;
+    line-height: 1;
+    border-radius: 50%;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.oc-dashboard-promo-card__visual--ai {
+    background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+}
+
+.oc-dashboard-promo-card__visual--accent i,
+.oc-dashboard-promo-card__visual--ai i {
+    background: #bef264;
+    color: #0f172a;
+    font-size: 1.15rem;
+}
+
+.oc-dashboard-promo-card__visual:not(.oc-dashboard-promo-card__visual--accent):not(.oc-dashboard-promo-card__visual--ai) i {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.oc-dashboard-promo-card__body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem 1rem 1.1rem;
+}
+
+.oc-dashboard-promo-card__kicker {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    margin: 0 0 0.5rem;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #9ca3af;
+}
+
+.oc-dashboard-promo-card__title {
+    margin: 0 0 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    line-height: 1.25;
+}
+
+.oc-dashboard-promo-card__text {
+    margin: 0 0 0.75rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #4b5563;
+}
+
+.oc-dashboard-promo-card__list {
+    margin: 0 0 1rem;
+    padding: 0;
+    list-style: none;
+    font-size: 0.8125rem;
+    color: #4b5563;
+}
+
+.oc-dashboard-promo-card__list li {
+    position: relative;
+    padding-left: 1.35rem;
+    margin-bottom: 0.35rem;
+}
+
+.oc-dashboard-promo-card__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.35rem;
+    width: 0.65rem;
+    height: 0.4rem;
+    border-left: 2px solid #9ca3af;
+    border-bottom: 2px solid #9ca3af;
+    transform: rotate(-45deg);
+}
+
+.oc-dashboard-promo-card__btn {
+    margin-top: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    align-self: flex-start;
+    padding: 0.55rem 1.15rem;
+    border-radius: 999px;
+    background: #111827;
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: background 0.15s ease;
+}
+
+.oc-dashboard-promo-card__btn:hover {
+    background: #000;
+    color: #fff;
+}
+
+.oc-dashboard-planner-dt .dataTables_wrapper,
+.oc-dashboard-esperienze-categories-dt .dataTables_wrapper {
+    margin-top: 0.5rem;
+}
+
+.oc-dashboard-planner-dt .dataTables_filter input,
+.oc-dashboard-esperienze-categories-dt .dataTables_filter input {
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.5rem 0.65rem;
+    margin-left: 0.5rem;
+}
+
+.oc-dashboard-planner-dt .dataTables_length select,
+.oc-dashboard-esperienze-categories-dt .dataTables_length select {
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.5rem;
+    margin: 0 0.35rem;
+}
+
+.oc-dashboard-planner-dt .dataTables_info,
+.oc-dashboard-esperienze-categories-dt .dataTables_info {
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.oc-dashboard-planner-dt .dataTables_paginate .paginate_button,
+.oc-dashboard-esperienze-categories-dt .dataTables_paginate .paginate_button {
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    padding: 0.35rem 0.65rem;
+    margin: 0 0.125rem;
+}
+
+.oc-dashboard-planner-dt .dataTables_paginate .paginate_button.current,
+.oc-dashboard-esperienze-categories-dt .dataTables_paginate .paginate_button.current {
+    background: #2563eb;
+    color: #fff !important;
+    border-color: #2563eb;
+}
+
+.oc-dashboard-planner-dt .oc-dashboard-actions,
+.oc-dashboard-esperienze-categories-dt .oc-dashboard-actions {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0.35rem;
+    white-space: nowrap;
+}
+
+.oc-dashboard-planner-dt .oc-dashboard-actions .oc-dashboard-btn,
+.oc-dashboard-esperienze-categories-dt .oc-dashboard-actions .oc-dashboard-btn {
+    flex-shrink: 0;
+}
+
+.oc-dashboard-planner-dt .oc-planner-admin__inline-form,
+.oc-dashboard-esperienze-categories-dt .oc-planner-admin__inline-form {
+    display: inline-flex;
+    margin: 0;
+}
+
+.oc-planner-media-field__box {
+    border: 2px dashed #d1d5db;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+.oc-planner-media-field__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.oc-planner-media-field__preview {
+    margin-top: 1rem;
+}
+
+.oc-planner-media-field__preview-img {
+    display: block;
+    max-width: 280px;
+    width: 100%;
+    height: auto;
+    max-height: 160px;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+}
+
+.oc-planner-media-field .is-hidden {
+    display: none !important;
+}

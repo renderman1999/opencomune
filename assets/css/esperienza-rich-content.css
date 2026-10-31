@@ -1,0 +1,300 @@
+/**
+ * Tipografia per HTML da editor (TinyMCE) su scheda esperienza.
+ * Tailwind Preflight azzera h1–h6; la classe prose non e inclusa nel build.
+ */
+.oc-esperienza-rich-content {
+    color: #374151;
+    font-size: 1rem;
+    line-height: 1.75;
+    max-width: none;
+    word-wrap: break-word;
+}
+
+.oc-esperienza-rich-content > *:first-child {
+    margin-top: 0;
+}
+
+.oc-esperienza-rich-content > *:last-child {
+    margin-bottom: 0;
+}
+
+.oc-esperienza-rich-content p {
+    margin: 0 0 1em;
+}
+
+.oc-esperienza-rich-content h1 {
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 1.5em 0 0.75em;
+    color: #111827;
+}
+
+.oc-esperienza-rich-content h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 1.5em 0 0.65em;
+    color: #111827;
+}
+
+.oc-esperienza-rich-content h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin: 1.25em 0 0.5em;
+    color: #1f2937;
+}
+
+.oc-esperienza-rich-content h4,
+.oc-esperienza-rich-content h5,
+.oc-esperienza-rich-content h6 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    line-height: 1.4;
+    margin: 1em 0 0.5em;
+    color: #1f2937;
+}
+
+.oc-esperienza-rich-content ul,
+.oc-esperienza-rich-content ol {
+    margin: 0 0 1em;
+    padding-left: 1.625em;
+}
+
+.oc-esperienza-rich-content ul {
+    list-style-type: disc;
+}
+
+.oc-esperienza-rich-content ol {
+    list-style-type: decimal;
+}
+
+.oc-esperienza-rich-content li {
+    margin: 0.35em 0;
+}
+
+.oc-esperienza-rich-content li > ul,
+.oc-esperienza-rich-content li > ol {
+    margin: 0.35em 0 0;
+}
+
+.oc-esperienza-rich-content strong,
+.oc-esperienza-rich-content b {
+    font-weight: 700;
+}
+
+.oc-esperienza-rich-content em,
+.oc-esperienza-rich-content i {
+    font-style: italic;
+}
+
+.oc-esperienza-rich-content a {
+    color: #2563eb;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.oc-esperienza-rich-content a:hover {
+    color: #1d4ed8;
+}
+
+.oc-esperienza-rich-content blockquote {
+    margin: 1em 0;
+    padding-left: 1em;
+    border-left: 4px solid #d1d5db;
+    color: #4b5563;
+    font-style: italic;
+}
+
+.oc-esperienza-rich-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 1em 0;
+}
+
+.oc-esperienza-rich-content figure {
+    margin: 1em 0;
+}
+
+.oc-esperienza-rich-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1em 0;
+    font-size: 0.9375rem;
+}
+
+.oc-esperienza-rich-content th,
+.oc-esperienza-rich-content td {
+    border: 1px solid #e5e7eb;
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+}
+
+.oc-esperienza-rich-content th {
+    background: #f9fafb;
+    font-weight: 600;
+}
+
+.oc-esperienza-rich-content hr {
+    margin: 1.5em 0;
+    border: 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+.oc-esperienza-rich-content iframe,
+.oc-esperienza-rich-content video {
+    max-width: 100%;
+    margin: 1em 0;
+}
+
+.oc-exp-difficulty-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.65rem;
+    border-radius: 9999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+}
+
+.oc-exp-difficulty-badge--facile {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.oc-exp-difficulty-badge--medio {
+    background-color: #fef9c3;
+    color: #854d0e;
+}
+
+.oc-exp-difficulty-badge--difficile {
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.oc-exp-difficulty-badge--default {
+    background-color: #e5e7eb;
+    color: #374151;
+}
+
+.oc-esperienza-itinerary__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 1rem;
+}
+
+.oc-esperienza-itinerary__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.oc-esperienza-itinerary__step {
+    padding: 1rem 1.15rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background: #fafafa;
+}
+
+.oc-esperienza-itinerary__step-head {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.oc-esperienza-itinerary__badge {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
+    background: var(--brand-primary, #ffad02);
+    color: #1a1200;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.oc-esperienza-itinerary__step-title {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    line-height: 1.35;
+    color: #111827;
+}
+
+.oc-esperienza-itinerary__map-action {
+    margin: 0 0 0.65rem;
+    padding-left: 2.5rem;
+}
+
+.oc-esperienza-itinerary__map-toggle {
+    appearance: none;
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1d4ed8;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+.oc-esperienza-itinerary__map-toggle:hover {
+    color: #1e3a8a;
+}
+
+.oc-esperienza-itinerary__map-panel {
+    margin: 0 0 0.85rem 2.5rem;
+}
+
+.oc-esperienza-itinerary__map-panel[hidden] {
+    display: none !important;
+}
+
+.oc-esperienza-itinerary__map {
+    width: 100%;
+    height: 220px;
+    border-radius: 0.5rem;
+    border: 1px solid #e5e7eb;
+    background: #e5e7eb;
+    z-index: 0;
+}
+
+.oc-esperienza-itinerary__description {
+    margin-left: 2.5rem;
+    font-size: 0.9375rem;
+}
+
+.oc-esperienza-itinerary__gallery {
+    list-style: none;
+    margin: 0.75rem 0 0 2.5rem;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.oc-esperienza-itinerary__gallery-link {
+    display: block;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+}
+
+.oc-esperienza-itinerary__gallery-img {
+    display: block;
+    width: 5.5rem;
+    height: 4rem;
+    object-fit: cover;
+}

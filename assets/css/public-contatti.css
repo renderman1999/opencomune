@@ -1,0 +1,258 @@
+/* Pagina contatti pubblica */
+
+.oc-public-site .oc-public-contatti {
+  background: var(--background, #f3f3f7);
+  padding: 1.5rem 1rem 2.5rem;
+  min-height: calc(100vh - var(--site-header-height, 0px) - 8rem);
+}
+
+.oc-public-site .oc-public-contatti__inner {
+  max-width: 72rem;
+  margin: 0 auto;
+}
+
+.oc-public-site .oc-public-contatti__header {
+  margin-bottom: 1.75rem;
+  max-width: 40rem;
+}
+
+.oc-public-site .oc-public-contatti__payoff {
+  margin: 0 0 0.65rem;
+  font-size: 0.6875rem;
+  line-height: 1.35;
+  font-weight: 600;
+  color: var(--text-muted, #5c5f66);
+}
+
+.oc-public-site .oc-public-contatti__title {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--foreground, #171717);
+}
+
+.oc-public-site .oc-public-contatti__layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+@media (min-width: 900px) {
+  .oc-public-site .oc-public-contatti__layout {
+    grid-template-columns: minmax(0, 280px) minmax(0, 1fr);
+    gap: 2rem;
+  }
+}
+
+.oc-public-site .oc-public-contatti__info {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0.5rem;
+  padding: 1.25rem 1.15rem;
+  border-top: 3px solid var(--brand-primary, #ffad02);
+}
+
+.oc-public-site .oc-public-contatti__info-title {
+  margin: 0 0 1rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.oc-public-site .oc-public-contatti__info-list {
+  margin: 0;
+}
+
+.oc-public-site .oc-public-contatti__info-item {
+  margin: 0 0 0.85rem;
+}
+
+.oc-public-site .oc-public-contatti__info-item:last-child {
+  margin-bottom: 0;
+}
+
+.oc-public-site .oc-public-contatti__info-item dt {
+  margin: 0 0 0.15rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--text-muted, #5c5f66);
+}
+
+.oc-public-site .oc-public-contatti__info-item dd {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+}
+
+.oc-public-site .oc-public-contatti__info-item a {
+  color: var(--link-accent, #b57a00);
+  text-decoration: none;
+}
+
+.oc-public-site .oc-public-contatti__info-item a:hover {
+  color: var(--brand-primary-hover, #ff8c00);
+}
+
+.oc-public-site .oc-public-contatti__form-wrap {
+  min-width: 0;
+}
+
+.oc-public-site .oc-public-contatti__lead {
+  margin: 0 0 1.25rem;
+  font-size: 1rem;
+  line-height: 1.55;
+  color: var(--text-muted, #5c5f66);
+  max-width: 36rem;
+}
+
+.oc-public-site .oc-public-contatti__card {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 0.5rem;
+  padding: 1.5rem 1.25rem;
+}
+
+@media (min-width: 640px) {
+  .oc-public-site .oc-public-contatti__card {
+    padding: 1.75rem 1.5rem;
+  }
+}
+
+.oc-public-site .oc-public-contatti__form-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.oc-public-site .oc-public-contatti__alert {
+  margin-bottom: 1rem;
+  padding: 0.75rem 0.85rem;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  line-height: 1.45;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.oc-public-site .oc-public-contatti__alert--success {
+  border: 1px solid #bbf7d0;
+  background: #f0fdf4;
+  color: #166534;
+}
+
+.oc-public-site .oc-public-contatti__alert--error {
+  border: 1px solid #fecaca;
+  background: #fef2f2;
+  color: #991b1b;
+}
+
+.oc-public-site .oc-public-contatti__alert ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.oc-public-site .oc-public-contatti__fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.oc-public-site .oc-public-contatti__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
+}
+
+@media (min-width: 640px) {
+  .oc-public-site .oc-public-contatti__grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.oc-public-site .oc-public-contatti__label {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--foreground, #171717);
+}
+
+.oc-public-site .oc-public-contatti__label--required::after {
+  content: " *";
+  color: #dc2626;
+}
+
+.oc-public-site .oc-public-contatti__input,
+.oc-public-site .oc-public-contatti__textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.9375rem;
+  line-height: 1.4;
+  color: var(--foreground, #171717);
+  background: #fff;
+  font-family: inherit;
+}
+
+.oc-public-site .oc-public-contatti__textarea {
+  min-height: 8rem;
+  resize: vertical;
+}
+
+.oc-public-site .oc-public-contatti__input:focus,
+.oc-public-site .oc-public-contatti__textarea:focus {
+  outline: 2px solid rgb(255 173 2 / 0.45);
+  outline-offset: 1px;
+  border-color: var(--brand-primary, #ffad02);
+}
+
+.oc-public-site .oc-public-contatti__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.oc-public-site .oc-public-contatti__turnstile {
+  margin: 0.25rem 0;
+}
+
+.oc-public-site .oc-public-contatti__submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  margin-top: 0.25rem;
+  padding: 0.7rem 1rem;
+  border: 2px solid var(--brand-primary, #ffad02);
+  border-radius: 999px;
+  background: var(--brand-primary, #ffad02);
+  color: var(--text-on-brand, #1a1200);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.oc-public-site .oc-public-contatti__submit:hover {
+  background: var(--brand-primary-hover, #ff8c00);
+  border-color: var(--brand-primary-hover, #ff8c00);
+}
+
+.oc-public-site .oc-public-contatti__submit:focus-visible {
+  outline: 2px solid var(--brand-primary, #ffad02);
+  outline-offset: 3px;
+}
+
+.oc-public-site .oc-public-contatti__prose {
+  max-width: none;
+}
+
+.oc-public-site .oc-public-contatti__prose > *:first-child {
+  margin-top: 0;
+}

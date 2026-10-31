@@ -1,0 +1,409 @@
+.oc-checkout {
+    color: #111827;
+}
+
+.oc-checkout__main {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.oc-checkout__summary-media {
+    width: 100%;
+    background: #f3f4f6;
+    line-height: 0;
+}
+
+.oc-checkout__summary-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.oc-checkout .oc-field-input,
+.oc-checkout input[type="text"],
+.oc-checkout input[type="email"],
+.oc-checkout input[type="tel"],
+.oc-checkout input[type="number"],
+.oc-checkout input[type="search"],
+.oc-checkout textarea,
+.oc-checkout select {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #111827;
+    background-color: #fff;
+    border: 1px solid #d1d5db;
+    border-radius: 0.75rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.oc-checkout textarea {
+    min-height: 6rem;
+    resize: vertical;
+}
+
+.oc-checkout .oc-field-input:focus,
+.oc-checkout input[type="text"]:focus,
+.oc-checkout input[type="email"]:focus,
+.oc-checkout input[type="tel"]:focus,
+.oc-checkout input[type="number"]:focus,
+.oc-checkout input[type="search"]:focus,
+.oc-checkout textarea:focus,
+.oc-checkout select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+.oc-checkout .oc-field-input::placeholder,
+.oc-checkout input::placeholder,
+.oc-checkout textarea::placeholder {
+    color: #9ca3af;
+}
+
+.oc-travelers-minors {
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #d1d5db;
+}
+
+.oc-travelers-minors__line {
+    margin: 0.35rem 0 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+.oc-review-card__travelers-minor {
+    font-weight: 600;
+    color: #4b5563;
+}
+
+.oc-checkout-consents {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.oc-checkout-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.oc-checkout-switch__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.oc-checkout-switch__track {
+    position: relative;
+    flex-shrink: 0;
+    width: 2.75rem;
+    height: 1.5rem;
+    background-color: #d1d5db;
+    border-radius: 9999px;
+    transition: background-color 0.2s ease;
+}
+
+.oc-checkout-switch__thumb {
+    position: absolute;
+    top: 0.125rem;
+    left: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: #fff;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.oc-checkout-switch__input:checked + .oc-checkout-switch__track {
+    background-color: #2563eb;
+}
+
+.oc-checkout-switch__input:checked + .oc-checkout-switch__track .oc-checkout-switch__thumb {
+    transform: translateX(1.25rem);
+}
+
+.oc-checkout-switch__input:focus-visible + .oc-checkout-switch__track {
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.35);
+}
+
+.oc-checkout-switch__label {
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #374151;
+}
+
+.oc-checkout label {
+    color: #374151;
+}
+
+.oc-phone-input-row {
+    display: flex;
+    gap: 0.5rem;
+    align-items: stretch;
+}
+
+.oc-checkout .oc-phone-prefix-select {
+    width: auto;
+    min-width: 6.75rem;
+    max-width: 8.5rem;
+    flex-shrink: 0;
+    padding-left: 0.65rem;
+    padding-right: 0.35rem;
+}
+
+.oc-checkout .oc-phone-number {
+    flex: 1;
+    min-width: 0;
+}
+
+.oc-checkout__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    align-items: center;
+    margin-top: 1.5rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.oc-checkout__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 3rem;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.25;
+    border-radius: 0.5rem;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.oc-checkout__btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+.oc-checkout__btn--primary {
+    background-color: #1d4ed8;
+    color: #fff;
+    flex: 1 1 auto;
+    min-width: 10rem;
+}
+
+.oc-checkout__btn--primary:hover:not(:disabled) {
+    background-color: #1e40af;
+}
+
+.oc-checkout__btn--secondary {
+    background-color: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+
+.oc-checkout__btn--secondary:hover:not(:disabled) {
+    background-color: #e5e7eb;
+}
+
+.oc-checkout__btn--cancel {
+    margin-right: auto;
+    background-color: #fff;
+    color: #b91c1c;
+    border: 1px solid #fca5a5;
+}
+
+.oc-checkout__btn--cancel:hover:not(:disabled) {
+    background-color: #fef2f2;
+}
+
+@media (min-width: 640px) {
+    .oc-checkout__btn--primary {
+        flex: 0 0 auto;
+    }
+}
+
+.oc-traveler-block {
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.oc-traveler-block:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.oc-traveler-block__title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 0.75rem;
+}
+
+.oc-traveler-block__category {
+    display: inline-block;
+    margin-left: 0.35rem;
+    font-weight: 500;
+    color: #6b7280;
+}
+
+.oc-review-card__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.oc-review-card__media {
+    flex-shrink: 0;
+    order: 1;
+    width: 100%;
+    max-width: none;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: #f3f4f6;
+}
+
+.oc-review-card__media img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+}
+
+.oc-review-card__body {
+    order: 2;
+    flex: 1;
+    min-width: 0;
+}
+
+@media (min-width: 768px) {
+    .oc-review-card__layout {
+        flex-direction: row;
+        align-items: flex-start;
+    }
+
+    .oc-review-card__media {
+        order: 0;
+        width: 8.5rem;
+    }
+
+    .oc-review-card__media img {
+        aspect-ratio: 4 / 3;
+    }
+
+    .oc-review-card__body {
+        order: 0;
+    }
+}
+
+.oc-review-card__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 0.35rem;
+    line-height: 1.3;
+}
+
+.oc-review-card__meta {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0;
+}
+
+.oc-review-card__travelers {
+    margin: 0.75rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.875rem;
+    line-height: 1.5;
+}
+
+.oc-review-card__travelers li {
+    padding: 0.15rem 0;
+}
+
+.oc-checkout-payment-inline {
+    margin-top: 1.25rem;
+    padding: 1.25rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    background: #f9fafb;
+}
+
+.oc-checkout-payment-inline__title {
+    margin: 0 0 0.35rem;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.oc-checkout-payment-inline__lead {
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #6b7280;
+}
+
+.oc-checkout-payment-inline__total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+    font-size: 0.9375rem;
+    color: #374151;
+}
+
+.oc-checkout-payment-inline__total strong {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.oc-checkout-payment-inline__gateway {
+    margin: 0.75rem 0 0;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.oc-checkout-payment-inline__gateway-logo {
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: 2.75rem;
+}
+
+.oc-checkout-payment-inline__gateway-label {
+    display: block;
+}

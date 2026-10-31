@@ -1,0 +1,34 @@
+Identità del Progetto  
+Nome: MyGuideLab
+Payoff: La piattaforma per scoprire, creare e condividere esperienze culturali
+Rubrica editoriale: Lucerna Viae
+
+Descrizione del Progetto  
+Connessione tra guide turistiche, storici e viaggiatori
+Promozione di visite, eventi, articoli culturali e profili guida
+
+Funzionalità Previste  
+Registrazione per guide e operatori
+Creazione visite guidate
+Ricerca per città, tema, lingua, data
+Articoli culturali tramite rubrica Lucerna Viae
+Profili guida con bio ed esperienze
+Versione bilingue (italiano/inglese)
+Collegamento a siti ufficiali per biglietti
+Recensioni utenti (opzionale)
+
+Struttura del Sito  
+Homepage: ricerca + categorie
+Pagine principali: lista eventi, pagina evento, articoli Lucerna Viae, profilo guida
+
+Mockup Visivo  
+Funzionalità principali: ricerca, scoperta esperienze, lettura articoli, consultazione profili guide
+Esempi di tour ed eventi in evidenza
+
+Roadmap Tecnica (suggerita)  
+Setup WordPress / CMS o WebApp custom
+Creazione database guide/eventi/articoli
+Integrazione sistema multilingua
+Front-end minimale con UX fluida
+Implementazione back-end admin/editori
+Test su dispositivi mobili e desktop

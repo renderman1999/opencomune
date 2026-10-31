@@ -1,0 +1,268 @@
+.oc-exp-pricing {
+    width: 100%;
+}
+
+.oc-exp-pricing__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 0.75rem;
+}
+
+.oc-exp-pricing__lead {
+    color: #4b5563;
+    font-size: 0.9375rem;
+    line-height: 1.55;
+    margin: 0 0 1rem;
+    max-width: 48rem;
+}
+
+.oc-exp-pricing__base {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.oc-exp-pricing__base-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+    max-width: 32rem;
+}
+
+.oc-exp-pricing__price-input {
+    flex: 1 1 10rem;
+    min-width: 8rem;
+}
+
+.oc-exp-pricing__free-btn {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.oc-exp-pricing__categories-heading {
+    margin-top: 0;
+}
+
+.oc-exp-pricing__list-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.oc-exp-pricing__list-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0;
+}
+
+.oc-exp-pricing__create-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.25rem;
+    border-radius: 999px;
+    border: none;
+    background: #111827;
+    color: #fff;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.oc-exp-pricing__create-btn:hover {
+    background: #1f2937;
+}
+
+.oc-exp-pricing__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 1px solid #e5e7eb;
+}
+
+.oc-exp-pricing__row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.oc-exp-pricing__drag {
+    border: none;
+    background: transparent;
+    color: #9ca3af;
+    cursor: grab;
+    padding: 0.25rem;
+    line-height: 1;
+}
+
+.oc-exp-pricing__drag:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.oc-exp-pricing__label-wrap {
+    flex: 1;
+    min-width: 0;
+    font-size: 0.9375rem;
+    color: #111827;
+}
+
+.oc-exp-pricing__label-wrap strong {
+    font-weight: 600;
+}
+
+.oc-exp-pricing__id {
+    color: #6b7280;
+    font-weight: 400;
+}
+
+.oc-exp-pricing__price {
+    display: inline-block;
+    margin-left: 0.35rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #059669;
+}
+
+.oc-exp-pricing__badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: #f3f4f6;
+    color: #374151;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.oc-exp-pricing__set-default {
+    padding: 0.35rem 0.85rem;
+    border-radius: 999px;
+    border: 1px solid #d1d5db;
+    background: #fff;
+    font-size: 0.8125rem;
+    color: #374151;
+    cursor: pointer;
+}
+
+.oc-exp-pricing__set-default:hover {
+    background: #f9fafb;
+}
+
+.oc-exp-pricing__icon-btn {
+    border: none;
+    background: transparent;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0.35rem;
+    line-height: 1;
+    font-size: 1rem;
+}
+
+.oc-exp-pricing__icon-btn:hover {
+    color: #111827;
+}
+
+.oc-exp-pricing__delete {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 1px solid #fca5a5;
+    background: #fff;
+    color: #dc2626;
+    cursor: pointer;
+}
+
+.oc-exp-pricing__delete:hover {
+    background: #fef2f2;
+}
+
+.oc-exp-pricing__empty {
+    padding: 2rem 0;
+    text-align: center;
+    color: #6b7280;
+    font-size: 0.875rem;
+}
+
+.oc-exp-pricing-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100070;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(15, 23, 42, 0.45);
+}
+
+.oc-exp-pricing-modal[hidden] {
+    display: none !important;
+}
+
+.oc-exp-pricing-modal__panel {
+    background: #fff;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 28rem;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.oc-exp-pricing-modal__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.oc-exp-pricing-modal__title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.oc-exp-pricing-modal__close {
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+.oc-exp-pricing-modal__field {
+    margin-bottom: 1rem;
+}
+
+.oc-exp-pricing-modal__field label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    margin-bottom: 0.35rem;
+    color: #374151;
+}
+
+.oc-exp-pricing-modal__ages {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.oc-exp-pricing-modal__footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f3f4f6;
+}

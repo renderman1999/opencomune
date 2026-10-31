@@ -1,0 +1,28 @@
+START → Utente accede a MyGuideLab
+
+┌─────────────────────────────────────┐
+│ VERIFICA STATUS UTENTE              │
+├─────────────────────────────────────┤
+│ È già registrato?                   │
+│ ├─ NO → Vai a Registrazione         │
+│ └─ SÌ → Verifica ruolo              │
+│    ├─ Utente normale → Upgrade      │
+│    └─ Guida verificata → Dashboard  │
+└─────────────────────────────────────┘
+
+REGISTRAZIONE COME GUIDA:
+├─ Dati personali (nome, cognome, email)
+├─ Documenti professionali
+│  ├─ Patentino guida turistica
+│  ├─ Attestato storico dell'arte
+│  └─ Altri certificati
+├─ Lingue parlate + livello
+├─ Città operative
+├─ Specializzazioni tematiche
+└─ Foto profilo + bio
+
+VERIFICA AMMINISTRATIVA (Backend):
+├─ Controllo documenti (24-48h)
+├─ Verifica patentino online
+├─ Approvazione profilo
+└─ Attivazione account guida

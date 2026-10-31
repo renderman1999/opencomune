@@ -1,0 +1,49 @@
+.oc-exp-experience-settings__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 1.75rem;
+}
+
+.oc-exp-experience-settings__block {
+    margin-bottom: 2rem;
+}
+
+.oc-exp-experience-settings__subtitle {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 0.75rem;
+}
+
+.oc-exp-experience-settings__hint {
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+    color: #6b7280;
+    line-height: 1.5;
+    max-width: 48rem;
+}
+
+.oc-exp-experience-settings__toggle-block {
+    padding-top: 0.5rem;
+    border-top: 1px solid #e5e7eb;
+}
+
+.oc-exp-experience-settings__toggle-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1.25rem;
+    font-size: 0.9375rem;
+    color: #374151;
+    cursor: pointer;
+}
+
+.oc-exp-experience-settings__toggle-row > span:first-child {
+    flex: 1;
+    line-height: 1.45;
+}
+
+.oc-exp-experience-settings .oc-exp-switch {
+    flex-shrink: 0;
+}
